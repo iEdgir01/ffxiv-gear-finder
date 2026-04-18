@@ -9,17 +9,59 @@
 <body>
   <div id="app">
     <aside id="sidebar">
-      <h1>FFXIV Gear Finder</h1>
-      <div id="import-section"></div>
-      <div id="job-group-section"></div>
-      <div id="stat-section"></div>
-      <div id="gear-type-section"></div>
+      <div class="sidebar-header">
+        <h1>FFXIV Gear Finder</h1>
+        <p class="tagline">Find your best craftable gear</p>
+      </div>
+
+      <section class="sidebar-section" id="import-section">
+        <h2 class="section-label">Import Character</h2>
+        <div class="import-tabs">
+          <button class="tab-btn active" data-tab="url">Lodestone URL</button>
+          <button class="tab-btn" data-tab="search">Search</button>
+        </div>
+        <div class="tab-panel active" id="tab-url">
+          <input type="text" id="lodestone-url" placeholder="https://na.finalfantasyxiv.com/lodestone/character/...">
+          <button class="btn-primary" id="btn-import-url">Import</button>
+        </div>
+        <div class="tab-panel" id="tab-search">
+          <input type="text" id="char-name" placeholder="Character name">
+          <input type="text" id="char-server" placeholder="Server (optional)">
+          <button class="btn-primary" id="btn-search-char">Search</button>
+          <div id="char-results"></div>
+        </div>
+        <div id="import-status" class="status-msg" hidden></div>
+        <div id="char-info" class="char-info" hidden></div>
+      </section>
+
+      <section class="sidebar-section" id="job-group-section">
+        <h2 class="section-label">Job Group</h2>
+        <div class="pill-group" id="group-pills">
+          <button class="pill active" data-group="doh">DoH avg</button>
+          <button class="pill" data-group="dol">DoL avg</button>
+          <button class="pill" data-group="combat">Combat</button>
+        </div>
+        <select id="combat-job-select" class="combat-select" hidden></select>
+        <div id="level-display" class="level-display"></div>
+      </section>
+
+      <section class="sidebar-section" id="stat-section">
+        <h2 class="section-label">Gear Stat</h2>
+        <div class="pill-group" id="stat-pills"></div>
+      </section>
+
+      <section class="sidebar-section" id="gear-type-section">
+        <h2 class="section-label">Gear Type</h2>
+        <div class="pill-group" id="gear-type-pills"></div>
+      </section>
     </aside>
+
     <main id="results-panel">
-      <div id="results-header"></div>
-      <div id="results-grid"></div>
+      <div id="results-header" class="results-header"></div>
+      <div id="results-grid" class="results-grid"></div>
     </main>
   </div>
+
   <script type="module" src="js/main.js"></script>
 </body>
 </html>
