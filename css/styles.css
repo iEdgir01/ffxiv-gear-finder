@@ -236,8 +236,18 @@ input[type="text"]:focus { border-color: var(--blue); }
   position: fixed;
   top: 0; left: 0; right: 0;
   height: 3px;
-  background: linear-gradient(90deg, var(--blue), var(--gold));
-  animation: slide 1.5s infinite;
+  background: linear-gradient(90deg, transparent 0%, var(--blue) 40%, var(--gold) 60%, transparent 100%);
+  background-size: 200% 100%;
+  animation: slide 1.5s infinite linear;
   z-index: 100;
 }
-@keyframes slide { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+@keyframes slide { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+.tab-btn:focus-visible,
+.pill:focus-visible,
+.btn-primary:focus-visible,
+.combat-select:focus-visible,
+.char-card:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}

@@ -16,15 +16,15 @@
 
       <section class="sidebar-section" id="import-section">
         <h2 class="section-label">Import Character</h2>
-        <div class="import-tabs">
-          <button class="tab-btn active" data-tab="url">Lodestone URL</button>
-          <button class="tab-btn" data-tab="search">Search</button>
+        <div class="import-tabs" role="tablist">
+          <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="tab-url" data-tab="url">Lodestone URL</button>
+          <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-search" data-tab="search">Search</button>
         </div>
-        <div class="tab-panel active" id="tab-url">
+        <div class="tab-panel active" id="tab-url" role="tabpanel">
           <input type="text" id="lodestone-url" placeholder="https://na.finalfantasyxiv.com/lodestone/character/...">
           <button class="btn-primary" id="btn-import-url">Import</button>
         </div>
-        <div class="tab-panel" id="tab-search">
+        <div class="tab-panel" id="tab-search" role="tabpanel" hidden>
           <input type="text" id="char-name" placeholder="Character name">
           <input type="text" id="char-server" placeholder="Server (optional)">
           <button class="btn-primary" id="btn-search-char">Search</button>
