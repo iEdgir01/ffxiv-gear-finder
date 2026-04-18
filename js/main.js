@@ -15,7 +15,11 @@ const state = {
   statsCache: {},
 };
 
+let _searchSeq = 0;
+
 async function runSearch() {
+  const seq = ++_searchSeq;
+
   if (!isLoaded()) {
     ui.renderEmptyState('Loading recipe data...', 'Please wait a moment.');
     return;
@@ -40,6 +44,8 @@ async function runSearch() {
       // Non-fatal: items render without stats
     }
   }
+
+  if (seq !== _searchSeq) return;
 
   items = items.map(item => ({
     ...item,
@@ -113,7 +119,7 @@ function initSidebar() {
     state.activeGroup = group;
     const isCombat = group === 'combat';
     ui.showCombatJobSelect(isCombat);
-    if (isCombat && !state.activeCombatJobId) {
+    if (isCombat) {
       state.activeCombatJobId = ui.initCombatJobSelect(state.jobs, id => {
         state.activeCombatJobId = id;
         runSearch();
