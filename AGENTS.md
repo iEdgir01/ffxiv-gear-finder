@@ -8,7 +8,7 @@ Single-page browser app. Import FFXIV character job levels from Lodestone via XI
 - [x] Task 2: constants.js — complete. Exports JOB_IDS (33 jobs), DOH/DOL/COMBAT_JOB_IDS arrays, STATS_BY_GROUP, GEAR_TYPES, LEVEL_RANGE_RADIUS.
 - [x] Task 3: search.js (TDD) — complete. 15 passing unit tests via `node --test tests/search.test.js`.
 - [x] Task 4: data.js — complete. Teamcraft loader with in-memory level index. buildIndex mock test passed. Browser gate pending (requires open browser).
-- [ ] Task 5: api.js — pending
+- [x] Task 5: api.js — complete. searchCharacter, fetchCharacterJobs, extractCharacterIdFromUrl, fetchItemStats implemented. escapeHtml on all API strings. characterId validated numeric. 19 search.js tests still pass.
 - [ ] Task 6: index.html + styles.css — pending
 - [ ] Task 7: ui.js — pending
 - [ ] Task 8: main.js — pending
