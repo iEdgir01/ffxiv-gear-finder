@@ -1,8 +1,7 @@
 // js/api.js
 
 const XIVAPI    = 'https://xivapi.com';
-const LODESTONE = 'https://lodestone.ffxivteamcraft.com';
-export const FIRESTORE = 'https://firestore.googleapis.com/v1/projects/ffxivteamcraft/databases/(default)/documents';
+export const FIRESTORE = 'https://firestore.googleapis.com/v1/projects/ffxivteamcraft/databases/(default)/documents'; // exported for gearsets.js
 
 function escapeHtml(str) {
   return String(str)
@@ -118,8 +117,8 @@ export async function fetchItemStats(itemIds) {
         const parsed = parseItemStats(item);
         cacheSet(id, parsed);
         results[id] = parsed;
-      } catch {
-        // skip failed items
+      } catch (err) {
+        console.warn('[api] Failed to fetch item', id, err?.message ?? err);
       }
     }));
   }

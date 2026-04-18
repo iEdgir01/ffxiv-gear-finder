@@ -8,7 +8,7 @@ Single-page browser app. Import FFXIV character job levels from Lodestone via XI
 - [x] Task 2: constants.js — complete. Exports JOB_IDS (33 jobs), DOH/DOL/COMBAT_JOB_IDS arrays, STATS_BY_GROUP, GEAR_TYPES, LEVEL_RANGE_RADIUS.
 - [x] Task 3: search.js (TDD) — complete. 15 passing unit tests via `node --test tests/search.test.js`.
 - [x] Task 4: data.js — complete. Teamcraft loader with in-memory level index. buildIndex mock test passed. Browser gate pending (requires open browser).
-- [x] Task 5: api.js — complete. searchCharacter, fetchCharacterJobs, extractCharacterIdFromUrl, fetchItemStats implemented. escapeHtml on all API strings. characterId validated numeric. 19 search.js tests still pass.
+- [x] Task 5: api.js — complete. searchCharacter, fetchCharacterJobs, extractCharacterIdFromUrl, fetchItemStats implemented. escapeHtml on all API strings. characterId validated numeric. 5 passing tests in tests/api.test.js. 19 search.js tests still pass.
 - [x] Task 6: index.html + styles.css — complete. Full sidebar + results panel layout, FFXIV dark theme with CSS variables. ARIA tab roles, focus-visible styles, fixed loading bar animation added post-review.
 - [x] Task 7: ui.js — complete. 15 exports, el() helper with createTextNode, ARIA tab toggling. Fixed stacked combat-select listener bug post-review.
 - [x] Task 8: main.js — complete. State management, all event wiring, onProgress data-load handler. Fixed runSearch race condition + stale combat-select guard post-review.
@@ -27,6 +27,7 @@ Single-page browser app. Import FFXIV character job levels from Lodestone via XI
 - `ai-context/build-plan.md` — ordered tasks + verification gates
 - `ai-context/ffxiv.md` — FFXIV domain context (job IDs, stat names)
 - `docs/superpowers/specs/2026-04-18-ffxiv-gear-finder-design.md` — original design spec: UI layout detail, error handling, full search behaviour
+- `tests/api.test.js` — 5 unit tests for api.js module (searchCharacter, fetchCharacterJobs, extractCharacterIdFromUrl, caching)
 
 ## Agent Rules
 1. Read this file and all linked ai-context/ files before writing any code or making any plan.
