@@ -1,17 +1,6 @@
-import { LEVEL_RANGE_RADIUS } from './constants.js';
-
-export function getGroupAverage(jobs, jobIds) {
-  const present = jobIds.filter(id => jobs[id]);
-  if (present.length === 0) return 1;
-  const sum = present.reduce((acc, id) => acc + (jobs[id].level || 1), 0);
-  return Math.floor(sum / present.length);
-}
-
-export function getLevelRange(avgLevel) {
-  return {
-    min: Math.max(1, avgLevel - LEVEL_RANGE_RADIUS),
-    max: Math.min(100, avgLevel + LEVEL_RANGE_RADIUS),
-  };
+export function getLevelRange(jobLevel) {
+  const min = Math.floor(jobLevel / 5) * 5;
+  return { min: Math.max(1, min), max: jobLevel };
 }
 
 export function filterItems(items, { levelMin, levelMax, stat, gearType }) {

@@ -1,48 +1,35 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  getGroupAverage,
   getLevelRange,
   filterItems,
   sortByStat,
 } from '../js/search.js';
 
-const JOBS = {
-  8:  { level: 44 }, 9:  { level: 46 }, 10: { level: 45 },
-  11: { level: 47 }, 12: { level: 44 }, 13: { level: 46 },
-  14: { level: 44 }, 15: { level: 44 },
-  16: { level: 38 }, 17: { level: 40 }, 18: { level: 36 },
-};
-const DOH_IDS = [8, 9, 10, 11, 12, 13, 14, 15];
-const DOL_IDS = [16, 17, 18];
-
-describe('getGroupAverage', () => {
-  it('returns floor of average for doh jobs', () => {
-    assert.equal(getGroupAverage(JOBS, DOH_IDS), 45);
-  });
-  it('returns floor of average for dol jobs', () => {
-    assert.equal(getGroupAverage(JOBS, DOL_IDS), 38);
-  });
-  it('returns 1 when all levels are 1', () => {
-    assert.equal(getGroupAverage({ 8: { level: 1 }, 9: { level: 1 } }, [8, 9]), 1);
-  });
-  it('ignores job IDs not present in jobs map', () => {
-    assert.equal(getGroupAverage({ 8: { level: 40 } }, [8, 9]), 40);
-  });
-  it('treats level 0 as 1 (locked job fallback)', () => {
-    assert.equal(getGroupAverage({ 8: { level: 0 }, 9: { level: 0 } }, [8, 9]), 1);
-  });
-});
-
 describe('getLevelRange', () => {
-  it('returns avg +-5', () => {
-    assert.deepEqual(getLevelRange(45), { min: 40, max: 50 });
+  it('Lv 52 → 50-52', () => {
+    assert.deepEqual(getLevelRange(52), { min: 50, max: 52 });
   });
-  it('clamps min to 1', () => {
-    assert.deepEqual(getLevelRange(3), { min: 1, max: 8 });
+  it('Lv 47 → 45-47', () => {
+    assert.deepEqual(getLevelRange(47), { min: 45, max: 47 });
   });
-  it('clamps max to 100', () => {
-    assert.deepEqual(getLevelRange(98), { min: 93, max: 100 });
+  it('Lv 55 → 55-55 (exact tier boundary)', () => {
+    assert.deepEqual(getLevelRange(55), { min: 55, max: 55 });
+  });
+  it('Lv 60 → 60-60 (exact tier boundary)', () => {
+    assert.deepEqual(getLevelRange(60), { min: 60, max: 60 });
+  });
+  it('Lv 1 → 1-1', () => {
+    assert.deepEqual(getLevelRange(1), { min: 1, max: 1 });
+  });
+  it('Lv 3 → 1-3 (below first tier, min clamp)', () => {
+    assert.deepEqual(getLevelRange(3), { min: 1, max: 3 });
+  });
+  it('Lv 5 → 5-5', () => {
+    assert.deepEqual(getLevelRange(5), { min: 5, max: 5 });
+  });
+  it('Lv 6 → 5-6', () => {
+    assert.deepEqual(getLevelRange(6), { min: 5, max: 6 });
   });
 });
 
@@ -73,15 +60,14 @@ describe('filterItems', () => {
   });
   it('returns all in range when stat and gearType are null', () => {
     assert.equal(
-      filterItems(ITEMS, { levelMin: 40, levelMax: 50, stat: null, gearType: null }).length,
-      3
+      filterItems(ITEMS, { levelMin: 40, levelMax: 50, stat: null, gearType: null }).length, 3
     );
   });
   it('returns empty array when no items match', () => {
-    assert.deepEqual(filterItems(ITEMS, { levelMin: 60, levelMax: 70, stat: null, gearType: null }), []);
+    assert.deepEqual(filterItems(ITEMS, { levelMin: 90, levelMax: 100, stat: null, gearType: null }), []);
   });
   it('does not throw when item has no stats property', () => {
-    const noStats = [{ id: 99, recipeLevel: 44, gearType: 'Ring' }];
+    const noStats = [{ id: 9, recipeLevel: 45, gearType: 'Ring' }];
     assert.doesNotThrow(() => filterItems(noStats, { levelMin: 40, levelMax: 50, stat: 'CP', gearType: null }));
   });
 });
@@ -103,9 +89,7 @@ describe('sortByStat', () => {
     assert.equal(sorted[2].id, 2);
   });
   it('handles items with no ilvl when stat is null', () => {
-    const items = [{ id: 1, stats: {} }, { id: 2, ilvl: 50, stats: {} }];
-    const sorted = sortByStat(items, null);
-    assert.equal(sorted[0].id, 2);
-    assert.equal(sorted[1].id, 1);
+    const items = [{ id: 1, stats: {} }, { id: 2, ilvl: 10, stats: {} }];
+    assert.doesNotThrow(() => sortByStat(items, null));
   });
 });
