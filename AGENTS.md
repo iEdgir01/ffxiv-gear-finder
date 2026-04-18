@@ -26,6 +26,7 @@ Single-page browser app. Import FFXIV character job levels from Lodestone via XI
 - `ai-context/technical.md` — stack, APIs, data layer
 - `ai-context/build-plan.md` — ordered tasks + verification gates
 - `ai-context/ffxiv.md` — FFXIV domain context (job IDs, stat names)
+- `docs/superpowers/specs/2026-04-18-ffxiv-gear-finder-design.md` — original design spec: UI layout detail, error handling, full search behaviour
 
 ## Agent Rules
 1. Read this file and all linked ai-context/ files before writing any code or making any plan.
