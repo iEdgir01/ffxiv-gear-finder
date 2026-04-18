@@ -37,11 +37,14 @@
       <section class="sidebar-section" id="job-group-section">
         <h2 class="section-label">Job Group</h2>
         <div class="pill-group" id="group-pills">
-          <button class="pill active" data-group="doh">DoH avg</button>
-          <button class="pill" data-group="dol">DoL avg</button>
-          <button class="pill" data-group="combat">Combat</button>
+          <button class="pill active" data-group="doh">DoH</button>
+          <button class="pill" data-group="dol">DoL</button>
+          <button class="pill" data-group="dow">DoW</button>
+          <button class="pill" data-group="dom">DoM</button>
         </div>
-        <select id="combat-job-select" class="combat-select" hidden></select>
+        <div id="job-select-wrap" hidden>
+          <select id="job-select" class="combat-select"></select>
+        </div>
         <div id="level-display" class="level-display"></div>
       </section>
 
@@ -57,9 +60,28 @@
     </aside>
 
     <main id="results-panel">
-      <div id="results-header" class="results-header"></div>
-      <div id="results-grid" class="results-grid"></div>
+      <div class="main-tabs" role="tablist">
+        <button class="main-tab active" role="tab" data-panel="finder" aria-selected="true">Gear Finder</button>
+        <button class="main-tab" role="tab" data-panel="upgrade" aria-selected="false">Upgrades</button>
+      </div>
+      <div id="finder-panel">
+        <div class="finder-toolbar">
+          <div id="results-header" class="results-header"></div>
+          <button id="btn-open-lists" class="btn-secondary btn-sm">Lists</button>
+        </div>
+        <div id="results-grid" class="results-grid"></div>
+      </div>
+      <div id="upgrade-panel" hidden>
+        <div id="upgrade-content"></div>
+      </div>
     </main>
+    <div id="list-panel" class="list-panel" hidden>
+      <div class="list-panel-header">
+        <h2>My Lists</h2>
+        <button id="btn-close-lists" class="btn-icon" aria-label="Close lists">&#x2715;</button>
+      </div>
+      <div id="list-panel-body"></div>
+    </div>
   </div>
 
   <script type="module" src="js/main.js"></script>
