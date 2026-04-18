@@ -34,14 +34,9 @@ export const JOB_IDS = {
   40: { abbr: 'PCT', name: 'Pictomancer',   group: 'combat' },
 };
 
-export const DOH_JOB_IDS = Object.entries(JOB_IDS)
-  .filter(([, v]) => v.group === 'doh').map(([k]) => Number(k));
-
-export const DOL_JOB_IDS = Object.entries(JOB_IDS)
-  .filter(([, v]) => v.group === 'dol').map(([k]) => Number(k));
-
-export const COMBAT_JOB_IDS = Object.entries(JOB_IDS)
-  .filter(([, v]) => v.group === 'combat').map(([k]) => Number(k));
+export const DOH_JOB_IDS    = [8, 9, 10, 11, 12, 13, 14, 15];
+export const DOL_JOB_IDS    = [16, 17, 18];
+export const COMBAT_JOB_IDS = [19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40];
 
 export const STATS_BY_GROUP = {
   doh: ['CP', 'Craftsmanship', 'Control'],
