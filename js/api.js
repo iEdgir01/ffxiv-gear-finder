@@ -26,6 +26,7 @@ export async function searchCharacter(name, server) {
 }
 
 export async function fetchCharacterJobs(characterId) {
+  if (!/^\d+$/.test(String(characterId))) throw new Error('Invalid character ID');
   const res = await fetch(XIVAPI + '/character/' + characterId + '?data=CJ');
   if (!res.ok) throw new Error('Character fetch failed (' + res.status + ')');
   const data = await res.json();
