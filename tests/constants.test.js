@@ -1,7 +1,7 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  JOB_IDS, DOH_JOB_IDS, DOL_JOB_IDS, DOW_JOB_IDS, DOM_JOB_IDS,
+  JOB_IDS, DOH_JOB_IDS, DOL_JOB_IDS, DOW_JOB_IDS, DOM_JOB_IDS, COMBAT_JOB_IDS,
   JOB_IDS_BY_GROUP, STATS_BY_GROUP, CLASSJOB_CATEGORY_TO_JOBS, PRIMARY_STAT_BY_JOB,
 } from '../js/constants.js';
 
@@ -81,5 +81,12 @@ describe('CLASSJOB_CATEGORY_TO_JOBS', () => {
   });
   it('All Classes → 33 jobs', () => {
     assert.equal(CLASSJOB_CATEGORY_TO_JOBS['All Classes'].length, 33);
+  });
+});
+
+describe('COMBAT_JOB_IDS backward compat', () => {
+  it('equals DOW_JOB_IDS + DOM_JOB_IDS union', () => {
+    const expected = new Set([...DOW_JOB_IDS, ...DOM_JOB_IDS]);
+    assert.deepEqual(new Set(COMBAT_JOB_IDS), expected);
   });
 });

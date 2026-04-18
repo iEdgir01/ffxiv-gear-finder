@@ -38,6 +38,7 @@ export const DOH_JOB_IDS = [8, 9, 10, 11, 12, 13, 14, 15];
 export const DOL_JOB_IDS = [16, 17, 18];
 export const DOW_JOB_IDS = [19, 20, 21, 22, 23, 28, 29, 30, 32, 35, 36, 37, 39];
 export const DOM_JOB_IDS = [24, 25, 26, 27, 31, 33, 34, 38, 40];
+// Deprecated: use DOW_JOB_IDS / DOM_JOB_IDS. Kept for backward compatibility with ui.js/main.js until Tasks 5-6.
 export const COMBAT_JOB_IDS = [...DOW_JOB_IDS, ...DOM_JOB_IDS];
 
 export const JOB_IDS_BY_GROUP = {

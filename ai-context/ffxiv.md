@@ -6,7 +6,9 @@ Current cap (Dawntrail): 100. Recipe levels go 1-100.
 ## Job Groups
 - DoH (Disciples of the Hand) — crafting jobs, 8 total
 - DoL (Disciples of the Land) — gathering jobs, 3 total
-- Combat — all combat jobs, used for combat gear search
+- DoW (Disciples of War) — 13 combat jobs (Tanks, Melee DPS, Physical Ranged)
+- DoM (Disciples of Magic) — 9 combat jobs (Healers, Casters)
+- COMBAT_JOB_IDS (deprecated) — union of DoW + DoM (22 combat jobs), kept for backward compatibility with ui.js/main.js until Tasks 5-6
 
 ## Job ID to Abbreviation Map (stable across patches)
 | ID | Abbr | Name | Group |
@@ -22,28 +24,28 @@ Current cap (Dawntrail): 100. Recipe levels go 1-100.
 | 16 | MIN | Miner         | DoL |
 | 17 | BTN | Botanist      | DoL |
 | 18 | FSH | Fisher        | DoL |
-| 19 | PLD | Paladin       | Combat |
-| 20 | MNK | Monk          | Combat |
-| 21 | WAR | Warrior       | Combat |
-| 22 | DRG | Dragoon       | Combat |
-| 23 | BRD | Bard          | Combat |
-| 24 | WHM | White Mage    | Combat |
-| 25 | BLM | Black Mage    | Combat |
-| 26 | SMN | Summoner      | Combat |
-| 27 | SCH | Scholar       | Combat |
-| 28 | NIN | Ninja         | Combat |
-| 29 | MCH | Machinist     | Combat |
-| 30 | DRK | Dark Knight   | Combat |
-| 31 | AST | Astrologian   | Combat |
-| 32 | SAM | Samurai       | Combat |
-| 33 | RDM | Red Mage      | Combat |
-| 34 | BLU | Blue Mage     | Combat |
-| 35 | GNB | Gunbreaker    | Combat |
-| 36 | DNC | Dancer        | Combat |
-| 37 | RPR | Reaper        | Combat |
-| 38 | SGE | Sage          | Combat |
-| 39 | VPR | Viper         | Combat |
-| 40 | PCT | Pictomancer   | Combat |
+| 19 | PLD | Paladin       | DoW |
+| 20 | MNK | Monk          | DoW |
+| 21 | WAR | Warrior       | DoW |
+| 22 | DRG | Dragoon       | DoW |
+| 23 | BRD | Bard          | DoW |
+| 24 | WHM | White Mage    | DoM |
+| 25 | BLM | Black Mage    | DoM |
+| 26 | SMN | Summoner      | DoM |
+| 27 | SCH | Scholar       | DoM |
+| 28 | NIN | Ninja         | DoW |
+| 29 | MCH | Machinist     | DoW |
+| 30 | DRK | Dark Knight   | DoW |
+| 31 | AST | Astrologian   | DoM |
+| 32 | SAM | Samurai       | DoW |
+| 33 | RDM | Red Mage      | DoM |
+| 34 | BLU | Blue Mage     | DoM |
+| 35 | GNB | Gunbreaker    | DoW |
+| 36 | DNC | Dancer        | DoW |
+| 37 | RPR | Reaper        | DoW |
+| 38 | SGE | Sage          | DoM |
+| 39 | VPR | Viper         | DoW |
+| 40 | PCT | Pictomancer   | DoM |
 
 ## Stats by Group
 - DoH gear stats: CP, Craftsmanship, Control
