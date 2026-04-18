@@ -1,0 +1,1 @@
+// FFXIV domain constants
