@@ -4,7 +4,7 @@
 Do not start the next task until the current one passes all its checks.
 
 ## Tasks
-1. [ ] Scaffold — directory structure, context docs, empty files. Gate: all files exist.
+1. [x] Scaffold — directory structure, context docs, empty files. Gate: all files exist.
 2. [ ] constants.js — FFXIV domain data. Gate: file exports all required constants.
 3. [ ] search.js (TDD) — pure functions. Gate: `node --test tests/search.test.js` passes.
 4. [ ] data.js — Teamcraft loader. Gate: open index.html, console shows loaded item count.
