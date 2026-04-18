@@ -10,7 +10,7 @@ Single-page browser app. Import FFXIV character job levels from Lodestone via XI
 - [x] Task 4: data.js — complete. Teamcraft loader with in-memory level index. buildIndex mock test passed. Browser gate pending (requires open browser).
 - [x] Task 5: api.js — complete. searchCharacter, fetchCharacterJobs, extractCharacterIdFromUrl, fetchItemStats implemented. escapeHtml on all API strings. characterId validated numeric. 19 search.js tests still pass.
 - [x] Task 6: index.html + styles.css — complete. Full sidebar + results panel layout, FFXIV dark theme with CSS variables. ARIA tab roles, focus-visible styles, fixed loading bar animation added post-review.
-- [ ] Task 7: ui.js — pending
+- [x] Task 7: ui.js — complete. 15 exports, el() helper with createTextNode, ARIA tab toggling. Fixed stacked combat-select listener bug post-review.
 - [ ] Task 8: main.js — pending
 - [ ] Task 9: Integration + polish — pending
 
