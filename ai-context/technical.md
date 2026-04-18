@@ -8,9 +8,12 @@
 ## Data Sources
 
 ### Teamcraft (recipe data, loaded at startup)
-Base URL: https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/master/libs/data/src/lib/data/
-- `recipes.json` — array of recipe objects: { id, job, lvl, rlvl, result, yields, ingredients }
-- `items.json` — object keyed by item ID string: { "6116": { "en": "Rose Gold Ring", ... } }
+Base URL: https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/master/libs/data/src/lib/json/
+(Note: original spec had `.../data/` — confirmed correct path is `.../json/` via repo tree inspection)
+- `recipes.json` — array of recipe objects: { id, job, lvl, rlvl, result, yields, ingredients, stars, qs, hq, durability, ... }
+- `items.json` — object keyed by item ID string: { "6116": { "en": "Rose Gold Ring", "de": "...", "ja": "...", "fr": "..." } }
+
+Field names verified 2026-04-18: `job` (integer), `lvl` (craft level), `result` (item ID integer). No adaptation needed — matches original spec.
 
 Loaded once at app startup, indexed in memory. ~2-5MB total.
 
