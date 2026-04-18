@@ -12,7 +12,7 @@ Single-page browser app. Import FFXIV character job levels from Lodestone via XI
 - [x] Task 6: index.html + styles.css — complete. Full sidebar + results panel layout, FFXIV dark theme with CSS variables. ARIA tab roles, focus-visible styles, fixed loading bar animation added post-review.
 - [x] Task 7: ui.js — complete. 15 exports, el() helper with createTextNode, ARIA tab toggling. Fixed stacked combat-select listener bug post-review.
 - [x] Task 8: main.js — complete. State management, all event wiring, onProgress data-load handler. Fixed runSearch race condition + stale combat-select guard post-review.
-- [ ] Task 9: Integration + polish — pending
+- [x] Task 9: Integration + polish — complete. 19/19 unit tests pass. All modules implemented and committed. Browser testing required for full e2e verification (XIVAPI calls, Lodestone import, visual rendering).
 
 ## Key Decisions
 - Plain HTML/CSS/JS, no build step — open index.html directly in browser
