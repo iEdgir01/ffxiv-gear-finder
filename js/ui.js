@@ -31,7 +31,8 @@ export function hideImportStatus() {
 
 export function showCharInfo(name, server) {
   const node = document.getElementById('char-info');
-  node.textContent = '\u2713 ' + name + ' \u2014 ' + server;
+  node.textContent = '';
+  node.appendChild(document.createTextNode('\u2713 ' + name + ' \u2014 ' + server));
   node.hidden = false;
 }
 
@@ -74,8 +75,9 @@ export function initGroupPills(activeGroup, onSelect) {
 }
 
 export function initCombatJobSelect(jobs, onSelect) {
-  const sel = document.getElementById('combat-job-select');
-  sel.textContent = '';
+  const old = document.getElementById('combat-job-select');
+  const sel = old.cloneNode(false);
+  old.replaceWith(sel);
   for (const id of COMBAT_JOB_IDS) {
     const job = JOB_IDS[id];
     const level = jobs[id]?.level ?? '?';
