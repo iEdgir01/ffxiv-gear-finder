@@ -3,7 +3,7 @@ import { LEVEL_RANGE_RADIUS } from './constants.js';
 export function getGroupAverage(jobs, jobIds) {
   const present = jobIds.filter(id => jobs[id]);
   if (present.length === 0) return 1;
-  const sum = present.reduce((acc, id) => acc + (jobs[id].level ?? 1), 0);
+  const sum = present.reduce((acc, id) => acc + (jobs[id].level || 1), 0);
   return Math.floor(sum / present.length);
 }
 
@@ -28,6 +28,7 @@ export function sortByStat(items, stat) {
     if (!stat) return (b.ilvl ?? 0) - (a.ilvl ?? 0);
     const aVal = a.stats?.[stat] ?? -Infinity;
     const bVal = b.stats?.[stat] ?? -Infinity;
+    if (aVal === -Infinity && bVal === -Infinity) return 0;
     return bVal - aVal;
   });
 }

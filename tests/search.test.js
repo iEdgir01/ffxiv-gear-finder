@@ -29,6 +29,9 @@ describe('getGroupAverage', () => {
   it('ignores job IDs not present in jobs map', () => {
     assert.equal(getGroupAverage({ 8: { level: 40 } }, [8, 9]), 40);
   });
+  it('treats level 0 as 1 (locked job fallback)', () => {
+    assert.equal(getGroupAverage({ 8: { level: 0 }, 9: { level: 0 } }, [8, 9]), 1);
+  });
 });
 
 describe('getLevelRange', () => {
@@ -74,6 +77,13 @@ describe('filterItems', () => {
       3
     );
   });
+  it('returns empty array when no items match', () => {
+    assert.deepEqual(filterItems(ITEMS, { levelMin: 60, levelMax: 70, stat: null, gearType: null }), []);
+  });
+  it('does not throw when item has no stats property', () => {
+    const noStats = [{ id: 99, recipeLevel: 44, gearType: 'Ring' }];
+    assert.doesNotThrow(() => filterItems(noStats, { levelMin: 40, levelMax: 50, stat: 'CP', gearType: null }));
+  });
 });
 
 describe('sortByStat', () => {
@@ -91,5 +101,11 @@ describe('sortByStat', () => {
     assert.equal(sorted[0].id, 3);
     assert.equal(sorted[1].id, 1);
     assert.equal(sorted[2].id, 2);
+  });
+  it('handles items with no ilvl when stat is null', () => {
+    const items = [{ id: 1, stats: {} }, { id: 2, ilvl: 50, stats: {} }];
+    const sorted = sortByStat(items, null);
+    assert.equal(sorted[0].id, 2);
+    assert.equal(sorted[1].id, 1);
   });
 });
