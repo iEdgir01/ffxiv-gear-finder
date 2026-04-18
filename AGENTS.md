@@ -4,7 +4,7 @@
 Single-page browser app. Import FFXIV character job levels from Lodestone via XIVAPI. Find best craftable gear at current level, filtered by stat and gear type, sorted best-first. Plain HTML/CSS/ES Modules, no build step.
 
 ## Current Status
-- [ ] Task 1: Scaffold — pending
+- [x] Task 1: Scaffold — complete. All project files, context docs, and empty module files created. Git initialized with initial commit.
 - [ ] Task 2: constants.js — pending
 - [ ] Task 3: search.js (TDD) — pending
 - [ ] Task 4: data.js — pending
