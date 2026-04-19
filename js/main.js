@@ -1,18 +1,20 @@
 // js/main.js
 import { loadData, getItemsInLevelRange, isLoaded, onProgress } from './data.js';
 import { searchCharacter, fetchCharacterJobs, extractCharacterIdFromUrl, fetchItemStats } from './api.js';
-import { getGroupAverage, getLevelRange, filterItems, sortByStat } from './search.js';
-import { DOH_JOB_IDS, DOL_JOB_IDS, COMBAT_JOB_IDS } from './constants.js';
+import { getLevelRange, filterItems, sortByStat } from './search.js';
+import { JOB_IDS, JOB_IDS_BY_GROUP } from './constants.js';
 import * as ui from './ui.js';
 
 const state = {
-  jobs: {},
-  charName: null,
-  activeGroup: 'doh',
-  activeCombatJobId: null,
-  activeStat: null,
+  jobs:          {},
+  charName:      null,
+  uid:           null,        // Firebase UID from Teamcraft import; null if Lodestone-only
+  activeGroup:   'doh',
+  activeJobId:   null,        // single selected job ID for any group
+  activeStat:    null,
   activeGearType: null,
-  statsCache: {},
+  statsCache:    {},
+  gearsets:      null,        // Map<jobId, gearset> or null — populated after Teamcraft import
 };
 
 let _searchSeq = 0;
@@ -25,13 +27,16 @@ async function runSearch() {
     return;
   }
 
-  const jobIds = state.activeGroup === 'doh' ? DOH_JOB_IDS
-               : state.activeGroup === 'dol' ? DOL_JOB_IDS
-               : state.activeCombatJobId ? [state.activeCombatJobId] : [];
+  const jobId = state.activeJobId;
+  if (!jobId) {
+    ui.renderEmptyState('Select a job', 'Pick a job from the dropdown to search.');
+    return;
+  }
 
-  const avg = getGroupAverage(state.jobs, jobIds);
-  const { min, max } = getLevelRange(avg);
-  ui.renderLevelDisplay(state.activeGroup, avg, min, max);
+  const jobLevel = state.jobs[jobId]?.level ?? 1;
+  const { min, max } = getLevelRange(jobLevel);
+  const jobAbbr = JOB_IDS[jobId]?.abbr ?? '?';
+  ui.renderLevelDisplay(jobAbbr, jobLevel, min, max);
 
   let items = getItemsInLevelRange(min, max);
 
@@ -40,9 +45,7 @@ async function runSearch() {
     try {
       const fetched = await fetchItemStats(uncachedIds);
       Object.assign(state.statsCache, fetched);
-    } catch {
-      // Non-fatal: items render without stats
-    }
+    } catch {}
   }
 
   if (seq !== _searchSeq) return;
@@ -60,7 +63,7 @@ async function runSearch() {
   });
 
   const sorted = sortByStat(filtered, state.activeStat);
-  ui.renderResultsHeader(sorted.length, state.activeStat, state.activeGearType, state.activeGroup, avg);
+  ui.renderResultsHeader(sorted.length, state.activeStat, state.activeGearType, jobAbbr, jobLevel);
   ui.renderResults(sorted, state.activeStat);
 }
 
@@ -72,8 +75,14 @@ async function handleImportUrl() {
     const { name, server, jobs } = await fetchCharacterJobs(id);
     state.jobs = jobs;
     state.charName = name;
+    state.uid = null;
     ui.showImportStatus('success', 'Imported ' + name);
     ui.showCharInfo(name, server);
+    // Re-init the current group's dropdown with updated levels
+    const groupIds = JOB_IDS_BY_GROUP[state.activeGroup];
+    const defaultJobId = groupIds.find(id => (state.jobs[id]?.level ?? 1) > 1) ?? groupIds[0];
+    state.activeJobId = defaultJobId;
+    ui.initJobSelect(groupIds, state.jobs, id => { state.activeJobId = id; runSearch(); });
     runSearch();
   } catch (err) {
     ui.showImportStatus('error', err.message);
@@ -100,8 +109,14 @@ async function handleImportById(id) {
     const { name, server, jobs } = await fetchCharacterJobs(id);
     state.jobs = jobs;
     state.charName = name;
+    state.uid = null;
     ui.showImportStatus('success', 'Imported ' + name);
     ui.showCharInfo(name, server);
+    // Re-init the current group's dropdown with updated levels
+    const groupIds = JOB_IDS_BY_GROUP[state.activeGroup];
+    const defaultJobId = groupIds.find(id => (state.jobs[id]?.level ?? 1) > 1) ?? groupIds[0];
+    state.activeJobId = defaultJobId;
+    ui.initJobSelect(groupIds, state.jobs, id => { state.activeJobId = id; runSearch(); });
     runSearch();
   } catch (err) {
     ui.showImportStatus('error', err.message);
@@ -114,29 +129,63 @@ function initSidebar() {
   document.getElementById('btn-import-url').addEventListener('click', handleImportUrl);
   document.getElementById('btn-search-char').addEventListener('click', handleCharacterSearch);
   document.addEventListener('import-character-id', e => handleImportById(e.detail.id));
+  ui.initServerDropdowns();
 
   ui.initGroupPills(state.activeGroup, group => {
     state.activeGroup = group;
-    const isCombat = group === 'combat';
-    ui.showCombatJobSelect(isCombat);
-    if (isCombat) {
-      state.activeCombatJobId = ui.initCombatJobSelect(state.jobs, id => {
-        state.activeCombatJobId = id;
-        runSearch();
-      });
-    }
     state.activeStat = null;
+    const groupIds = JOB_IDS_BY_GROUP[group];
+    const defaultJobId = groupIds.find(id => (state.jobs[id]?.level ?? 1) > 1) ?? groupIds[0];
+    state.activeJobId = defaultJobId;
+    ui.initJobSelect(groupIds, state.jobs, id => {
+      state.activeJobId = id;
+      runSearch();
+    });
+    ui.showJobSelect(true);
     ui.renderStatPills(group, null, stat => { state.activeStat = stat; runSearch(); });
     runSearch();
   });
 
-  ui.showCombatJobSelect(false);
+  // Initialise DoH group as default
+  const initialIds = JOB_IDS_BY_GROUP['doh'];
+  state.activeJobId = initialIds[0];
+  ui.initJobSelect(initialIds, state.jobs, id => {
+    state.activeJobId = id;
+    runSearch();
+  });
+  ui.showJobSelect(true);
   ui.renderStatPills('doh', null, stat => { state.activeStat = stat; runSearch(); });
   ui.renderGearTypePills(null, type => { state.activeGearType = type; runSearch(); });
-  ui.renderLevelDisplay('doh', 1, 1, 6);
+  ui.renderLevelDisplay('CRP', 1, 1, 1);
+}
+
+function refreshUpgradePage() {
+  ui.renderUpgradePage([], JOB_IDS[state.activeJobId]?.abbr ?? '?', true);
 }
 
 async function init() {
+  document.querySelectorAll('.main-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.main-tab').forEach(t => {
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
+      const panel = tab.dataset.panel;
+      document.getElementById('finder-panel').hidden = panel !== 'finder';
+      document.getElementById('upgrade-panel').hidden = panel !== 'upgrade';
+      if (panel === 'upgrade') refreshUpgradePage();
+    });
+  });
+
+  document.getElementById('btn-open-lists').addEventListener('click', () => {
+    document.getElementById('list-panel').hidden = false;
+  });
+  document.getElementById('btn-close-lists').addEventListener('click', () => {
+    document.getElementById('list-panel').hidden = true;
+  });
+
   initSidebar();
   ui.renderEmptyState(
     'Import your character',
