@@ -1,6 +1,13 @@
 // js/main.js
 import { loadData, getItemsInLevelRange, isLoaded, onProgress } from './data.js';
-import { searchCharacter, fetchCharacterJobs, extractCharacterIdFromUrl, fetchItemStats } from './api.js';
+import {
+  searchCharacter,
+  fetchCharacterJobs,
+  fetchByTeamcraftUID,
+  extractTeamcraftUid,
+  extractCharacterIdFromUrl,
+  fetchItemStats,
+} from './api.js';
 import { getLevelRange, filterItems, sortByStat } from './search.js';
 import { JOB_IDS, JOB_IDS_BY_GROUP } from './constants.js';
 import * as ui from './ui.js';
@@ -69,16 +76,22 @@ async function runSearch() {
 
 async function handleImportUrl() {
   const url = document.getElementById('lodestone-url').value.trim();
+  ui.showImportStatus('loading', 'Importing character...');
   try {
-    const id = extractCharacterIdFromUrl(url);
-    ui.showImportStatus('loading', 'Importing character...');
-    const { name, server, jobs } = await fetchCharacterJobs(id);
+    let result;
+    const tcUid = extractTeamcraftUid(url);
+    if (tcUid) {
+      result = await fetchByTeamcraftUID(tcUid);
+    } else {
+      const id = extractCharacterIdFromUrl(url);
+      result = await fetchCharacterJobs(id);
+    }
+    const { name, server, jobs } = result;
     state.jobs = jobs;
     state.charName = name;
-    state.uid = null;
+    state.uid = tcUid ?? null;
     ui.showImportStatus('success', 'Imported ' + name);
     ui.showCharInfo(name, server);
-    // Re-init the current group's dropdown with updated levels
     const groupIds = JOB_IDS_BY_GROUP[state.activeGroup];
     const defaultJobId = groupIds.find(id => (state.jobs[id]?.level ?? 1) > 1) ?? groupIds[0];
     state.activeJobId = defaultJobId;
