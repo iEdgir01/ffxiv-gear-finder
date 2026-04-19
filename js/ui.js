@@ -1,5 +1,5 @@
 // js/ui.js
-import { STATS_BY_GROUP, GEAR_TYPES, JOB_IDS, JOB_IDS_BY_GROUP, CLASSJOB_CATEGORY_TO_JOBS } from './constants.js';
+import { STATS_BY_GROUP, GEAR_TYPES, JOB_IDS, JOB_IDS_BY_GROUP, CLASSJOB_CATEGORY_TO_JOBS, SERVERS_BY_DC } from './constants.js';
 
 function el(tag, attrs = {}, ...children) {
   const node = document.createElement(tag);
@@ -16,6 +16,24 @@ function el(tag, attrs = {}, ...children) {
 }
 
 // ── Import section ────────────────────────────────────────────────────────────
+
+export function initServerDropdowns() {
+  const dcSel = document.getElementById('char-datacenter');
+  const srvSel = document.getElementById('char-server');
+  dcSel.addEventListener('change', () => {
+    const dc = dcSel.value;
+    srvSel.textContent = '';
+    srvSel.appendChild(el('option', { value: '' }, 'Any server'));
+    if (dc && SERVERS_BY_DC[dc]) {
+      for (const s of SERVERS_BY_DC[dc]) {
+        srvSel.appendChild(el('option', {}, s));
+      }
+      srvSel.hidden = false;
+    } else {
+      srvSel.hidden = true;
+    }
+  });
+}
 
 export function showImportStatus(type, message) {
   const node = document.getElementById('import-status');
