@@ -26,7 +26,23 @@
         </div>
         <div class="tab-panel" id="tab-search" role="tabpanel" hidden>
           <input type="text" id="char-name" placeholder="Character name">
-          <input type="text" id="char-server" placeholder="Server (optional)">
+          <select id="char-datacenter" class="combat-select" style="margin-bottom:6px" aria-label="Data centre">
+            <option value="">Any data centre</option>
+            <option>Aether</option>
+            <option>Crystal</option>
+            <option>Dynamis</option>
+            <option>Primal</option>
+            <option>Chaos</option>
+            <option>Light</option>
+            <option>Elemental</option>
+            <option>Gaia</option>
+            <option>Mana</option>
+            <option>Meteor</option>
+            <option>Materia</option>
+          </select>
+          <select id="char-server" class="combat-select" style="margin-bottom:6px" hidden aria-label="Server">
+            <option value="">Any server</option>
+          </select>
           <button class="btn-primary" id="btn-search-char">Search</button>
           <div id="char-results"></div>
         </div>
