@@ -16,36 +16,26 @@
 
       <section class="sidebar-section" id="import-section">
         <h2 class="section-label">Import Character</h2>
-        <div class="import-tabs" role="tablist">
-          <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="tab-url" data-tab="url">Lodestone URL</button>
-          <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-search" data-tab="search">Search</button>
-        </div>
-        <div class="tab-panel active" id="tab-url" role="tabpanel">
-          <input type="text" id="lodestone-url" placeholder="Lodestone character URL or ffxivteamcraft.com/profile/…">
-          <button class="btn-primary" id="btn-import-url">Import</button>
-        </div>
-        <div class="tab-panel" id="tab-search" role="tabpanel" hidden>
-          <input type="text" id="char-name" placeholder="Character name">
-          <select id="char-datacenter" class="combat-select" style="margin-bottom:6px" aria-label="Data centre">
-            <option value="">Any data centre</option>
-            <option>Aether</option>
-            <option>Crystal</option>
-            <option>Dynamis</option>
-            <option>Primal</option>
-            <option>Chaos</option>
-            <option>Light</option>
-            <option>Elemental</option>
-            <option>Gaia</option>
-            <option>Mana</option>
-            <option>Meteor</option>
-            <option>Materia</option>
-          </select>
-          <select id="char-server" class="combat-select" style="margin-bottom:6px" hidden aria-label="Server">
-            <option value="">Any server</option>
-          </select>
-          <button class="btn-primary" id="btn-search-char">Search</button>
-          <div id="char-results"></div>
-        </div>
+        <input type="text" id="char-name" placeholder="Character name">
+        <select id="char-datacenter" class="combat-select" style="margin-bottom:6px" aria-label="Data centre">
+          <option value="">Any data centre</option>
+          <option>Aether</option>
+          <option>Crystal</option>
+          <option>Dynamis</option>
+          <option>Primal</option>
+          <option>Chaos</option>
+          <option>Light</option>
+          <option>Elemental</option>
+          <option>Gaia</option>
+          <option>Mana</option>
+          <option>Meteor</option>
+          <option>Materia</option>
+        </select>
+        <select id="char-server" class="combat-select" style="margin-bottom:6px" hidden aria-label="Server">
+          <option value="">Any server</option>
+        </select>
+        <button class="btn-primary" id="btn-search-char" type="button">Search</button>
+        <div id="char-results"></div>
         <div id="import-status" class="status-msg" hidden></div>
         <div id="char-info" class="char-info" hidden></div>
       </section>

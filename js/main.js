@@ -3,9 +3,6 @@ import { loadData, getItemsInLevelRange, isLoaded, onProgress } from './data.js'
 import {
   searchCharacter,
   fetchCharacterJobs,
-  fetchByTeamcraftUID,
-  extractTeamcraftUid,
-  extractCharacterIdFromUrl,
   fetchItemStats,
 } from './api.js';
 import { getLevelRange, filterItems, sortByStat } from './search.js';
@@ -74,34 +71,6 @@ async function runSearch() {
   ui.renderResults(sorted, state.activeStat);
 }
 
-async function handleImportUrl() {
-  const url = document.getElementById('lodestone-url').value.trim();
-  ui.showImportStatus('loading', 'Importing character...');
-  try {
-    let result;
-    const tcUid = extractTeamcraftUid(url);
-    if (tcUid) {
-      result = await fetchByTeamcraftUID(tcUid);
-    } else {
-      const id = extractCharacterIdFromUrl(url);
-      result = await fetchCharacterJobs(id);
-    }
-    const { name, server, jobs } = result;
-    state.jobs = jobs;
-    state.charName = name;
-    state.uid = tcUid ?? null;
-    ui.showImportStatus('success', 'Imported ' + name);
-    ui.showCharInfo(name, server);
-    const groupIds = JOB_IDS_BY_GROUP[state.activeGroup];
-    const defaultJobId = groupIds.find(id => (state.jobs[id]?.level ?? 1) > 1) ?? groupIds[0];
-    state.activeJobId = defaultJobId;
-    ui.initJobSelect(groupIds, state.jobs, id => { state.activeJobId = id; runSearch(); });
-    runSearch();
-  } catch (err) {
-    ui.showImportStatus('error', err.message);
-  }
-}
-
 async function handleCharacterSearch() {
   const name = document.getElementById('char-name').value.trim();
   const server = document.getElementById('char-server').value.trim();
@@ -137,9 +106,6 @@ async function handleImportById(id) {
 }
 
 function initSidebar() {
-  ui.initImportTabs();
-
-  document.getElementById('btn-import-url').addEventListener('click', handleImportUrl);
   document.getElementById('btn-search-char').addEventListener('click', handleCharacterSearch);
   document.addEventListener('import-character-id', e => handleImportById(e.detail.id));
   ui.initServerDropdowns();
@@ -202,7 +168,7 @@ async function init() {
   initSidebar();
   ui.renderEmptyState(
     'Import your character',
-    'Use the sidebar to import from Lodestone, then select a stat to search.'
+    'Search for your character in the sidebar, pick them from the results, then choose a stat to search.'
   );
 
   onProgress(msg => {
