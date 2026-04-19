@@ -20,6 +20,9 @@ function el(tag, attrs = {}, ...children) {
 export function initServerDropdowns() {
   const dcSel = document.getElementById('char-datacenter');
   const srvSel = document.getElementById('char-server');
+  if (!dcSel || !srvSel || dcSel.tagName !== 'SELECT' || srvSel.tagName !== 'SELECT') {
+    return;
+  }
   dcSel.addEventListener('change', () => {
     const dc = dcSel.value;
     srvSel.textContent = '';
