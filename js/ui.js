@@ -1,5 +1,5 @@
 // js/ui.js
-import { STATS_BY_GROUP, GEAR_TYPES, JOB_IDS, COMBAT_JOB_IDS } from './constants.js';
+import { STATS_BY_GROUP, GEAR_TYPES, JOB_IDS, JOB_IDS_BY_GROUP, CLASSJOB_CATEGORY_TO_JOBS } from './constants.js';
 
 function el(tag, attrs = {}, ...children) {
   const node = document.createElement(tag);
@@ -74,11 +74,11 @@ export function initGroupPills(activeGroup, onSelect) {
   });
 }
 
-export function initCombatJobSelect(jobs, onSelect) {
-  const old = document.getElementById('combat-job-select');
+export function initJobSelect(groupJobIds, jobs, onSelect) {
+  const old = document.getElementById('job-select');
   const sel = old.cloneNode(false);
   old.replaceWith(sel);
-  for (const id of COMBAT_JOB_IDS) {
+  for (const id of groupJobIds) {
     const job = JOB_IDS[id];
     const level = jobs[id]?.level ?? '?';
     const opt = el('option', { value: String(id) }, job.abbr + ' \u2014 ' + job.name + ' (Lv ' + level + ')');
@@ -88,17 +88,16 @@ export function initCombatJobSelect(jobs, onSelect) {
   return Number(sel.value);
 }
 
-export function showCombatJobSelect(visible) {
-  document.getElementById('combat-job-select').hidden = !visible;
+export function showJobSelect(visible) {
+  document.getElementById('job-select-wrap').hidden = !visible;
 }
 
-export function renderLevelDisplay(group, avgLevel, min, max) {
-  const label = group === 'doh' ? 'DoH average' : group === 'dol' ? 'DoL average' : 'Job level';
+export function renderLevelDisplay(jobAbbr, jobLevel, min, max) {
   const node = document.getElementById('level-display');
   node.textContent = '';
   const row1 = el('div', {});
-  row1.appendChild(el('span', { style: 'color:var(--text-muted)' }, label + ': '));
-  row1.appendChild(el('span', { class: 'level-avg' }, 'Lv ' + avgLevel));
+  row1.appendChild(el('span', { style: 'color:var(--text-muted)' }, jobAbbr + ' level: '));
+  row1.appendChild(el('span', { class: 'level-avg' }, 'Lv ' + jobLevel));
   const row2 = el('div', {});
   row2.appendChild(el('span', { style: 'color:var(--text-muted)' }, 'Showing: '));
   row2.appendChild(el('span', { class: 'level-range' }, 'Lv ' + min + '\u2013' + max));
@@ -143,10 +142,8 @@ export function renderGearTypePills(activeType, onSelect) {
 
 // ── Results panel ─────────────────────────────────────────────────────────────
 
-export function renderResultsHeader(count, stat, gearType, group, avgLevel) {
-  const groupLabel = group === 'doh' ? 'DoH avg Lv ' + avgLevel
-                   : group === 'dol' ? 'DoL avg Lv ' + avgLevel
-                   : 'Lv ' + avgLevel;
+export function renderResultsHeader(count, stat, gearType, jobAbbr, jobLevel) {
+  const groupLabel = 'Lv ' + jobLevel;
   const el2 = document.getElementById('results-header');
   el2.textContent = '';
   const countSpan = el('span', { class: 'count' }, String(count));
@@ -155,8 +152,16 @@ export function renderResultsHeader(count, stat, gearType, group, avgLevel) {
     ' result' + (count !== 1 ? 's' : '') +
     ' \u2014 ' + (stat ?? 'all stats') +
     ', ' + (gearType ?? 'all types') +
-    ', ' + groupLabel
+    ', ' + (jobAbbr ? jobAbbr + ' ' : '') + groupLabel
   ));
+}
+
+function renderJobTags(classJobCategory) {
+  const abbrs = CLASSJOB_CATEGORY_TO_JOBS[classJobCategory] ?? [];
+  if (abbrs.length === 0) return null;
+  const row = el('div', { class: 'card-job-tags' });
+  row.appendChild(document.createTextNode(abbrs.join(' \u00b7 ')));
+  return row;
 }
 
 export function renderResults(items, activeStat) {
@@ -171,7 +176,10 @@ export function renderResults(items, activeStat) {
     return;
   }
   items.forEach((item, idx) => {
-    const card = el('div', { class: 'result-card' + (idx === 0 && activeStat ? ' best-match' : '') });
+    const card = el('div', {
+      class: 'result-card' + (idx === 0 && activeStat ? ' best-match' : ''),
+      'data-item-id': String(item.id),
+    });
 
     const nameLine = el('div', { class: 'card-name' }, item.name);
     const meta = el('div', { class: 'card-meta' });
@@ -192,8 +200,25 @@ export function renderResults(items, activeStat) {
     card.appendChild(nameLine);
     card.appendChild(meta);
     card.appendChild(statsDiv);
+    const jobTagRow = renderJobTags(item.classJobCategory ?? '');
+    if (jobTagRow) card.appendChild(jobTagRow);
+    card.appendChild(el('div', { class: 'card-acq-tags' }));
     grid.appendChild(card);
   });
+}
+
+export function updateCardTags(itemId, tags) {
+  const card = document.querySelector('[data-item-id="' + itemId + '"]');
+  if (!card) return;
+  const container = card.querySelector('.card-acq-tags');
+  if (!container) return;
+  container.textContent = '';
+  for (const { label, cssVar } of tags) {
+    container.appendChild(el('span', {
+      class: 'acq-tag',
+      style: 'background:var(' + cssVar + ')',
+    }, label));
+  }
 }
 
 export function renderEmptyState(title, detail) {
@@ -236,4 +261,92 @@ export function initImportTabs() {
       panel.hidden = false;
     });
   });
+}
+
+// ── Upgrade page ──────────────────────────────────────────────────────────────
+
+export function renderUpgradePage(upgrades, jobAbbr, noGearset) {
+  const container = document.getElementById('upgrade-content');
+  container.textContent = '';
+
+  if (noGearset) {
+    container.appendChild(el('div', { class: 'empty-state' },
+      el('span', { class: 'empty-title' }, 'No gearset for ' + jobAbbr),
+      'Sync this job\'s gearset in the Teamcraft desktop app, then re-import.'
+    ));
+    return;
+  }
+
+  if (!upgrades || upgrades.length === 0) {
+    container.appendChild(el('div', { class: 'empty-state' },
+      el('span', { class: 'empty-title' }, 'Select a job to see upgrades')
+    ));
+    return;
+  }
+
+  const table = el('table', { class: 'upgrade-table' });
+  const thead = el('thead', {},
+    el('tr', {},
+      el('th', {}, 'Slot'),
+      el('th', {}, 'Equipped'),
+      el('th', {}, 'Best Upgrade'),
+      el('th', {}, 'Stat Delta'),
+    )
+  );
+  table.appendChild(thead);
+  const tbody = el('tbody', {});
+  for (const row of upgrades) {
+    const currentText = row.current
+      ? row.current.name + ' (ilvl ' + (row.current.ilvl ?? '?') + ')'
+      : '\u2014';
+    const bestCell = row.best
+      ? el('td', { class: 'upgrade-best' }, row.best.name + ' (ilvl ' + (row.best.ilvl ?? '?') + ')')
+      : el('td', {}, row.current ? '\u2713 Best available' : '\u2014');
+    const deltaCell = row.delta != null
+      ? el('td', { class: 'upgrade-best' }, '+' + row.delta + ' ' + row.primaryStat)
+      : el('td', {}, '\u2014');
+    tbody.appendChild(el('tr', {},
+      el('td', {}, row.label),
+      el('td', {}, currentText),
+      bestCell,
+      deltaCell,
+    ));
+  }
+  table.appendChild(tbody);
+  container.appendChild(table);
+}
+
+// ── List panel ────────────────────────────────────────────────────────────────
+
+export function renderListPanel(lists, handlers) {
+  const body = document.getElementById('list-panel-body');
+  body.textContent = '';
+  if (lists.length === 0) {
+    body.appendChild(el('p', { style: 'color:var(--text-muted);font-size:13px' },
+      'No lists yet. Use + on any item card.'));
+    return;
+  }
+  for (const list of lists) {
+    const section = el('div', { style: 'margin-bottom:16px' });
+    const header = el('div', { style: 'display:flex;align-items:center;justify-content:space-between;margin-bottom:6px' });
+    header.appendChild(el('strong', {}, list.name + ' (' + list.items.length + ')'));
+    const actions = el('div', { style: 'display:flex;gap:6px' });
+    const exportBtn = el('button', { class: 'btn-secondary btn-sm' }, 'Export');
+    exportBtn.addEventListener('click', () => handlers.onExport(list));
+    const delBtn = el('button', { class: 'btn-secondary btn-sm' }, 'Delete');
+    delBtn.addEventListener('click', () => handlers.onDeleteList(list.id));
+    actions.appendChild(exportBtn);
+    actions.appendChild(delBtn);
+    header.appendChild(actions);
+    section.appendChild(header);
+    for (const item of list.items) {
+      const row = el('div', { style: 'display:flex;align-items:center;justify-content:space-between;font-size:12px;padding:3px 0' });
+      row.appendChild(document.createTextNode(item.name));
+      const rmBtn = el('button', { class: 'btn-icon', style: 'font-size:12px' }, '\u00d7');
+      rmBtn.addEventListener('click', () => handlers.onRemoveItem(list.id, item.itemId));
+      row.appendChild(rmBtn);
+      section.appendChild(row);
+    }
+    body.appendChild(section);
+  }
 }
