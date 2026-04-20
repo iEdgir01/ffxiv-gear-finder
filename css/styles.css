@@ -53,6 +53,20 @@ body {
 
 .sidebar-section { padding: 14px 0; border-bottom: 1px solid var(--border); }
 
+.sidebar-github-link {
+  margin-top: auto;
+  padding-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.72em;
+  opacity: 0.7;
+  transition: opacity 0.15s, color 0.15s;
+}
+.sidebar-github-link:hover { opacity: 1; color: var(--blue); }
+
 .section-label {
   color: var(--blue);
   font-size: 0.72em;

@@ -59,7 +59,8 @@ export function removeItemFromList(listId, itemId) {
   const store = readStore();
   const list = store.lists.find(l => l.id === listId);
   if (!list) return;
-  list.items = list.items.filter(i => i.itemId !== itemId);
+  const id = Number(itemId);
+  list.items = list.items.filter(i => i.itemId !== id);
   writeStore(store);
 }
 

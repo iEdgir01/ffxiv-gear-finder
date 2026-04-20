@@ -194,7 +194,7 @@ export function getActiveProfile() {
 /** @returns {StoredProfile[]} */
 export function listProfilesSorted() {
   const s = readStore();
-  return Object.values(s.profiles).sort((a, b) => a.name.localeCompare(b.name));
+  return Object.values(s.profiles).sort((a, b) => String(a.name ?? '').localeCompare(String(b.name ?? '')));
 }
 
 /**
