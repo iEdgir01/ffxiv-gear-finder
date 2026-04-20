@@ -3,6 +3,7 @@ import { loadData, getCraftPoolItems, isLoaded, onProgress } from './data.js';
 import {
   searchCharacter,
   fetchCharacterJobs,
+  fetchByTeamcraftUID,
   fetchItemStats,
   extractTeamcraftUid,
 } from './api.js';
@@ -1064,6 +1065,25 @@ async function refreshCharacterJobsOnLoad() {
     const { name, server, jobs, portrait } = payload ?? {};
     // If the user is mid-session and data is already loaded, update in-place without resetting UI state.
     state.jobs = jobs || state.jobs;
+
+    // Supplement with Teamcraft job levels — TC reflects in-game progress faster than Lodestone.
+    if (state.uid) {
+      try {
+        const tcData = await fetchByTeamcraftUID(state.uid);
+        if (tcData?.jobs) {
+          const merged = { ...state.jobs };
+          for (const [jobId, tcJob] of Object.entries(tcData.jobs)) {
+            const existing = merged[jobId]?.level ?? 0;
+            const tcLevel = tcJob?.level ?? 0;
+            if (tcLevel > existing) merged[jobId] = { level: tcLevel };
+          }
+          state.jobs = merged;
+        }
+      } catch {
+        // Non-fatal; keep Lodestone-only levels.
+      }
+    }
+
     if (name) state.charName = name;
     if (server) {
       // Keep existing UI server label up to date.
@@ -1072,7 +1092,7 @@ async function refreshCharacterJobsOnLoad() {
     if (portrait) state.charPortrait = portrait;
     if (state.charName) ui.setCharacterChip({ name: state.charName, portraitUrl: state.charPortrait });
 
-    // Persist refreshed levels so next load is already updated.
+    // Persist refreshed levels (merged Lodestone + Teamcraft) so next load is already updated.
     profiles.upsertProfileFromImport(state.lodestoneId, {
       name: state.charName ?? name ?? 'Unknown',
       server: server ?? '',
