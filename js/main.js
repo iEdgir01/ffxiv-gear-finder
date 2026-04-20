@@ -6,7 +6,7 @@ import {
   fetchItemStats,
   extractTeamcraftUid,
 } from './api.js';
-import { fetchItemAcquisition, isGcExclusiveAcquisition } from './garland.js';
+import { fetchItemAcquisition, isGcExclusiveAcquisition, syntheticAcqFromItem } from './garland.js';
 import {
   filterItems,
   sortGearForDisplay,
@@ -510,6 +510,32 @@ function handleAddToList(item, anchor) {
   );
 }
 
+function preSeedAcqCacheFromPool(items) {
+  for (const item of items) {
+    if (state.acqCache[item.id] !== undefined) continue;
+    const synth = syntheticAcqFromItem(item);
+    if (synth !== undefined) state.acqCache[item.id] = synth;
+  }
+}
+
+function preSeedStatsCacheFromPool(items) {
+  for (const item of items) {
+    if (state.statsCache[item.id]) continue;
+    if (!item.gcInfo && !item.tomestoneInfo && !item.scripInfo) continue;
+    state.statsCache[item.id] = {
+      id: item.id,
+      name: item.name,
+      ilvl: item.ilvl,
+      equipLevel: item.equipLevel,
+      gearTypeRaw: item.gearTypeRaw ?? '',
+      gearType: item.gearType ?? '',
+      classJobCategory: item.classJobCategory ?? '',
+      isUntradable: false,
+      stats: item.stats ?? {},
+    };
+  }
+}
+
 async function runSearch() {
   const seq = ++_searchSeq;
 
@@ -555,6 +581,7 @@ async function runSearch() {
     const equipIds = gearset
       ? [...new Set(Object.values(gearset).map(Number).filter(id => id > 0))]
       : [];
+    preSeedStatsCacheFromPool(filtered);
     const poolIds = filtered.map(i => i.id);
     const uncachedIds = [...new Set([...poolIds, ...equipIds])].filter(id => !state.statsCache[id]);
     if (uncachedIds.length > 0) {
@@ -594,6 +621,7 @@ async function runSearch() {
       return;
     }
 
+    preSeedAcqCacheFromPool(filtered);
     await ensureAcquisitionsCached(filtered.map(i => i.id));
     if (seq !== _searchSeq) return;
 
@@ -1106,6 +1134,7 @@ async function refreshUpgradePage() {
       gearType: null,
     });
     const gearIds = [...new Set(Object.values(gearset).map(Number).filter(id => id > 0))];
+    preSeedStatsCacheFromPool(pool);
     const poolIds = pool.map(i => i.id);
     const uncached = [...new Set([...poolIds, ...gearIds])].filter(id => !state.statsCache[id]);
     if (uncached.length > 0) {
@@ -1123,6 +1152,7 @@ async function refreshUpgradePage() {
     const upgradeGroup = JOB_IDS[jobId]?.group ?? null;
     pool = filterByJobGroupStats(pool, upgradeGroup);
 
+    preSeedAcqCacheFromPool(pool);
     await ensureAcquisitionsCached(pool.map(i => i.id));
     if (seq !== _upgradeRefreshSeq) return;
 

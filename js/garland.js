@@ -78,6 +78,12 @@ function setCached(id, data) {
   try { localStorage.setItem(GT_CACHE_VER + id, JSON.stringify({ ts: Date.now(), data })); } catch {}
 }
 
+export function syntheticAcqFromItem(item) {
+  if (!item) return undefined;
+  if (item.gcInfo || item.tomestoneInfo || item.scripInfo || item.recipeLevel != null) return null;
+  return undefined;
+}
+
 export async function fetchItemAcquisition(itemId) {
   const cached = getCached(itemId);
   if (cached) return cached;

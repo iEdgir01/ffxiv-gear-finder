@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { parseGarlandDoc, classifyAcquisition, isGcExclusiveAcquisition } from '../js/garland.js';
+import { parseGarlandDoc, classifyAcquisition, isGcExclusiveAcquisition, syntheticAcqFromItem } from '../js/garland.js';
 
 const MOCK_DOC = {
   item: {
@@ -84,5 +84,41 @@ describe('isGcExclusiveAcquisition', () => {
   });
   it('false when null', () => {
     assert.equal(isGcExclusiveAcquisition(null), false);
+  });
+});
+
+describe('syntheticAcqFromItem', () => {
+  it('returns null for GC item (has gcInfo)', () => {
+    assert.equal(syntheticAcqFromItem({ id: 1, gcInfo: { seals: 500 }, recipeLevel: null }), null);
+  });
+  it('returns null for tomestone vendor item (has tomestoneInfo)', () => {
+    assert.equal(syntheticAcqFromItem({ id: 2, tomestoneInfo: { cost: 100 }, recipeLevel: null }), null);
+  });
+  it('returns null for scrip vendor item (has scripInfo)', () => {
+    assert.equal(syntheticAcqFromItem({ id: 3, scripInfo: { cost: 50 }, recipeLevel: null }), null);
+  });
+  it('returns null for craftable item (recipeLevel is a number)', () => {
+    assert.equal(syntheticAcqFromItem({ id: 4, recipeLevel: 90 }), null);
+  });
+  it('returns null for item that is both craftable and GC', () => {
+    assert.equal(syntheticAcqFromItem({ id: 5, gcInfo: { seals: 200 }, recipeLevel: 50 }), null);
+  });
+  it('returns undefined for item with no classifiable metadata (recipeLevel null, no markers)', () => {
+    assert.equal(syntheticAcqFromItem({ id: 6, recipeLevel: null }), undefined);
+  });
+  it('returns undefined for null input', () => {
+    assert.equal(syntheticAcqFromItem(null), undefined);
+  });
+
+  describe('null return is safe with all downstream consumers', () => {
+    it('isGcExclusiveAcquisition(null) returns false — craft items are not GC-exclusive', () => {
+      assert.equal(isGcExclusiveAcquisition(null), false);
+    });
+    it('classifyAcquisition(null) marks unknown — never reached for pool items due to metadata-first checks', () => {
+      const c = classifyAcquisition(null);
+      assert.equal(c.unknown, true);
+      assert.equal(c.craftable, false);
+      assert.equal(c.buyable, false);
+    });
   });
 });
