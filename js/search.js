@@ -53,6 +53,11 @@ export function jobCanEquipCategory(jobId, categoryName) {
   }
   const isJobAbbr = Object.values(JOB_IDS).some(j => j.abbr === cat);
   if (isJobAbbr && cat === abbr) return true;
+  // Space-separated abbreviation list from datamining (e.g. "GLA MRD PLD WAR DRK GNB")
+  const parts = cat.split(/\s+/);
+  if (parts.length > 1 && parts.every(p => /^[A-Z]{2,4}$/.test(p))) {
+    return parts.includes(abbr);
+  }
   return false;
 }
 

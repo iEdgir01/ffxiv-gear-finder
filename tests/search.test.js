@@ -103,6 +103,18 @@ describe('jobCanEquipCategory', () => {
     assert.equal(jobCanEquipCategory(8, 'CRP'), true);
     assert.equal(jobCanEquipCategory(9, 'CRP'), false);
   });
+  it('handles space-separated abbreviation list — WAR allowed in tank list', () => {
+    assert.equal(jobCanEquipCategory(21, 'GLA MRD PLD WAR DRK GNB'), true);
+  });
+  it('handles space-separated abbreviation list — WHM excluded from tank list', () => {
+    assert.equal(jobCanEquipCategory(24, 'GLA MRD PLD WAR DRK GNB'), false);
+  });
+  it('handles space-separated abbreviation list — CRP allowed in DoH abbr list', () => {
+    assert.equal(jobCanEquipCategory(8, 'CRP BSM ARM GSM LTW WVR ALC CUL'), true);
+  });
+  it('handles space-separated abbreviation list — WAR excluded from DoH abbr list', () => {
+    assert.equal(jobCanEquipCategory(21, 'CRP BSM ARM GSM LTW WVR ALC CUL'), false);
+  });
 });
 
 describe('maxGroupStatScore', () => {

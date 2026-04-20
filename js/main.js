@@ -6,7 +6,7 @@ import {
   fetchItemStats,
   extractTeamcraftUid,
 } from './api.js';
-import { fetchItemAcquisition, isGcExclusiveAcquisition, syntheticAcqFromItem } from './garland.js';
+import { isGcExclusiveAcquisition } from './garland.js';
 import {
   filterItems,
   sortGearForDisplay,
@@ -358,22 +358,6 @@ function filterOutMasterRecipeItems(items, includeMaster) {
   return items.filter(it => !isMasterRecipeRow(it));
 }
 
-async function ensureAcquisitionsCached(itemIds) {
-  const uncached = itemIds.filter(id => state.acqCache[id] === undefined);
-  const chunk = 12;
-  for (let i = 0; i < uncached.length; i += chunk) {
-    const batch = uncached.slice(i, i + chunk);
-    await Promise.all(
-      batch.map(async id => {
-        try {
-          state.acqCache[id] = await fetchItemAcquisition(id);
-        } catch {
-          state.acqCache[id] = null;
-        }
-      })
-    );
-  }
-}
 
 function buildAcquisitionTags(row, acq, equippedIds) {
   const tags = [];
@@ -395,24 +379,11 @@ function buildUpgradeSourceTags(best, acq) {
   return tags;
 }
 
-async function hydrateAcquisitionTags(items) {
-  const slice = items.slice(0, 48);
+function applyAcquisitionTags(items) {
   const equippedIds = equippedItemIdSetForActiveJob();
-  await Promise.all(
-    slice.map(async row => {
-      try {
-        let acq = state.acqCache[row.id];
-        if (acq === undefined) {
-          acq = await fetchItemAcquisition(row.id);
-          state.acqCache[row.id] = acq;
-        }
-        const tags = buildAcquisitionTags(row, acq, equippedIds);
-        ui.updateCardTags(row.id, tags);
-      } catch {
-        /* ignore */
-      }
-    })
-  );
+  for (const row of items.slice(0, 48)) {
+    ui.updateCardTags(row.id, buildAcquisitionTags(row, null, equippedIds));
+  }
 }
 
 function refreshListPanel() {
@@ -510,32 +481,6 @@ function handleAddToList(item, anchor) {
   );
 }
 
-function preSeedAcqCacheFromPool(items) {
-  for (const item of items) {
-    if (state.acqCache[item.id] !== undefined) continue;
-    const synth = syntheticAcqFromItem(item);
-    if (synth !== undefined) state.acqCache[item.id] = synth;
-  }
-}
-
-function preSeedStatsCacheFromPool(items) {
-  for (const item of items) {
-    if (state.statsCache[item.id]) continue;
-    if (!item.gcInfo && !item.tomestoneInfo && !item.scripInfo) continue;
-    state.statsCache[item.id] = {
-      id: item.id,
-      name: item.name,
-      ilvl: item.ilvl,
-      equipLevel: item.equipLevel,
-      gearTypeRaw: item.gearTypeRaw ?? '',
-      gearType: item.gearType ?? '',
-      classJobCategory: item.classJobCategory ?? '',
-      isUntradable: false,
-      stats: item.stats ?? {},
-    };
-  }
-}
-
 async function runSearch() {
   const seq = ++_searchSeq;
 
@@ -581,7 +526,6 @@ async function runSearch() {
     const equipIds = gearset
       ? [...new Set(Object.values(gearset).map(Number).filter(id => id > 0))]
       : [];
-    preSeedStatsCacheFromPool(filtered);
     const poolIds = filtered.map(i => i.id);
     const uncachedIds = [...new Set([...poolIds, ...equipIds])].filter(id => !state.statsCache[id]);
     if (uncachedIds.length > 0) {
@@ -620,10 +564,6 @@ async function runSearch() {
       );
       return;
     }
-
-    preSeedAcqCacheFromPool(filtered);
-    await ensureAcquisitionsCached(filtered.map(i => i.id));
-    if (seq !== _searchSeq) return;
 
     const afterGc = filterOutGcExclusiveItems(filtered, state.finderIncludeGc);
     const afterTomestone = filterOutTomestoneVendorItems(afterGc, state.finderIncludeTomestones);
@@ -673,7 +613,7 @@ async function runSearch() {
       state.activeGearType, listedIds, null, false, state.priorityStat,
       getCraftUiForCards()
     );
-    void hydrateAcquisitionTags(ordered);
+    applyAcquisitionTags(ordered);
   } finally {
     ui.endViewLoading();
   }
@@ -1174,7 +1114,6 @@ async function refreshUpgradePage() {
       gearType: null,
     });
     const gearIds = [...new Set(Object.values(gearset).map(Number).filter(id => id > 0))];
-    preSeedStatsCacheFromPool(pool);
     const poolIds = pool.map(i => i.id);
     const uncached = [...new Set([...poolIds, ...gearIds])].filter(id => !state.statsCache[id]);
     if (uncached.length > 0) {
@@ -1191,10 +1130,6 @@ async function refreshUpgradePage() {
 
     const upgradeGroup = JOB_IDS[jobId]?.group ?? null;
     pool = filterByJobGroupStats(pool, upgradeGroup);
-
-    preSeedAcqCacheFromPool(pool);
-    await ensureAcquisitionsCached(pool.map(i => i.id));
-    if (seq !== _upgradeRefreshSeq) return;
 
     pool = filterOutGcExclusiveItems(pool, state.upgradeIncludeGc);
     pool = filterOutTomestoneVendorItems(pool, state.upgradeIncludeTomestones);
