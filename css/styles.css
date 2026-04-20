@@ -1370,6 +1370,165 @@ input[type="text"]:focus { border-color: var(--blue); }
   color: var(--red);
 }
 
+/* ── Two-screen character overlay ────────────────────── */
+.char-screen[hidden] { display: none !important; }
+
+.char-back-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 0.8em;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0 0 12px;
+  transition: color 0.15s;
+}
+.char-back-btn:hover { color: var(--text); }
+
+.char-manage-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.char-manage-title {
+  font-size: 0.72em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--blue);
+}
+
+/* ── Profile cards ───────────────────────────────────── */
+.profile-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.profile-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.profile-card--active {
+  border-color: rgba(52, 152, 219, 0.5);
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+
+.profile-card-portrait {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+}
+
+.profile-card-portrait img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center 25%;
+  border: 1px solid var(--border);
+  display: block;
+}
+
+.profile-card-portrait-ph {
+  display: block;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2a3148, #1a1f2e);
+  border: 1px dashed var(--border);
+}
+
+.profile-card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-card-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 2px;
+}
+
+.profile-card-name {
+  font-weight: 600;
+  font-size: 0.88em;
+  color: var(--gold);
+}
+
+.profile-card-active-pill {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(52, 152, 219, 0.15);
+  border: 1px solid rgba(52, 152, 219, 0.35);
+  color: var(--accent);
+}
+
+.profile-card-server {
+  font-size: 0.75em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.profile-card-tc-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.profile-card-tc-input {
+  flex: 1;
+  min-width: 0;
+  font-size: 11px;
+  padding: 4px 7px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--text);
+  transition: border-color 0.15s;
+}
+.profile-card-tc-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.profile-card-tc-input::placeholder { color: var(--text-muted); }
+
+.profile-card-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-shrink: 0;
+  align-items: stretch;
+}
+
+.profile-card-use-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.profile-card-remove-btn:hover {
+  border-color: rgba(231, 76, 60, 0.45);
+  color: var(--red);
+}
+
 .recipe-range-row {
   display: flex;
   align-items: center;

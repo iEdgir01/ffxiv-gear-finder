@@ -76,56 +76,58 @@
         <div class="character-overlay-backdrop" id="character-overlay-backdrop"></div>
         <div class="character-overlay-panel" role="dialog" aria-modal="true" aria-labelledby="character-overlay-title">
           <div class="character-overlay-head">
-            <h2 id="character-overlay-title" class="character-overlay-title">Character &amp; Teamcraft</h2>
+            <h2 id="character-overlay-title" class="character-overlay-title">Characters</h2>
             <button type="button" class="character-overlay-close" id="character-overlay-close" aria-label="Close">&times;</button>
           </div>
-          <section class="character-overlay-section">
-            <h3 class="character-overlay-section-label">Import character</h3>
-            <div class="character-import-intro">
-              <p class="character-import-hint">Job levels are loaded from the <strong>official Lodestone character API</strong>. If the profile is <strong>private</strong>, or <strong>class / job details</strong> are hidden, import may fail or show no jobs.</p>
-              <button type="button" class="character-import-info-btn" id="character-import-toggle" aria-expanded="false" aria-controls="character-import-extra" title="Lodestone privacy — how to fix import issues">
-                <span class="character-import-info-icon" aria-hidden="true">i</span>
-                <span class="visually-hidden">More about Lodestone privacy settings</span>
-              </button>
+
+          <!-- Screen: Manage saved profiles -->
+          <div id="char-screen-manage" class="char-screen" hidden>
+            <div class="char-manage-header">
+              <span class="char-manage-title">Saved characters</span>
+              <button type="button" id="char-add-btn" class="btn-secondary btn-sm">+ Add character</button>
             </div>
-            <div id="character-import-extra" class="character-import-extra" hidden>
-              <p class="character-import-extra-text">On <strong>The Lodestone</strong> for your region, sign in and open <strong>account privacy settings</strong>, or open your <strong>character</strong> page and use <strong>profile / privacy settings</strong> (often <strong>Edit Profile</strong>; labels depend on language). Ensure your <strong>character</strong> and <strong>class / job details</strong> are visible to others, then search again here.</p>
-            </div>
-            <input type="text" id="char-name" placeholder="Character name">
-            <select id="char-datacenter" class="combat-select" style="margin-bottom:6px" aria-label="Data centre">
-              <option value="">-- selection required --</option>
-              <option>Aether</option>
-              <option>Crystal</option>
-              <option>Dynamis</option>
-              <option>Primal</option>
-              <option>Chaos</option>
-              <option>Light</option>
-              <option>Elemental</option>
-              <option>Gaia</option>
-              <option>Mana</option>
-              <option>Meteor</option>
-              <option>Materia</option>
-            </select>
-            <select id="char-server" class="combat-select" style="margin-bottom:6px" hidden aria-label="Server">
-              <option value="">-- selection required --</option>
-            </select>
-            <button class="btn-primary" id="btn-search-char" type="button">Search</button>
-            <div id="char-results"></div>
-            <div id="import-status" class="status-msg" hidden></div>
-            <div id="char-info" class="char-info" hidden></div>
-          </section>
-          <section class="character-overlay-section" id="teamcraft-section" hidden>
-            <h3 class="character-overlay-section-label">Teamcraft (optional)</h3>
-            <p class="tagline" style="margin-bottom:8px">After you import a character above, link your Teamcraft profile so gearsets load for Upgrades and Equipped tags. The link is saved with that character.</p>
-            <input type="text" id="teamcraft-profile" placeholder="https://ffxivteamcraft.com/profile/…" autocomplete="off">
-            <button class="btn-primary" id="btn-link-teamcraft" type="button">Link profile</button>
-            <div id="teamcraft-status" class="status-msg" hidden></div>
-          </section>
-          <section class="character-overlay-section character-overlay-section--saved" id="saved-profiles-section" aria-labelledby="saved-profiles-heading">
-            <h3 id="saved-profiles-heading" class="character-overlay-section-label">Saved characters</h3>
-            <p class="saved-profiles-hint">Stored in this browser only. Select one to use it in Gear Finder and Upgrades.</p>
-            <div id="saved-profiles-list" class="saved-profiles-list" role="list"></div>
-          </section>
+            <div id="profile-cards-list" class="profile-cards-list"></div>
+          </div>
+
+          <!-- Screen: Add / import a character -->
+          <div id="char-screen-add" class="char-screen">
+            <button type="button" id="char-back-btn" class="char-back-btn" hidden>&#8592; Back</button>
+            <section class="character-overlay-section">
+              <h3 class="character-overlay-section-label">Import character</h3>
+              <div class="character-import-intro">
+                <p class="character-import-hint">Job levels are loaded from the <strong>official Lodestone character API</strong>. If the profile is <strong>private</strong>, or <strong>class / job details</strong> are hidden, import may fail or show no jobs.</p>
+                <button type="button" class="character-import-info-btn" id="character-import-toggle" aria-expanded="false" aria-controls="character-import-extra" title="Lodestone privacy — how to fix import issues">
+                  <span class="character-import-info-icon" aria-hidden="true">i</span>
+                  <span class="visually-hidden">More about Lodestone privacy settings</span>
+                </button>
+              </div>
+              <div id="character-import-extra" class="character-import-extra" hidden>
+                <p class="character-import-extra-text">On <strong>The Lodestone</strong> for your region, sign in and open <strong>account privacy settings</strong>, or open your <strong>character</strong> page and use <strong>profile / privacy settings</strong> (often <strong>Edit Profile</strong>; labels depend on language). Ensure your <strong>character</strong> and <strong>class / job details</strong> are visible to others, then search again here.</p>
+              </div>
+              <input type="text" id="char-name" placeholder="Character name">
+              <select id="char-datacenter" class="combat-select" style="margin-bottom:6px" aria-label="Data centre">
+                <option value="">-- selection required --</option>
+                <option>Aether</option>
+                <option>Crystal</option>
+                <option>Dynamis</option>
+                <option>Primal</option>
+                <option>Chaos</option>
+                <option>Light</option>
+                <option>Elemental</option>
+                <option>Gaia</option>
+                <option>Mana</option>
+                <option>Meteor</option>
+                <option>Materia</option>
+              </select>
+              <select id="char-server" class="combat-select" style="margin-bottom:6px" hidden aria-label="Server">
+                <option value="">-- selection required --</option>
+              </select>
+              <button class="btn-primary" id="btn-search-char" type="button">Search</button>
+              <div id="char-results"></div>
+              <div id="import-status" class="status-msg" hidden></div>
+              <div id="char-info" class="char-info" hidden></div>
+            </section>
+          </div>
         </div>
       </div>
 

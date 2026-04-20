@@ -406,6 +406,96 @@ export function renderSavedProfilesList(entries, activeLodestoneId, onSwitch, on
   }
 }
 
+/** Toggle between the two character overlay screens ('manage' | 'add'). */
+export function showCharacterScreen(screen) {
+  const manage = document.getElementById('char-screen-manage');
+  const add = document.getElementById('char-screen-add');
+  if (manage) manage.hidden = screen !== 'manage';
+  if (add) add.hidden = screen !== 'add';
+}
+
+/** Reset the add-character form to a blank state (call when showing the add screen). */
+export function resetAddForm() {
+  const name = document.getElementById('char-name');
+  const dc = document.getElementById('char-datacenter');
+  const srv = document.getElementById('char-server');
+  const results = document.getElementById('char-results');
+  const status = document.getElementById('import-status');
+  const info = document.getElementById('char-info');
+  if (name) name.value = '';
+  if (dc) dc.value = '';
+  if (srv) {
+    srv.textContent = '';
+    srv.appendChild(el('option', { value: '' }, '-- selection required --'));
+    srv.hidden = true;
+  }
+  if (results) results.textContent = '';
+  if (status) status.hidden = true;
+  if (info) info.hidden = true;
+}
+
+/**
+ * Render profile cards on the manage screen.
+ * @param {Array} entries
+ * @param {string|null} activeLodestoneId
+ * @param {{ onMakeActive: Function, onRemove: Function, onTcSave: Function }} callbacks
+ */
+export function renderProfileCards(entries, activeLodestoneId, { onMakeActive, onRemove, onTcSave }) {
+  const container = document.getElementById('profile-cards-list');
+  if (!container) return;
+  container.textContent = '';
+  if (entries.length === 0) {
+    container.appendChild(el('p', { class: 'saved-profiles-empty' }, 'No saved characters.'));
+    return;
+  }
+  for (const p of entries) {
+    const isActive = String(p.lodestoneId) === String(activeLodestoneId);
+    const card = el('div', { class: 'profile-card' + (isActive ? ' profile-card--active' : '') });
+
+    const portraitEl = el('div', { class: 'profile-card-portrait' });
+    const portraitSrc = p.portrait && /^https?:\/\//i.test(String(p.portrait)) ? String(p.portrait) : null;
+    if (portraitSrc) {
+      portraitEl.appendChild(el('img', { src: portraitSrc, alt: '', width: '48', height: '48', loading: 'lazy' }));
+    } else {
+      portraitEl.appendChild(el('span', { class: 'profile-card-portrait-ph', 'aria-hidden': 'true' }));
+    }
+
+    const info = el('div', { class: 'profile-card-info' });
+    const nameRow = el('div', { class: 'profile-card-name-row' });
+    nameRow.appendChild(el('span', { class: 'profile-card-name' }, p.name));
+    if (isActive) nameRow.appendChild(el('span', { class: 'profile-card-active-pill' }, 'Active'));
+    info.appendChild(nameRow);
+    info.appendChild(el('div', { class: 'profile-card-server' }, p.server));
+
+    const tcRow = el('div', { class: 'profile-card-tc-row' });
+    const tcInput = document.createElement('input');
+    tcInput.type = 'text';
+    tcInput.className = 'profile-card-tc-input';
+    tcInput.placeholder = 'Teamcraft URL (optional)';
+    tcInput.value = p.teamcraftProfileUrl ?? '';
+    tcInput.autocomplete = 'off';
+    const tcSaveBtn = el('button', { type: 'button', class: 'btn-secondary btn-sm' }, 'Save');
+    tcSaveBtn.addEventListener('click', () => onTcSave(p.lodestoneId, tcInput.value.trim()));
+    tcRow.appendChild(tcInput);
+    tcRow.appendChild(tcSaveBtn);
+    info.appendChild(tcRow);
+
+    const actions = el('div', { class: 'profile-card-actions' });
+    const useBtn = el('button', { type: 'button', class: 'btn-primary btn-sm profile-card-use-btn' }, isActive ? 'Active' : 'Use');
+    if (isActive) useBtn.setAttribute('disabled', '');
+    useBtn.addEventListener('click', () => onMakeActive(p.lodestoneId));
+    const removeBtn = el('button', { type: 'button', class: 'btn-secondary btn-sm profile-card-remove-btn' }, 'Remove');
+    removeBtn.addEventListener('click', () => onRemove(p.lodestoneId));
+    actions.appendChild(useBtn);
+    actions.appendChild(removeBtn);
+
+    card.appendChild(portraitEl);
+    card.appendChild(info);
+    card.appendChild(actions);
+    container.appendChild(card);
+  }
+}
+
 const STAT_DISPLAY_NAMES = {
   CriticalHit:   'Critical Hit',
   DirectHitRate: 'Direct Hit Rate',

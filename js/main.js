@@ -691,6 +691,12 @@ async function handleImportById(e) {
     const tcInput = document.getElementById('teamcraft-profile');
     if (tcInput) tcInput.value = pSaved?.teamcraftProfileUrl || '';
     refreshSavedProfilesUi();
+    const overlay = document.getElementById('character-overlay');
+    if (overlay && !overlay.hidden) {
+      ui.showCharacterScreen('manage');
+      const backBtn = document.getElementById('char-back-btn');
+      if (backBtn) backBtn.hidden = false;
+    }
     await runSearch();
   } catch (err) {
     ui.showImportStatus('error', err.message);
@@ -749,19 +755,34 @@ async function handleTeamcraftLink() {
   }
 }
 
-function updateTeamcraftSectionVisibility() {
-  const sec = document.getElementById('teamcraft-section');
-  if (sec) sec.hidden = !state.lodestoneId;
-}
-
 function refreshSavedProfilesUi() {
-  ui.renderSavedProfilesList(
+  ui.renderProfileCards(
     profiles.listProfilesSorted(),
     state.lodestoneId,
-    id => void switchToProfileById(id),
-    id => void removeSavedProfile(id)
+    {
+      onMakeActive: id => void switchToProfileById(id),
+      onRemove: id => void removeSavedProfile(id),
+      onTcSave: (id, url) => void handleTcSaveForCard(id, url),
+    }
   );
-  updateTeamcraftSectionVisibility();
+}
+
+async function handleTcSaveForCard(lodestoneId, url) {
+  const uid = extractTeamcraftUid(url) ?? null;
+  profiles.patchTeamcraftForProfile(lodestoneId, uid, url);
+  if (String(lodestoneId) === String(state.lodestoneId) && uid) {
+    state.uid = uid;
+    try {
+      ui.beginViewLoading('Loading Teamcraft gearsets…');
+      state.gearsetsByJob = await fetchGearsetsForUser(uid);
+    } catch {
+      state.gearsetsByJob = null;
+    } finally {
+      ui.endViewLoading();
+    }
+    await Promise.all([refreshUpgradePage(), runSearch()]);
+  }
+  refreshSavedProfilesUi();
 }
 
 function clearCharacterState() {
@@ -881,6 +902,11 @@ async function removeSavedProfile(lodestoneId) {
     if (p) await applyStoredProfile(p);
   } else {
     clearCharacterState();
+    const overlay = document.getElementById('character-overlay');
+    if (overlay && !overlay.hidden) {
+      ui.showCharacterScreen('add');
+      ui.resetAddForm();
+    }
   }
   refreshSavedProfilesUi();
 }
@@ -890,6 +916,9 @@ function initCharacterOverlay() {
   const backdrop = document.getElementById('character-overlay-backdrop');
   const closeBtn = document.getElementById('character-overlay-close');
   const openBtn = document.getElementById('character-open-btn');
+  const addBtn = document.getElementById('char-add-btn');
+  const backBtn = document.getElementById('char-back-btn');
+
   function hide() {
     if (!overlay) return;
     overlay.hidden = true;
@@ -899,13 +928,33 @@ function initCharacterOverlay() {
     if (!overlay) return;
     overlay.hidden = false;
     overlay.setAttribute('aria-hidden', 'false');
-    refreshSavedProfilesUi();
+    const profs = profiles.listProfilesSorted();
+    if (profs.length > 0) {
+      ui.showCharacterScreen('manage');
+      refreshSavedProfilesUi();
+    } else {
+      ui.showCharacterScreen('add');
+      ui.resetAddForm();
+    }
+    if (backBtn) backBtn.hidden = profs.length === 0;
   }
+
   openBtn?.addEventListener('click', show);
   backdrop?.addEventListener('click', hide);
   closeBtn?.addEventListener('click', hide);
   document.addEventListener('keydown', ev => {
     if (ev.key === 'Escape' && overlay && !overlay.hidden) hide();
+  });
+
+  addBtn?.addEventListener('click', () => {
+    ui.showCharacterScreen('add');
+    ui.resetAddForm();
+    if (backBtn) backBtn.hidden = false;
+  });
+
+  backBtn?.addEventListener('click', () => {
+    ui.showCharacterScreen('manage');
+    refreshSavedProfilesUi();
   });
 
   const importToggle = document.getElementById('character-import-toggle');
@@ -1033,6 +1082,16 @@ async function refreshCharacterJobsOnLoad() {
 
     refreshLevelDisplaySidebar();
     syncUpgradeToolbar();
+
+    // Re-fetch Teamcraft gearsets in parallel — TC may update before Lodestone.
+    if (state.uid) {
+      try {
+        state.gearsetsByJob = await fetchGearsetsForUser(state.uid);
+      } catch {
+        // Keep existing gearsets if refresh fails.
+      }
+    }
+
     await Promise.all([runSearch(), refreshUpgradePage()]);
   } catch (err) {
     // Ignore network/privacy failures; stored levels remain.
