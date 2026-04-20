@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { parseGarlandDoc } from '../js/garland.js';
+import { parseGarlandDoc, classifyAcquisition, isGcExclusiveAcquisition } from '../js/garland.js';
 
 const MOCK_DOC = {
   item: {
@@ -45,5 +45,44 @@ describe('parseGarlandDoc', () => {
     assert.deepEqual(r.vendors, []);
     assert.deepEqual(r.quests, []);
     assert.deepEqual(r.drops, []);
+  });
+});
+
+describe('classifyAcquisition', () => {
+  it('marks craftable when craft recipes exist', () => {
+    const c = classifyAcquisition({ craft: [{}], vendors: [], tradeable: 1 });
+    assert.equal(c.craftable, true);
+    assert.equal(c.buyable, false);
+  });
+  it('marks buy when not craftable but tradeable (marketboard)', () => {
+    const c = classifyAcquisition({ craft: [], vendors: [], tradeable: 1 });
+    assert.equal(c.craftable, false);
+    assert.equal(c.buyable, true);
+  });
+  it('marks buy for vendors without craft', () => {
+    const c = classifyAcquisition({ craft: [], vendors: ['NPC'], tradeable: 0 });
+    assert.equal(c.buyable, true);
+  });
+  it('unknown when null doc', () => {
+    const c = classifyAcquisition(null);
+    assert.equal(c.unknown, true);
+  });
+});
+
+describe('isGcExclusiveAcquisition', () => {
+  it('true when GC only (no craft, not tradeable, no vendors)', () => {
+    assert.equal(isGcExclusiveAcquisition({ craft: [], gc: { id: 1 }, tradeable: 0, vendors: [] }), true);
+  });
+  it('false when craftable', () => {
+    assert.equal(isGcExclusiveAcquisition({ craft: [{}], gc: {}, vendors: [], tradeable: 0 }), false);
+  });
+  it('false when tradeable (MB)', () => {
+    assert.equal(isGcExclusiveAcquisition({ craft: [], gc: {}, vendors: [], tradeable: 1 }), false);
+  });
+  it('false when vendor', () => {
+    assert.equal(isGcExclusiveAcquisition({ craft: [], gc: {}, vendors: ['NPC'], tradeable: 0 }), false);
+  });
+  it('false when null', () => {
+    assert.equal(isGcExclusiveAcquisition(null), false);
   });
 });

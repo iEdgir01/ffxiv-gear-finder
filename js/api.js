@@ -1,18 +1,10 @@
 // js/api.js
 import { CLASSJOB_NAME_TO_ID } from './constants.js';
+import { normalizeGearType } from './search.js';
 
 const XIVAPI    = 'https://xivapi.com';
 const LODESTONE = 'https://lodestone.ffxivteamcraft.com';
 export const FIRESTORE = 'https://firestore.googleapis.com/v1/projects/ffxivteamcraft/databases/(default)/documents';
-
-function escapeHtml(str) {
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
 
 function fsVal(v) {
   if (!v) return null;
@@ -31,8 +23,13 @@ function fsVal(v) {
 }
 
 export function extractTeamcraftUid(url) {
-  const match = url.match(/ffxivteamcraft\.com\/profile\/([A-Za-z0-9]+)/);
-  return match?.[1] ?? null;
+  const s = String(url ?? '').trim();
+  let m = s.match(/ffxivteamcraft\.com\/profile\/([A-Za-z0-9]+)/i);
+  if (m) return m[1];
+  m = s.match(/(?:^|\/)profile\/([A-Za-z0-9]+)/i);
+  if (m) return m[1];
+  if (/^[A-Za-z0-9]+$/.test(s) && s.length >= 16) return s;
+  return null;
 }
 
 export async function fetchByTeamcraftUID(uid) {
@@ -63,8 +60,8 @@ export async function fetchByTeamcraftUID(uid) {
   }
 
   return {
-    name:   escapeHtml(charData.Character?.Name  ?? 'Unknown'),
-    server: escapeHtml(charData.Character?.World ?? ''),
+    name:   decodeHtmlEntities(charData.Character?.Name ?? 'Unknown'),
+    server: decodeHtmlEntities(charData.Character?.World ?? ''),
     jobs,
   };
 }
@@ -77,8 +74,8 @@ export async function searchCharacter(name, server) {
   const data = await res.json();
   return (data.List ?? []).map(c => ({
     id: c.ID,
-    name: escapeHtml(c.Name),
-    server: escapeHtml(c.Server ?? ''),
+    name: decodeHtmlEntities(c.Name),
+    server: decodeHtmlEntities(c.Server ?? ''),
     avatar: c.Avatar,
   }));
 }
@@ -100,10 +97,16 @@ export async function fetchCharacterJobs(characterId) {
   if (Object.keys(jobs).length === 0) {
     throw new Error('No job data found. The character profile may be private.');
   }
+  const ch = data.Character ?? {};
+  /** Prefer Avatar/Icon (headshot) over Portrait (full-body) for small UI thumbnails. */
+  const rawPortrait = ch.Avatar ?? ch.Icon ?? ch.Portrait ?? null;
+  const portrait =
+    typeof rawPortrait === 'string' && /^https?:\/\//i.test(rawPortrait) ? rawPortrait : null;
   return {
-    name: escapeHtml(data.Character?.Name ?? 'Unknown'),
-    server: escapeHtml(data.Character?.World ?? ''),
+    name: decodeHtmlEntities(ch.Name ?? 'Unknown'),
+    server: decodeHtmlEntities(ch.World ?? ''),
     jobs,
+    portrait,
   };
 }
 
@@ -118,7 +121,7 @@ export function extractCharacterIdFromUrl(url) {
 const CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 
 function cacheKey(id) {
-  return 'xivapi_item_' + id;
+  return 'xivapi_item_2_' + id;
 }
 
 function cacheGet(id) {
@@ -183,21 +186,52 @@ export async function fetchItemStats(itemIds) {
   return results;
 }
 
+export function decodeHtmlEntities(str) {
+  let s = String(str ?? '');
+  if (!s.includes('&')) return s;
+  s = s.replace(/&#x([0-9a-f]+);/gi, (_, h) => String.fromCharCode(parseInt(h, 16)));
+  s = s.replace(/&#(\d{1,7});/g, (m, n) => {
+    const code = Number(n);
+    return code >= 0 && code <= 0x10ffff ? String.fromCodePoint(code) : m;
+  });
+  s = s.replace(/&apos;/gi, "'");
+  s = s.replace(/&quot;/g, '"');
+  s = s.replace(/&gt;/g, '>');
+  s = s.replace(/&lt;/g, '<');
+  s = s.replace(/&amp;/g, '&');
+  return s;
+}
+
 export function parseItemStats(item) {
   const rawStats = item.Stats ?? {};
   const stats = {};
   for (const [key, val] of Object.entries(rawStats)) {
-    const value = typeof val === 'object' ? (val.NQ ?? val.Value ?? 0) : Number(val);
+    const value =
+      typeof val === 'object'
+        ? Math.max(
+            Number(val.NQ ?? 0),
+            Number(val.HQ ?? 0),
+            Number(val.Value ?? 0)
+          )
+        : Number(val);
     if (value > 0) stats[key] = value;
   }
+  const rawCat = item.ItemUICategory?.Name ?? '';
+  const normalized = normalizeGearType(rawCat);
+  const cjc = item.ClassJobCategory ?? {};
+  const classJobAbbrs = Object.entries(cjc)
+    .filter(([k, v]) => v === 1 && /^[A-Z]{2,4}$/.test(k))
+    .map(([k]) => k);
   return {
     id:               item.ID,
-    name:             escapeHtml(item.Name ?? ''),
+    name:             decodeHtmlEntities(item.Name ?? ''),
     ilvl:             item.LevelItem,
     equipLevel:       item.LevelEquip,
-    gearType:         escapeHtml(item.ItemUICategory?.Name ?? 'Unknown'),
+    gearTypeRaw:      rawCat,
+    gearType:         normalized || rawCat,
     isUntradable:     item.IsUntradable === 1,
-    classJobCategory: item.ClassJobCategory?.Name ?? '',
+    classJobCategory: cjc.Name ?? '',
+    classJobAbbrs,
     stats,
   };
 }

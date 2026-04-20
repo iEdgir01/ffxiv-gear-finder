@@ -34,6 +34,9 @@ export const JOB_IDS = {
   40: { abbr: 'PCT', name: 'Pictomancer',   group: 'dom' },
 };
 
+/** Upper bound for equip/recipe level filters and sidebar inputs (current game data). */
+export const MAX_EQUIP_LEVEL = 100;
+
 export const DOH_JOB_IDS = [8, 9, 10, 11, 12, 13, 14, 15];
 export const DOL_JOB_IDS = [16, 17, 18];
 export const DOW_JOB_IDS = [19, 20, 21, 22, 23, 28, 29, 30, 32, 35, 36, 37, 39];
@@ -90,6 +93,14 @@ export const CLASSJOB_CATEGORY_TO_JOBS = {
   'Astrologian': ['AST'], 'Samurai': ['SAM'], 'Red Mage': ['RDM'], 'Blue Mage': ['BLU'],
   'Gunbreaker': ['GNB'], 'Dancer': ['DNC'], 'Reaper': ['RPR'], 'Sage': ['SGE'],
   'Viper': ['VPR'], 'Pictomancer': ['PCT'],
+  // Legacy / alternate XIVAPI ClassJobCategory names (same jobs, different strings)
+  Gladiator: ['PLD'],
+  Pugilist: ['MNK'],
+  Marauder: ['WAR'],
+  Lancer: ['DRG'],
+  Rogue: ['NIN'],
+  Thaumaturge: ['BLM'],
+  Arcanist: ['SMN', 'SCH'],
 };
 
 export const PRIMARY_STAT_BY_JOB = {
