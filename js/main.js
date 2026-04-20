@@ -80,6 +80,8 @@ const state = {
 
 let _searchSeq = 0;
 let _upgradeRefreshSeq = 0;
+let _refreshAllProfilesPromise = null;
+let _lastAllProfilesRefreshAt = 0;
 /** Draft object while master overlay is open (same reference passed to `fillMasterCraftingOverlay`). */
 let _masterDraft = null;
 
@@ -1120,6 +1122,79 @@ async function refreshCharacterJobsOnLoad() {
   }
 }
 
+function mergeJobsPreferHigher(a, b) {
+  const out = { ...(a ?? {}) };
+  for (const [jobId, jb] of Object.entries(b ?? {})) {
+    const existing = out[jobId]?.level ?? 0;
+    const incoming = jb?.level ?? 0;
+    if (incoming > existing) out[jobId] = { level: incoming };
+  }
+  return out;
+}
+
+async function refreshAllProfilesJobsOnLoad({ reason = 'load', minIntervalMs = 30_000 } = {}) {
+  const now = Date.now();
+  if (_refreshAllProfilesPromise) return _refreshAllProfilesPromise;
+  if (now - _lastAllProfilesRefreshAt < minIntervalMs) return;
+  _lastAllProfilesRefreshAt = now;
+
+  const doWork = (async () => {
+    const store = profiles.readStore();
+    const ids = Object.keys(store.profiles ?? {});
+    if (ids.length === 0) return;
+
+    // Sequential fetch to avoid hammering external services.
+    for (const lodestoneId of ids) {
+      const p = store.profiles[String(lodestoneId)];
+      if (!p) continue;
+
+      let lodestoneJobs = null;
+      try {
+        const payload = await fetchCharacterJobs(lodestoneId);
+        lodestoneJobs = payload?.jobs ?? null;
+      } catch {
+        lodestoneJobs = null;
+      }
+
+      let merged = lodestoneJobs ?? p.jobs ?? {};
+
+      const uid = p.teamcraftUid ?? null;
+      if (uid) {
+        try {
+          const tc = await fetchByTeamcraftUID(uid);
+          if (tc?.jobs) merged = mergeJobsPreferHigher(merged, tc.jobs);
+        } catch {
+          // Keep Lodestone/stored levels.
+        }
+      }
+
+      profiles.setJobsForProfile(lodestoneId, merged);
+
+      // Keep in-memory state in sync for the active profile so the UI updates immediately.
+      if (String(lodestoneId) === String(state.lodestoneId)) {
+        state.jobs = merged;
+        refreshLevelDisplaySidebar();
+      }
+
+      // Small delay to reduce rate-limit / burstiness.
+      await new Promise(r => setTimeout(r, 120));
+    }
+
+    // Re-render profile cards (levels not shown today, but keeps TC URL edits consistent).
+    refreshSavedProfilesUi();
+
+    // Re-run views for active profile in case job level changed.
+    await Promise.all([runSearch(), refreshUpgradePage()]);
+
+    console.info('[main] Refreshed job levels for', ids.length, 'profiles (' + reason + ')');
+  })();
+
+  _refreshAllProfilesPromise = doWork.finally(() => {
+    _refreshAllProfilesPromise = null;
+  });
+  return _refreshAllProfilesPromise;
+}
+
 async function handleRefreshGearsets() {
   if (!state.uid) return;
   const status = document.getElementById('teamcraft-status');
@@ -1297,7 +1372,10 @@ async function init() {
   const refreshBtn = document.getElementById('btn-refresh-search');
   if (refreshBtn) {
     refreshBtn.addEventListener('click', () => {
-      if (state.lodestoneId) void refreshCharacterJobsOnLoad();
+      if (state.lodestoneId) {
+        void refreshAllProfilesJobsOnLoad({ reason: 'toolbar' });
+        void refreshCharacterJobsOnLoad();
+      }
       else void runSearch();
     });
   }
@@ -1506,7 +1584,18 @@ async function init() {
 
   await loadData();
   await hydrateFromStorage();
+  void refreshAllProfilesJobsOnLoad({ reason: 'load' });
   void refreshCharacterJobsOnLoad();
+
+  // When the user comes back to the tab (or after a laptop sleep), refresh levels again.
+  window.addEventListener('focus', () => {
+    void refreshAllProfilesJobsOnLoad({ reason: 'focus', minIntervalMs: 30_000 });
+  });
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      void refreshAllProfilesJobsOnLoad({ reason: 'visible', minIntervalMs: 30_000 });
+    }
+  });
 }
 
 init();

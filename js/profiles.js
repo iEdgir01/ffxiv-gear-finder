@@ -221,3 +221,18 @@ export function setActiveLodestoneId(lodestoneId) {
   writeStore(s);
   return true;
 }
+
+/**
+ * Update stored job levels for a profile without changing which profile is active.
+ * Safe for background refresh on page load/focus.
+ * @param {string} lodestoneId
+ * @param {Record<string, { level: number }>} jobs
+ */
+export function setJobsForProfile(lodestoneId, jobs) {
+  const s = readStore();
+  const id = String(lodestoneId);
+  const p = s.profiles[id];
+  if (!p) return;
+  p.jobs = jobs ?? {};
+  writeStore(s);
+}
