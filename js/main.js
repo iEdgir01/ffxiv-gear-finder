@@ -1081,6 +1081,7 @@ async function refreshCharacterJobsOnLoad() {
         }
       } catch {
         // Non-fatal; keep Lodestone-only levels.
+        console.warn('[main] Teamcraft level sync failed on load; keeping Lodestone levels.');
       }
     }
 
@@ -1294,7 +1295,12 @@ async function init() {
   ui.setCharacterChip({ name: null, portraitUrl: null });
 
   const refreshBtn = document.getElementById('btn-refresh-search');
-  if (refreshBtn) refreshBtn.addEventListener('click', () => void runSearch());
+  if (refreshBtn) {
+    refreshBtn.addEventListener('click', () => {
+      if (state.lodestoneId) void refreshCharacterJobsOnLoad();
+      else void runSearch();
+    });
+  }
 
   syncFinderAcqFilter();
   syncFinderSortSelect();

@@ -47,7 +47,8 @@ function currencyKindFromItemName(itemName) {
   if (!n) return null;
   if (/^Allagan Tomestone of /i.test(n)) return 'tomestone';
   if (/Token/i.test(n)) return null;
-  if (/(Crafters'|Gatherers') Scrip$/i.test(n)) return 'scrip';
+  // Includes variants like "Crafters' Scrip (White)".
+  if (/(Crafters'|Gatherers') Scrip/i.test(n)) return 'scrip';
   return null;
 }
 
@@ -56,6 +57,40 @@ function scripBranchFromName(itemName) {
   if (/Crafters'/i.test(n)) return 'crafter';
   if (/Gatherers'/i.test(n)) return 'gatherer';
   return null;
+}
+
+/**
+ * SpecialShop has multiple cost encodings. We support:
+ * - CostType 0: `CurrencyCost[0]` = currency item id, `ItemCost[0]` = amount
+ * - CostType 2: `CurrencyCost[0]` = amount, `ItemCost[0]` = token (1/2) representing tomestones
+ *
+ * Token mapping inferred from current datamine behavior:
+ * - token 1: Poetics (Item 28)
+ * - token 2: Other tomestones (varies by patch); we keep a generic label
+ */
+function decodeSpecialShopCost({ costType, currencyCost0, itemCost0, currencyIdToKind, currencyIdToName }) {
+  if (costType === 2) {
+    const token = toNum(itemCost0);
+    const amount = toNum(currencyCost0);
+    if (!Number.isFinite(amount) || amount <= 0) return null;
+    if (token === 1) {
+      return { kind: 'tomestone', currencyId: 28, currencyName: 'Allagan Tomestone of Poetics', amount };
+    }
+    if (token === 2) {
+      return { kind: 'tomestone', currencyId: null, currencyName: 'Tomestones', amount };
+    }
+    return null;
+  }
+
+  // CostType 0 and 3 both use (currencyId, amount) in (CurrencyCost[0], ItemCost[0]).
+  if (costType !== 0 && costType !== 3) return null;
+  const currencyId = toNum(currencyCost0);
+  const kind = currencyIdToKind.get(currencyId) ?? null;
+  if (!kind) return null;
+  const amount = toNum(itemCost0);
+  if (!Number.isFinite(amount) || amount <= 0) return null;
+  const currencyName = currencyIdToName.get(currencyId) ?? String(currencyId);
+  return { kind, currencyId, currencyName, amount };
 }
 
 async function main() {
@@ -102,35 +137,44 @@ async function main() {
       if (ci == null || bi == null || ii == null) break;
 
       const costType = specialIdx.get(ctKey) != null ? toNum(row[specialIdx.get(ctKey)]) : 0;
-      if (costType !== 0) continue;
-
-      const currencyId = toNum(row[ci]);
-      const kind = currencyIdToKind.get(currencyId);
-      if (!kind) continue;
 
       const itemId = toNum(row[ii]);
       if (!itemId) continue;
 
-      const amount = toNum(row[bi]);
-      if (!Number.isFinite(amount) || amount <= 0) continue;
+      const decoded = decodeSpecialShopCost({
+        costType,
+        currencyCost0: row[ci],
+        itemCost0: row[bi],
+        currencyIdToKind,
+        currencyIdToName,
+      });
+      if (!decoded) continue;
 
-      const currencyName = currencyIdToName.get(currencyId) ?? String(currencyId);
       let rec = acc.get(itemId);
       if (!rec) {
         rec = { itemId };
         acc.set(itemId, rec);
       }
 
-      if (kind === 'tomestone') {
+      if (decoded.kind === 'tomestone') {
         const prev = rec.tomestone;
-        if (!prev || amount > prev.amount) {
-          rec.tomestone = { currencyId, amount, currencyName };
+        if (!prev || decoded.amount > prev.amount) {
+          rec.tomestone = {
+            currencyId: decoded.currencyId,
+            amount: decoded.amount,
+            currencyName: decoded.currencyName,
+          };
         }
       } else {
-        const branch = scripBranchFromName(currencyName);
+        const branch = scripBranchFromName(decoded.currencyName);
         const prev = rec.scrip;
-        const next = { currencyId, amount, currencyName, branch: branch ?? 'crafter' };
-        if (!prev || amount > prev.amount) rec.scrip = next;
+        const next = {
+          currencyId: decoded.currencyId,
+          amount: decoded.amount,
+          currencyName: decoded.currencyName,
+          branch: branch ?? 'crafter',
+        };
+        if (!prev || decoded.amount > prev.amount) rec.scrip = next;
       }
     }
   }

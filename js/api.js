@@ -43,21 +43,38 @@ export async function fetchByTeamcraftUID(uid) {
   const lodestoneId = fields.defaultLodestoneId;
   if (!lodestoneId) throw new Error('No character linked to this Teamcraft profile.');
 
-  const entry = (fields.lodestoneIds ?? []).find(e => String(e.id) === String(lodestoneId))
-             ?? fields.lodestoneIds?.[0];
-  const stats = entry?.stats ?? [];
+  // Teamcraft user docs have evolved over time; job-level stats may be stored in different places.
+  // We try a few plausible shapes and pick the first array that yields jobId+level pairs.
+  const entry =
+    (fields.lodestoneIds ?? []).find(e => String(e.id) === String(lodestoneId)) ??
+    fields.lodestoneIds?.[0] ??
+    null;
+  const statsCandidates = [
+    entry?.stats,
+    fields.stats,
+    fields.jobStats,
+    fields.jobs,
+    fields.classJobs,
+  ].filter(v => Array.isArray(v));
+  const stats = statsCandidates[0] ?? [];
 
   const jobs = {};
-  for (const s of (stats ?? [])) {
-    if (s?.jobId && s?.level) jobs[s.jobId] = { level: s.level };
+  for (const s of stats) {
+    const jobId = s?.jobId ?? s?.jobID ?? s?.classJobId ?? s?.classjobId ?? s?.id ?? null;
+    const level = s?.level ?? s?.lvl ?? s?.Level ?? null;
+    if (jobId != null && level != null) {
+      const jid = Number(jobId);
+      const lv = Number(level);
+      if (Number.isFinite(jid) && Number.isFinite(lv) && jid > 0 && lv > 0) jobs[jid] = { level: lv };
+    }
   }
 
   const charRes = await fetch(LODESTONE + '/Character/' + lodestoneId);
   const charData = charRes.ok ? await charRes.json() : {};
 
-  if (Object.keys(jobs).length === 0) {
-    return fetchCharacterJobs(lodestoneId);
-  }
+  // If Teamcraft didn't yield any job levels, do not silently fall back to Lodestone here.
+  // The caller already has Lodestone levels; returning them again would mask TC parse issues.
+  if (Object.keys(jobs).length === 0) throw new Error('Teamcraft job levels unavailable for this profile.');
 
   return {
     name:   decodeHtmlEntities(charData.Character?.Name ?? 'Unknown'),
