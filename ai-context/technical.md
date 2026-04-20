@@ -3,7 +3,7 @@
 ## Stack
 - Plain HTML/CSS/ES Modules — no bundler, no build step
 - Open index.html directly in browser (or `python -m http.server 3000`)
-- Tests: `npm test` → `node --test tests/*.test.js` — 134 tests across `tests/` covering search, api, lists, garland, upgrade, gearBaseline, gearsets, constants, gcSealCost, finderSourceFilter
+- Tests: `npm test` → `node --test tests/*.test.js` — 147 tests across `tests/` covering search, api, lists, garland, upgrade, gearBaseline, gearsets, constants, gcSealCost, finderSourceFilter
 - **Deployed**: GitHub Pages at https://iedgir01.github.io/ffxiv-gear-finder/ (auto-deploys on push to main via `.github/workflows/deploy.yml`)
 - **Datamine CI**: `.github/workflows/weekly-datamine-refresh.yml` — Mondays 06:00 UTC, fetches xivapi/ffxiv-datamining CSVs, regenerates `js/gcData.js` + `js/specialVendorData.js`, runs tests, commits + pushes if changed (which triggers redeploy)
 
@@ -56,11 +56,11 @@ Integration:
 - `main.js` uses GC metadata for Source → GC and Include GC.
 - `ui.js` displays seals + rank where present.
 
-### Garland Tools (acquisition metadata, per-item lazy)
-- `js/garland.js` fetches `https://garlandtools.org/db/doc/item/en/3/{id}.json` per item on demand.
-- Classifies acquisition as `craft | gc | vendor | drop | unknown`.
-- Cached in `state.acqCache` (session-scoped).
-- Drives the Source filter (All / GC / Craft) and the source tags on result cards.
+### Garland Tools (pure classification only — no runtime fetch)
+- `js/garland.js` retains pure functions: `parseGarlandDoc`, `classifyAcquisition`, `isGcExclusiveAcquisition`, `syntheticAcqFromItem`.
+- **No runtime network calls** — fetch infrastructure removed. Source classification is synchronous from local item metadata (`gcInfo`, `tomestoneInfo`, `scripInfo`).
+- `state.acqCache` still exists but is populated from local data only (no Garland API calls).
+- Source tags and Source filter work without any external requests.
 
 ## Search / Scoring
 
@@ -87,6 +87,28 @@ Display labels use `statLabel()` / `STAT_DISPLAY_NAMES` in `ui.js` (e.g. "Critic
 
 ### Job equip filter
 `jobCanEquipCategory(jobId, categoryName)` maps XIVAPI `ClassJobCategory` strings → job abbrs via `CLASSJOB_CATEGORY_TO_JOBS`. Recipe crafter (`craftJobAbbr`) is display-only.
+
+**Important:** `specialVendorData.js` (tomestone/scrip items) uses space-separated abbreviation lists for `classJobCategory` (e.g. `"GLA MRD PLD WAR DRK GNB"`), not the CLASSJOB_CATEGORY_TO_JOBS keyword format. `jobCanEquipCategory` handles both: single-keyword lookup first, then space-separated abbreviation list split.
+
+## Character / Profile System
+
+### Storage
+`js/profiles.js` — localStorage key `gf_profiles_v1`. Stores `{ version, activeLodestoneId, profiles: Record<id, StoredProfile> }`. Each profile: `lodestoneId`, `name`, `server`, `portrait`, `jobs`, `teamcraftUid`, `teamcraftProfileUrl`, `masterStars`, include-toggles, `upgradeSourceMode`.
+
+### Character overlay — two-screen design
+- **Manage screen** (`#char-screen-manage`): profile cards listing all saved characters. Each card: portrait, name/server (read-only), editable Teamcraft URL + Save button, Use (disabled if active) and Remove buttons.
+- **Add screen** (`#char-screen-add`): import form (name/DC/server search). Back button hidden when no profiles exist.
+- Logic: open overlay → manage if profiles exist, add if none. Successful import → auto-switch to manage. Last profile removed → switch to add. `ui.resetAddForm()` called whenever add screen shown (clears DC/server/name/results).
+
+### On-load refresh (`refreshCharacterJobsOnLoad`)
+1. Fetch Lodestone job levels (with one retry).
+2. If `state.uid` is set, also fetch Teamcraft job stats via `fetchByTeamcraftUID`.
+3. Merge: take `max(Lodestone level, Teamcraft level)` per job — Teamcraft reflects in-game progress faster than Lodestone.
+4. Persist merged levels to profile, re-run search + upgrades.
+5. Re-fetch Teamcraft gearsets if `state.uid` is set.
+
+### Per-card Teamcraft linking
+`handleTcSaveForCard(lodestoneId, url)` saves TC URL to the profile. If the card is the currently active profile, also loads gearsets and re-runs upgrades + search.
 
 ## Lists & Teamcraft Export
 Lists are saved in localStorage via `js/lists.js`.

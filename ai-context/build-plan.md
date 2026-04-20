@@ -29,3 +29,10 @@ Do not start the next task until the current one passes all its checks.
 19. [x] Teamcraft list export fix — format is `id,null,qty;id,null,qty` (semicolons), base64 via `btoa()`. Was incorrectly sending JSON.
 20. [x] % gain removal — removed `sortByPercent`, `_gainPct`, `showSortToggle`, `maxGroupStatGainPercent`, `resolveBaselineStats` usage. Scoring is raw stats only.
 21. [x] Recipe level inputs — single-line row, 52px-wide inputs, dark-themed spinners, font-size 0.88em.
+
+### v3 Fixes & Overlay Redesign (all complete)
+22. [x] Garland Tools runtime fetch removed — `garland.js` pure functions retained; no network calls at runtime. Source classification synchronous from local item metadata. 147 tests pass.
+23. [x] Combat tomestone/scrip gear fix — `jobCanEquipCategory` extended to handle space-separated abbreviation lists (`"GLA MRD PLD WAR DRK GNB"`) used by `specialVendorData.js`. 4 new tests. 147 tests pass.
+24. [x] Two-screen character overlay — manage screen (profile cards) + add screen (import form). Screen logic: profiles exist → manage, none → add, import success → manage, last removed → add. `resetAddForm()` fixes server dropdown bug. 147 tests pass.
+25. [x] Per-card Teamcraft URL — TC linking moved from standalone section to inline field on each profile card. `handleTcSaveForCard` saves + loads gearsets if card is active profile.
+26. [x] On-reload Lodestone + Teamcraft merge — `refreshCharacterJobsOnLoad` fetches both sources, takes max level per job. Handles Lodestone lag behind in-game progress. 147 tests pass.

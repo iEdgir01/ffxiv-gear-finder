@@ -79,3 +79,5 @@ Ring, Earring, Necklace, Bracelet, Head, Body, Hands, Legs, Feet, MainHand, OffH
 XIVAPI `ClassJobCategory` is a string describing which jobs can equip an item (e.g. "Disciple of War or Magic", "Carpenter"). `CLASSJOB_CATEGORY_TO_JOBS` in `constants.js` maps these strings to job abbreviation arrays.
 
 The recipe crafter job (`craftJobAbbr` from Teamcraft) is separate and display-only — a BSM-made weapon still appears for all jobs that can equip it.
+
+**Gotcha — `specialVendorData.js` uses a different format:** Tomestone and scrip vendor items store `classJobCategory` as a space-separated abbreviation list (e.g. `"GLA MRD PLD WAR DRK GNB"`), not the CLASSJOB_CATEGORY_TO_JOBS keyword. `jobCanEquipCategory` handles both formats: CLASSJOB_CATEGORY_TO_JOBS lookup first, then space-separated abbreviation split.

@@ -38,15 +38,26 @@ Single-page browser app. Import FFXIV character job levels from Lodestone via XI
 - [x] GitHub sidebar link — bottom-left of sidebar, links to https://github.com/iEdgir01/ffxiv-gear-finder.
 - [x] Deployment — GitHub Pages + CI workflow; weekly datamine-refresh workflow. 134 tests pass on main.
 
+### v3 Fixes & Overlay Redesign — all complete
+- [x] **Garland Tools removed at runtime** — fetch infrastructure stripped from `garland.js`. Source classification is now synchronous from local item metadata (`gcInfo`, `tomestoneInfo`, `scripInfo`). Zero external requests for acquisition data. Pure functions `parseGarlandDoc`, `classifyAcquisition`, `isGcExclusiveAcquisition`, `syntheticAcqFromItem` retained.
+- [x] **Combat tomestone/scrip gear invisible (fixed)** — `specialVendorData.js` uses space-separated abbreviation lists (`"GLA MRD PLD WAR DRK GNB"`) for `classJobCategory`. `jobCanEquipCategory` in `search.js` now handles this format. 4 new tests added. 147 tests pass.
+- [x] **Two-screen character overlay** — replaced three-section overlay with manage/add screens. Manage screen: profile cards (portrait, name/server read-only, editable Teamcraft URL, Use/Remove). Add screen: import form + Back button. Opens to manage when profiles exist, add when empty. Auto-switches to manage after import; to add when last profile removed.
+- [x] **Server dropdown reset** — `ui.resetAddForm()` clears DC to blank and hides server dropdown every time the add screen is shown, fixing the "server disappears and won't reappear" bug.
+- [x] **Teamcraft URL per profile card** — TC linking moved from standalone `#teamcraft-section` to inline editable field on each card. `handleTcSaveForCard` saves URL, loads gearsets if card is the active profile.
+- [x] **On-reload level merge** — `refreshCharacterJobsOnLoad` now fetches both Lodestone and Teamcraft job levels, taking the higher value per job. Handles Lodestone lag (TC reflects in-game progress faster). 147 tests pass.
+
 ## Key Decisions
 - **Plain HTML/CSS/JS, no build step** — open index.html directly; avoids toolchain complexity.
 - **Teamcraft GitHub CDN** for recipe data — loaded at startup, indexed in memory (~2-5MB).
 - **XIVAPI** for character import + item stats (batched, session-cached).
-- **Garland Tools** for acquisition metadata (lazy, per-item, session-cached).
+- **Garland Tools removed at runtime** — was used for acquisition metadata but eliminated (network overhead, unreliable). Source classification is now synchronous from local item metadata. `garland.js` retains pure classification functions; fetch infrastructure removed.
 - **Sum scoring for all groups** — avoids single-stat specialists being over-ranked; priority stat dropdown lets user override when they want to optimise a specific stat.
 - **GC data from datamining CSVs** (not runtime API) — `feature/datamine-shops` worktree: `GCScripShopItem` + `GCScripShopCategory` (primary) merged with `SpecialShop` CostType 0 seal rows; **no Garland** in `build-gc-data.mjs`. Run `npm run build:gc-data` or `npm run build:datamine-shops`.
 - **Teamcraft export format** confirmed from `Aida-Enna/TeamcraftListMaker` Plugin.cs source: `id,null,qty;` semicolon-delimited, base64.
 - **% gain removed** — was complex, confusing, and required a Teamcraft baseline. Raw stats are clearer and simpler.
+- **Two-screen character overlay** — manage screen (profile cards) vs add screen (import form). Avoids the old embedded three-section design that was hard to navigate with multiple profiles.
+- **Job level merge on reload** — take `max(Lodestone, Teamcraft)` per job on page load. Teamcraft reflects in-game progress faster than Lodestone; Lodestone is the fallback when TC is not linked.
+- **`specialVendorData.js` uses space-separated abbreviation lists** — `classJobCategory` field uses format like `"GLA MRD PLD WAR DRK GNB"` (not a single keyword). `jobCanEquipCategory` must handle both single-keyword and space-separated formats.
 
 ## File Map
 - `ai-context/technical.md` — stack, APIs, data layer, module boundaries, scoring details
