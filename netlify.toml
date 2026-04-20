@@ -9,16 +9,16 @@
     Cache-Control = "public, max-age=3600"
 
 [[headers]]
-  for = "/js/gcData.js"
+  for = "/index.html"
   [headers.values]
-    Cache-Control = "public, max-age=86400"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
-  for = "/js/specialVendorData.js"
+  for = "/js/*"
   [headers.values]
-    Cache-Control = "public, max-age=86400"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
-  for = "/js/itemMeta.js"
+  for = "/css/*"
   [headers.values]
-    Cache-Control = "public, max-age=86400"
+    Cache-Control = "public, max-age=0, must-revalidate"
