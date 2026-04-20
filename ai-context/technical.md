@@ -2,9 +2,10 @@
 
 ## Stack
 - Plain HTML/CSS/ES Modules — no bundler, no build step
-- Open index.html directly in browser (or `npx serve .` for a local server)
-- Tests: `node --experimental-vm-modules node_modules/.bin/jest` from project root (Jest with ES module support)
-- 104 unit tests across `tests/` — search.js, api.js, lists.js, garland.js, upgrade.js, gearBaseline.js, gearsets.js, constants.js
+- Open index.html directly in browser (or `python -m http.server 3000`)
+- Tests: `npm test` → `node --test tests/*.test.js` — 134 tests across `tests/` covering search, api, lists, garland, upgrade, gearBaseline, gearsets, constants, gcSealCost, finderSourceFilter
+- **Deployed**: GitHub Pages at https://iedgir01.github.io/ffxiv-gear-finder/ (auto-deploys on push to main via `.github/workflows/deploy.yml`)
+- **Datamine CI**: `.github/workflows/weekly-datamine-refresh.yml` — Mondays 06:00 UTC, fetches xivapi/ffxiv-datamining CSVs, regenerates `js/gcData.js` + `js/specialVendorData.js`, runs tests, commits + pushes if changed (which triggers redeploy)
 
 ## Data Sources
 

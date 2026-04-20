@@ -5,6 +5,11 @@ Single-page browser app. Import FFXIV character job levels from Lodestone via XI
 
 ## Current Status
 
+### Deployed
+- GitHub Pages: https://iedgir01.github.io/ffxiv-gear-finder/
+- CI on push to main (`deploy.yml`): runs tests → deploys to Pages
+- Weekly datamine refresh (`weekly-datamine-refresh.yml`): regenerates GC + special vendor data, auto-commits, re-triggers deploy
+
 ### v1 Core — all complete
 - [x] Task 1: Scaffold — all project files, context docs, empty modules.
 - [x] Task 2: constants.js — JOB_IDS (39 jobs), JOB_IDS_BY_GROUP, STATS_BY_GROUP, GEAR_TYPES, CLASSJOB_CATEGORY_TO_JOBS.
@@ -29,6 +34,9 @@ Single-page browser app. Import FFXIV character job levels from Lodestone via XI
 - [x] % gain removed — no `sortByPercent`, `_gainPct`, `showSortToggle`, `maxGroupStatGainPercent`. Raw stat scoring only.
 - [x] Recipe level inputs — single-line, 52px wide, dark-themed spinners.
 - [x] Teamcraft list export fixed — was sending JSON, now correct `id,null,qty;` semicolon format. 3 tests in `tests/lists.test.js`.
+- [x] Post-review fixes: `listProfilesSorted` null-safe name sort; `removeItemFromList` normalises itemId to Number before strict-equality filter.
+- [x] GitHub sidebar link — bottom-left of sidebar, links to https://github.com/iEdgir01/ffxiv-gear-finder.
+- [x] Deployment — GitHub Pages + CI workflow; weekly datamine-refresh workflow. 134 tests pass on main.
 
 ## Key Decisions
 - **Plain HTML/CSS/JS, no build step** — open index.html directly; avoids toolchain complexity.
