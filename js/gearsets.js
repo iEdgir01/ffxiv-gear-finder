@@ -1,0 +1,211 @@
+import { FIRESTORE } from './api.js';
+import { JOB_IDS, CLASSJOB_NAME_TO_ID } from './constants.js';
+
+/** Abbreviation (CRP, BSM, …) → ClassJob id */
+const ABBR_TO_ID = {};
+for (const [idStr, info] of Object.entries(JOB_IDS)) {
+  const id = Number(idStr);
+  if (info?.abbr) ABBR_TO_ID[info.abbr.toUpperCase()] = id;
+}
+
+function normalizeNameKey(s) {
+  return String(s).trim().toLowerCase().replace(/[\s_-]+/g, '');
+}
+
+/**
+ * Resolve Teamcraft / Firestore job field to our ClassJob id (8–40), or null.
+ * Handles numeric ids, abbreviations, and English job names.
+ */
+export function resolveGearsetJobId(raw) {
+  if (raw == null || raw === '') return null;
+  if (typeof raw === 'object' && raw !== null) {
+    return resolveGearsetJobId(raw.id ?? raw.jobId ?? raw.classJobId ?? raw.name ?? raw.abbr);
+  }
+  if (typeof raw === 'number' && Number.isFinite(raw)) {
+    return JOB_IDS[raw] ? raw : null;
+  }
+  const s = String(raw).trim();
+  if (/^\d+$/.test(s)) {
+    const n = Number(s);
+    return JOB_IDS[n] ? n : null;
+  }
+  if (/^[A-Za-z]{2,4}$/.test(s)) {
+    const id = ABBR_TO_ID[s.toUpperCase()];
+    if (id != null) return id;
+  }
+  const norm = normalizeNameKey(s);
+  for (const [name, id] of Object.entries(CLASSJOB_NAME_TO_ID)) {
+    if (normalizeNameKey(name) === norm) return id;
+  }
+  const displayNames = {
+    paladin: 19, monk: 20, warrior: 21, dragoon: 22, bard: 23,
+    whitemage: 24, blackmage: 25, summoner: 26, scholar: 27,
+    ninja: 28, machinist: 29, darkknight: 30, astrologian: 31,
+    samurai: 32, redmage: 33, bluemage: 34, gunbreaker: 35,
+    dancer: 36, reaper: 37, sage: 38, viper: 39, pictomancer: 40,
+    carpenter: 8, blacksmith: 9, armorer: 10, goldsmith: 11,
+    leatherworker: 12, weaver: 13, alchemist: 14, culinarian: 15,
+    miner: 16, botanist: 17, fisher: 18,
+  };
+  if (displayNames[norm]) return displayNames[norm];
+  return null;
+}
+
+function pickJobField(fields) {
+  return (
+    fields.job ??
+    fields.jobId ??
+    fields.classJob ??
+    fields.classJobId ??
+    fields.jobID ??
+    fields.classjob
+  );
+}
+
+function fireVal(v) {
+  if (!v) return null;
+  if ('integerValue' in v) return Number(v.integerValue);
+  if ('doubleValue' in v) return v.doubleValue;
+  if ('stringValue' in v) return v.stringValue;
+  if ('booleanValue' in v) return v.booleanValue;
+  if ('nullValue' in v) return null;
+  if ('arrayValue' in v) return (v.arrayValue.values ?? []).map(fireVal);
+  if ('mapValue' in v) {
+    const o = {};
+    for (const [k, val] of Object.entries(v.mapValue.fields ?? {})) o[k] = fireVal(val);
+    return o;
+  }
+  return null;
+}
+
+function slotItemId(slot) {
+  if (slot == null) return null;
+  if (typeof slot === 'number') return slot;
+  if (typeof slot === 'object') {
+    if (slot.itemId != null) return Number(slot.itemId);
+    if (slot.id != null) return Number(slot.id);
+  }
+  return null;
+}
+
+/**
+ * Legacy nested bag (older / alternate shapes).
+ */
+const LEGACY_SLOT_KEYS = [
+  ['mainHand', 'mainHand'],
+  ['offHand', 'offHand'],
+  ['head', 'head'],
+  ['body', 'body'],
+  ['hands', 'hands'],
+  ['legs', 'legs'],
+  ['feet', 'feet'],
+  ['necklace', 'necklace'],
+  ['earrings', 'earrings'],
+  ['bracelet', 'bracelet'],
+  ['ring1', 'ring1'],
+  ['ring2', 'ring2'],
+];
+
+/**
+ * Current Teamcraft Firestore: one field per slot at document root (see gearsets collection).
+ * chest → body, gloves → hands, earRings → earrings (keys expected by upgrade.js).
+ */
+const TEAMCRAFT_ROOT_SLOTS = [
+  ['mainHand', 'mainHand'],
+  ['offHand', 'offHand'],
+  ['head', 'head'],
+  ['chest', 'body'],
+  ['gloves', 'hands'],
+  ['legs', 'legs'],
+  ['feet', 'feet'],
+  ['earRings', 'earrings'],
+  ['necklace', 'necklace'],
+  ['bracelet', 'bracelet'],
+  ['ring1', 'ring1'],
+  ['ring2', 'ring2'],
+];
+
+function extractSlotsFromNestedItems(items) {
+  const slots = {};
+  if (!items || typeof items !== 'object') return slots;
+  for (const [out, inn] of LEGACY_SLOT_KEYS) {
+    const id = slotItemId(items[inn] ?? items[out]);
+    if (id) slots[out] = id;
+  }
+  return slots;
+}
+
+function extractSlotsFromRootFields(fields) {
+  const slots = {};
+  for (const [tcKey, outKey] of TEAMCRAFT_ROOT_SLOTS) {
+    const id = slotItemId(fields[tcKey]);
+    if (id) slots[outKey] = id;
+  }
+  return slots;
+}
+
+function slotCount(slots) {
+  return Object.keys(slots ?? {}).length;
+}
+
+/**
+ * Fetch user's gearsets from Firestore (public read). Returns Map<jobId, slotsRecord>.
+ */
+export async function fetchGearsetsForUser(uid) {
+  if (!uid) return new Map();
+
+  const url = FIRESTORE + ':runQuery';
+  const body = {
+    structuredQuery: {
+      from: [{ collectionId: 'gearsets' }],
+      where: {
+        fieldFilter: {
+          field: { fieldPath: 'authorId' },
+          op: 'EQUAL',
+          value: { stringValue: String(uid) },
+        },
+      },
+      limit: 100,
+    },
+  };
+
+  let res;
+  try {
+    res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+  } catch {
+    return new Map();
+  }
+
+  if (!res.ok) return new Map();
+
+  const rows = await res.json();
+  const byJob = new Map();
+
+  for (const row of rows) {
+    const doc = row.document;
+    if (!doc?.fields) continue;
+    const fields = {};
+    for (const [k, v] of Object.entries(doc.fields)) fields[k] = fireVal(v);
+
+    const rawJob = pickJobField(fields);
+    const jobNum = resolveGearsetJobId(rawJob);
+    if (jobNum == null) continue;
+
+    let slots = extractSlotsFromNestedItems(fields.items ?? fields.gear ?? fields.equipment);
+    if (slotCount(slots) === 0) {
+      slots = extractSlotsFromRootFields(fields);
+    }
+
+    if (slotCount(slots) === 0) continue;
+
+    const prev = byJob.get(jobNum);
+    if (prev && slotCount(prev) > slotCount(slots)) continue;
+    byJob.set(Number(jobNum), slots);
+  }
+
+  return byJob;
+}

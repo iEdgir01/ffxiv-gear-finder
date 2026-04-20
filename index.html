@@ -14,51 +14,212 @@
         <p class="tagline">Find your best craftable gear</p>
       </div>
 
-      <section class="sidebar-section" id="import-section">
-        <h2 class="section-label">Import Character</h2>
-        <div class="import-tabs" role="tablist">
-          <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="tab-url" data-tab="url">Lodestone URL</button>
-          <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-search" data-tab="search">Search</button>
-        </div>
-        <div class="tab-panel active" id="tab-url" role="tabpanel">
-          <input type="text" id="lodestone-url" placeholder="https://na.finalfantasyxiv.com/lodestone/character/...">
-          <button class="btn-primary" id="btn-import-url">Import</button>
-        </div>
-        <div class="tab-panel" id="tab-search" role="tabpanel" hidden>
-          <input type="text" id="char-name" placeholder="Character name">
-          <input type="text" id="char-server" placeholder="Server (optional)">
-          <button class="btn-primary" id="btn-search-char">Search</button>
-          <div id="char-results"></div>
-        </div>
-        <div id="import-status" class="status-msg" hidden></div>
-        <div id="char-info" class="char-info" hidden></div>
-      </section>
-
       <section class="sidebar-section" id="job-group-section">
-        <h2 class="section-label">Job Group</h2>
-        <div class="pill-group" id="group-pills">
-          <button class="pill active" data-group="doh">DoH avg</button>
-          <button class="pill" data-group="dol">DoL avg</button>
-          <button class="pill" data-group="combat">Combat</button>
+        <div class="sidebar-section-head">
+          <h2 class="section-label">Job Group</h2>
+          <button type="button" id="job-group-master-edit-btn" class="sidebar-section-head-btn">Edit all…</button>
         </div>
-        <select id="combat-job-select" class="combat-select" hidden></select>
+        <div class="pill-group" id="group-pills">
+          <button type="button" class="pill" data-group="doh">DoH</button>
+          <button type="button" class="pill" data-group="dol">DoL</button>
+          <button type="button" class="pill" data-group="dow">DoW</button>
+          <button type="button" class="pill" data-group="dom">DoM</button>
+        </div>
+        <div id="job-select-wrap" hidden>
+          <select id="job-select" class="combat-select"></select>
+        </div>
         <div id="level-display" class="level-display"></div>
-      </section>
-
-      <section class="sidebar-section" id="stat-section">
-        <h2 class="section-label">Gear Stat</h2>
-        <div class="pill-group" id="stat-pills"></div>
       </section>
 
       <section class="sidebar-section" id="gear-type-section">
         <h2 class="section-label">Gear Type</h2>
         <div class="pill-group" id="gear-type-pills"></div>
+        <label class="sidebar-checkbox-row" for="finder-gc-toggle">
+          <input type="checkbox" id="finder-gc-toggle" checked>
+          <span>Include Grand Company items</span>
+        </label>
+        <label class="sidebar-checkbox-row" for="finder-tomestone-toggle">
+          <input type="checkbox" id="finder-tomestone-toggle" checked>
+          <span>Include tomestone vendor items</span>
+        </label>
+        <label class="sidebar-checkbox-row" for="finder-scrip-toggle">
+          <input type="checkbox" id="finder-scrip-toggle" checked>
+          <span>Include scrip vendor items</span>
+        </label>
+        <label class="sidebar-checkbox-row" for="finder-master-toggle">
+          <input type="checkbox" id="finder-master-toggle" checked>
+          <span>Include master crafts</span>
+        </label>
       </section>
+
+      <a href="https://github.com/iEdgir01/ffxiv-gear-finder" class="sidebar-github-link" target="_blank" rel="noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.09-.745.083-.729.083-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.605-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12"/></svg>
+        View on GitHub
+      </a>
     </aside>
 
     <main id="results-panel">
-      <div id="results-header" class="results-header"></div>
-      <div id="results-grid" class="results-grid"></div>
+      <div class="main-top-bar">
+        <div class="main-tabs" role="tablist">
+          <button class="main-tab active" role="tab" data-panel="finder" aria-selected="true">Gear Finder</button>
+          <button class="main-tab" role="tab" data-panel="upgrade" aria-selected="false">Upgrades</button>
+          <button class="main-tab" role="tab" data-panel="lists" aria-selected="false">Lists</button>
+        </div>
+        <button type="button" id="character-open-btn" class="character-chip" aria-label="Character import and Teamcraft" title="Character &amp; Teamcraft">
+          <span id="character-chip-placeholder" class="character-chip-placeholder" aria-hidden="true"></span>
+          <img id="character-chip-avatar" class="character-chip-avatar" alt="" width="40" height="40" hidden>
+          <span id="character-chip-label" class="character-chip-label">Character</span>
+        </button>
+      </div>
+
+      <div id="character-overlay" class="character-overlay" hidden aria-hidden="true">
+        <div class="character-overlay-backdrop" id="character-overlay-backdrop"></div>
+        <div class="character-overlay-panel" role="dialog" aria-modal="true" aria-labelledby="character-overlay-title">
+          <div class="character-overlay-head">
+            <h2 id="character-overlay-title" class="character-overlay-title">Character &amp; Teamcraft</h2>
+            <button type="button" class="character-overlay-close" id="character-overlay-close" aria-label="Close">&times;</button>
+          </div>
+          <section class="character-overlay-section">
+            <h3 class="character-overlay-section-label">Import character</h3>
+            <div class="character-import-intro">
+              <p class="character-import-hint">Job levels are loaded from the <strong>official Lodestone character API</strong>. If the profile is <strong>private</strong>, or <strong>class / job details</strong> are hidden, import may fail or show no jobs.</p>
+              <button type="button" class="character-import-info-btn" id="character-import-toggle" aria-expanded="false" aria-controls="character-import-extra" title="Lodestone privacy — how to fix import issues">
+                <span class="character-import-info-icon" aria-hidden="true">i</span>
+                <span class="visually-hidden">More about Lodestone privacy settings</span>
+              </button>
+            </div>
+            <div id="character-import-extra" class="character-import-extra" hidden>
+              <p class="character-import-extra-text">On <strong>The Lodestone</strong> for your region, sign in and open <strong>account privacy settings</strong>, or open your <strong>character</strong> page and use <strong>profile / privacy settings</strong> (often <strong>Edit Profile</strong>; labels depend on language). Ensure your <strong>character</strong> and <strong>class / job details</strong> are visible to others, then search again here.</p>
+            </div>
+            <input type="text" id="char-name" placeholder="Character name">
+            <select id="char-datacenter" class="combat-select" style="margin-bottom:6px" aria-label="Data centre">
+              <option value="">-- selection required --</option>
+              <option>Aether</option>
+              <option>Crystal</option>
+              <option>Dynamis</option>
+              <option>Primal</option>
+              <option>Chaos</option>
+              <option>Light</option>
+              <option>Elemental</option>
+              <option>Gaia</option>
+              <option>Mana</option>
+              <option>Meteor</option>
+              <option>Materia</option>
+            </select>
+            <select id="char-server" class="combat-select" style="margin-bottom:6px" hidden aria-label="Server">
+              <option value="">-- selection required --</option>
+            </select>
+            <button class="btn-primary" id="btn-search-char" type="button">Search</button>
+            <div id="char-results"></div>
+            <div id="import-status" class="status-msg" hidden></div>
+            <div id="char-info" class="char-info" hidden></div>
+          </section>
+          <section class="character-overlay-section" id="teamcraft-section" hidden>
+            <h3 class="character-overlay-section-label">Teamcraft (optional)</h3>
+            <p class="tagline" style="margin-bottom:8px">After you import a character above, link your Teamcraft profile so gearsets load for Upgrades and Equipped tags. The link is saved with that character.</p>
+            <input type="text" id="teamcraft-profile" placeholder="https://ffxivteamcraft.com/profile/…" autocomplete="off">
+            <button class="btn-primary" id="btn-link-teamcraft" type="button">Link profile</button>
+            <div id="teamcraft-status" class="status-msg" hidden></div>
+          </section>
+          <section class="character-overlay-section character-overlay-section--saved" id="saved-profiles-section" aria-labelledby="saved-profiles-heading">
+            <h3 id="saved-profiles-heading" class="character-overlay-section-label">Saved characters</h3>
+            <p class="saved-profiles-hint">Stored in this browser only. Select one to use it in Gear Finder and Upgrades.</p>
+            <div id="saved-profiles-list" class="saved-profiles-list" role="list"></div>
+          </section>
+        </div>
+      </div>
+
+      <div id="master-overlay" class="character-overlay" hidden aria-hidden="true">
+        <div class="character-overlay-backdrop" id="master-overlay-backdrop"></div>
+        <div class="character-overlay-panel" role="dialog" aria-modal="true" aria-labelledby="master-overlay-title">
+          <div class="character-overlay-head">
+            <h2 id="master-overlay-title" class="character-overlay-title">Master crafting</h2>
+            <button type="button" class="character-overlay-close" id="master-overlay-close" aria-label="Close">&times;</button>
+          </div>
+          <div id="master-overlay-body" class="character-overlay-section"></div>
+          <div class="character-overlay-section" style="padding-top:0">
+            <button type="button" class="btn-primary" id="master-overlay-save" style="width:100%">Save</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="finder-panel">
+        <div class="finder-toolbar">
+          <div id="results-header" class="results-header"></div>
+          <div class="finder-toolbar-actions">
+            <div class="finder-search-wrap">
+              <input type="search" id="finder-search" class="finder-search-input" placeholder="Search items…" autocomplete="off" aria-label="Search items">
+            </div>
+            <label class="finder-acq-label" for="finder-priority-stat" title="Which stat to emphasize when sorting (Best overall = balanced group score).">Stat</label>
+            <select id="finder-priority-stat" class="combat-select finder-acq-select" aria-label="Stat priority: best overall or a specific group stat">
+              <option value="">Best overall</option>
+            </select>
+            <label class="finder-acq-label" for="finder-acq-filter" title="Matches sidebar include toggles; choosing a source turns that include on.">Source</label>
+            <select id="finder-acq-filter" class="combat-select finder-acq-select" aria-label="Acquisition source filter (same choices as sidebar toggles)">
+              <optgroup label="Acquisition">
+                <option value="all">All sources</option>
+                <option value="gc">Grand Company</option>
+                <option value="tomestone">Tomestones</option>
+                <option value="scrip">Scrips</option>
+                <option value="master">Master crafts</option>
+                <option value="craft">Craftable</option>
+              </optgroup>
+            </select>
+            <label class="finder-acq-label" for="finder-sort-mode">Sort</label>
+            <select id="finder-sort-mode" class="combat-select finder-acq-select" aria-label="Order results">
+              <option value="bestMatch">Best match</option>
+              <option value="topPick">Top picks (red dot)</option>
+              <option value="ilvl">Item level</option>
+              <option value="equipLevel">Equip level</option>
+            </select>
+            <button id="btn-refresh-search" class="btn-secondary btn-sm" type="button">Refresh</button>
+          </div>
+        </div>
+        <div id="results-grid" class="results-grid"></div>
+      </div>
+      <div id="upgrade-panel" hidden>
+        <div class="upgrade-toolbar">
+          <div class="finder-toolbar upgrade-toolbar-filter-row">
+            <div class="upgrade-toolbar-leading" aria-hidden="true"></div>
+            <div class="finder-toolbar-actions">
+              <label class="finder-acq-label" for="upgrade-acq-filter">Source</label>
+              <select id="upgrade-acq-filter" class="combat-select finder-acq-select" aria-label="Upgrades: Best overall uses the filtered pool below; Craftable limits to recipes you can make. Grand Company, tomestone vendor, scrip vendor, and master crafts are included or excluded with the checkboxes.">
+                <option value="bestOverall">Best overall</option>
+                <option value="craft">Craftable</option>
+              </select>
+              <label class="upgrade-gc-toggle" for="upgrade-gc-toggle">
+                <input type="checkbox" id="upgrade-gc-toggle" checked>
+                <span>Include Grand Company items</span>
+              </label>
+              <label class="upgrade-gc-toggle" for="upgrade-tomestone-toggle">
+                <input type="checkbox" id="upgrade-tomestone-toggle" checked>
+                <span>Include tomestone vendor items</span>
+              </label>
+              <label class="upgrade-gc-toggle" for="upgrade-scrip-toggle">
+                <input type="checkbox" id="upgrade-scrip-toggle" checked>
+                <span>Include scrip vendor items</span>
+              </label>
+              <label class="upgrade-gc-toggle" for="upgrade-master-toggle">
+                <input type="checkbox" id="upgrade-master-toggle" checked>
+                <span>Include master crafts</span>
+              </label>
+              <button type="button" id="btn-refresh-upgrades" class="btn-secondary btn-sm">Refresh gearsets</button>
+            </div>
+          </div>
+          <div id="upgrade-job-tabs" class="upgrade-job-tabs" role="tablist" aria-label="Gearset by job"></div>
+        </div>
+        <div id="upgrade-content"></div>
+      </div>
+      <div id="lists-panel" class="lists-panel" hidden>
+        <div class="lists-toolbar">
+          <h2 class="lists-heading">My lists</h2>
+          <div class="lists-create-row">
+            <input type="text" id="new-list-name" placeholder="New list name" aria-label="New list name">
+            <button id="btn-create-list" class="btn-secondary btn-sm" type="button">Create</button>
+          </div>
+        </div>
+        <div id="list-panel-body" class="lists-body"></div>
+      </div>
     </main>
   </div>
 
