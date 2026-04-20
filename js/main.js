@@ -1054,10 +1054,40 @@ function ensureUpgradeJobId() {
 function syncUpgradeToolbar() {
   ensureUpgradeJobId();
   const ids = sortedGearsetJobIds();
-  ui.renderUpgradeJobTabs(ids, state.upgradeJobId, jid => {
+  ui.renderUpgradeJobTabs(ids, state.upgradeJobId, state.jobs, jid => {
     state.upgradeJobId = jid;
     void refreshUpgradePage();
   });
+}
+
+async function refreshCharacterJobsOnLoad() {
+  if (!state.lodestoneId) return;
+  try {
+    const { name, server, jobs, portrait } = await fetchCharacterJobs(state.lodestoneId);
+    // If the user is mid-session and data is already loaded, update in-place without resetting UI state.
+    state.jobs = jobs || state.jobs;
+    if (name) state.charName = name;
+    if (server) {
+      // Keep existing UI server label up to date.
+      ui.showCharInfo(state.charName ?? name, server);
+    }
+    if (portrait) state.charPortrait = portrait;
+    if (state.charName) ui.setCharacterChip({ name: state.charName, portraitUrl: state.charPortrait });
+
+    // Persist refreshed levels so next load is already updated.
+    profiles.upsertProfileFromImport(state.lodestoneId, {
+      name: state.charName ?? name ?? 'Unknown',
+      server: server ?? '',
+      portrait: state.charPortrait ?? null,
+      jobs: state.jobs,
+    });
+
+    refreshLevelDisplaySidebar();
+    syncUpgradeToolbar();
+    await Promise.all([runSearch(), refreshUpgradePage()]);
+  } catch {
+    // Ignore network/privacy failures; stored levels remain.
+  }
 }
 
 async function handleRefreshGearsets() {
@@ -1446,6 +1476,7 @@ async function init() {
 
   await loadData();
   await hydrateFromStorage();
+  void refreshCharacterJobsOnLoad();
 }
 
 init();

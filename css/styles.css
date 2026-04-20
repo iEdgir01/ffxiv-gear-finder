@@ -533,8 +533,23 @@ input[type="text"]:focus { border-color: var(--blue); }
   color: var(--text-muted);
   font-size: 12px;
   font-weight: 600;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
   cursor: pointer;
   transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+
+.upgrade-job-tab-lv {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  opacity: 0.9;
+}
+
+.upgrade-job-tab.active .upgrade-job-tab-lv {
+  color: var(--accent);
+  opacity: 0.95;
 }
 
 .upgrade-job-tab:hover {

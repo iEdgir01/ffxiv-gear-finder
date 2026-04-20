@@ -1006,7 +1006,7 @@ export function initImportTabs() {
 /**
  * @param {'profile'|'gearsets'|'gearset'|null} emptyMode — null means render the upgrades table
  */
-export function renderUpgradeJobTabs(jobIds, selectedJobId, onSelect) {
+export function renderUpgradeJobTabs(jobIds, selectedJobId, jobsById, onSelect) {
   const wrap = document.getElementById('upgrade-job-tabs');
   if (!wrap) return;
   wrap.textContent = '';
@@ -1016,13 +1016,18 @@ export function renderUpgradeJobTabs(jobIds, selectedJobId, onSelect) {
     const info = JOB_IDS[jn] ?? JOB_IDS[jid];
     const abbr = info?.abbr ?? String(jid);
     const active = sel != null && Number.isFinite(sel) && sel === jn;
+    const lv = jobsById && typeof jobsById === 'object' ? jobsById[jn]?.level : null;
+    const lvText = typeof lv === 'number' && Number.isFinite(lv) ? 'Lv ' + lv : null;
     const btn = el('button', {
       type: 'button',
       class: 'upgrade-job-tab' + (active ? ' active' : ''),
       role: 'tab',
       'aria-selected': active ? 'true' : 'false',
       title: info ? info.name : '',
-    }, abbr);
+    },
+      el('span', { class: 'upgrade-job-tab-abbr' }, abbr),
+      lvText ? el('span', { class: 'upgrade-job-tab-lv' }, lvText) : null
+    );
     btn.addEventListener('click', () => onSelect(jn));
     wrap.appendChild(btn);
   }
