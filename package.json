@@ -2,6 +2,7 @@
   "name": "ffxiv-gear-finder",
   "type": "module",
   "scripts": {
+    "test": "node --test tests/*.test.js",
     "build:item-meta": "node scripts/build-item-meta.mjs",
     "build:gc-data": "node scripts/build-gc-data.mjs",
     "build:special-vendor-data": "node scripts/build-special-vendor-data.mjs",
