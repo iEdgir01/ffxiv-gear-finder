@@ -1063,7 +1063,16 @@ function syncUpgradeToolbar() {
 async function refreshCharacterJobsOnLoad() {
   if (!state.lodestoneId) return;
   try {
-    const { name, server, jobs, portrait } = await fetchCharacterJobs(state.lodestoneId);
+    // Sometimes a just-loaded page has transient fetch failures (network warm-up, captive portals).
+    // Retry once quickly; if it still fails we keep stored levels.
+    let payload = null;
+    try {
+      payload = await fetchCharacterJobs(state.lodestoneId);
+    } catch {
+      await new Promise(r => setTimeout(r, 600));
+      payload = await fetchCharacterJobs(state.lodestoneId);
+    }
+    const { name, server, jobs, portrait } = payload ?? {};
     // If the user is mid-session and data is already loaded, update in-place without resetting UI state.
     state.jobs = jobs || state.jobs;
     if (name) state.charName = name;
@@ -1085,8 +1094,9 @@ async function refreshCharacterJobsOnLoad() {
     refreshLevelDisplaySidebar();
     syncUpgradeToolbar();
     await Promise.all([runSearch(), refreshUpgradePage()]);
-  } catch {
+  } catch (err) {
     // Ignore network/privacy failures; stored levels remain.
+    console.warn('[main] Could not refresh character levels on load:', err?.message ?? err);
   }
 }
 

@@ -112,7 +112,7 @@ export function initServerDropdowns() {
   if (!dcSel || !srvSel || dcSel.tagName !== 'SELECT' || srvSel.tagName !== 'SELECT') {
     return;
   }
-  dcSel.addEventListener('change', () => {
+  const sync = () => {
     const dc = dcSel.value;
     srvSel.textContent = '';
     srvSel.appendChild(el('option', { value: '' }, '-- selection required --'));
@@ -124,7 +124,10 @@ export function initServerDropdowns() {
     } else {
       srvSel.hidden = true;
     }
-  });
+  };
+  dcSel.addEventListener('change', sync);
+  // If the browser restores the DC selection (or it was preselected), populate servers immediately.
+  sync();
 }
 
 export function showImportStatus(type, message) {
