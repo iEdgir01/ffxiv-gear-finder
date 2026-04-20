@@ -1328,6 +1328,9 @@ function initMainTabs() {
       if (jobGroupSec) jobGroupSec.hidden = panel === 'upgrade' || panel === 'lists';
       const gearTypeSec = document.getElementById('gear-type-section');
       if (gearTypeSec) gearTypeSec.hidden = panel === 'upgrade' || panel === 'lists';
+      // On every in-app tab switch, refresh job levels for all saved profiles in the background.
+      // Throttled/rate-limited by `refreshAllProfilesJobsOnLoad`.
+      void refreshAllProfilesJobsOnLoad({ reason: 'tab', minIntervalMs: 30_000 });
       if (panel === 'finder') void runSearch();
       if (panel === 'upgrade') void refreshUpgradePage();
       if (panel === 'lists') refreshListPanel();
