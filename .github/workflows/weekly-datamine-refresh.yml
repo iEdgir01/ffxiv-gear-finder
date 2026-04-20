@@ -1,0 +1,42 @@
+# Regenerates js/gcData.js and js/specialVendorData.js from xivapi/ffxiv-datamining CSVs.
+# Schedule: Mondays 06:00 UTC (~weekly). Change the cron or use "Run workflow" to adjust.
+name: Weekly datamine refresh
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dev deps (package-lock if present)
+        run: npm install
+
+      - name: Regenerate GC + special vendor data
+        run: npm run build:datamine-shops
+
+      - name: Run tests
+        run: npm test
+
+      - name: Commit and push if outputs changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add js/gcData.js js/specialVendorData.js
+          if git diff --staged --quiet; then
+            echo "No changes from datamine refresh (sheets unchanged)."
+          else
+            git commit -m "chore(datamine): weekly refresh of GC and special vendor data"
+            git push
+          fi
