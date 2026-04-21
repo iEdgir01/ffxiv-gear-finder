@@ -72,8 +72,8 @@ describe('CLASSJOB_CATEGORY_TO_JOBS', () => {
   it('Miner maps to [MIN]', () => {
     assert.deepEqual(CLASSJOB_CATEGORY_TO_JOBS['Miner'], ['MIN']);
   });
-  it('All Classes maps to all 33 jobs', () => {
-    assert.equal(CLASSJOB_CATEGORY_TO_JOBS['All Classes'].length, 34);
+  it('All Classes maps to all 42 jobs', () => {
+    assert.equal(CLASSJOB_CATEGORY_TO_JOBS['All Classes'].length, 42);
   });
 });
 
