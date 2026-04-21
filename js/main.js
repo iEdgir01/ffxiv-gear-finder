@@ -24,6 +24,7 @@ import { passesFinderSourceMode } from './finderSourceFilter.js';
 import { findBestUpgrades } from './upgrade.js';
 import { fetchGearsetsForUser } from './gearsets.js';
 import * as lists from './lists.js';
+import * as listImport from './listImport.js';
 import * as ui from './ui.js';
 import * as profiles from './profiles.js';
 
@@ -512,6 +513,9 @@ async function runSearch() {
   const seq = ++_searchSeq;
 
   if (!isLoaded()) {
+    if (!document.getElementById('results-view-loading')) {
+      ui.beginViewLoading('Loading recipe data…');
+    }
     ui.renderEmptyState('Loading recipe data...', 'Please wait a moment.');
     return;
   }
@@ -1012,20 +1016,14 @@ function getVisibleJobIds(group) {
   const allIds = JOB_IDS_BY_GROUP[group] ?? [];
   // No character data: show all jobs so anonymous users can pick any job and enter a level.
   if (!state.jobs || Object.keys(state.jobs).length === 0) return allIds;
-  const hasGearsets = state.gearsetsByJob?.size > 0;
   return allIds.filter(id => {
     // Only show jobs the character has actually leveled.
     const lv = state.jobs[id]?.level ?? 0;
     if (lv <= 0) return false;
     const promotedIds = JOB_IDS[id]?.promotedJobIds;
-    if (promotedIds) {
-      // Hide base class if any promoted job has a level — show the promoted job instead.
+    if (promotedIds?.length) {
+      // Hide base class if any specialization has a level — show that job instead (e.g. NIN not ROG).
       if (promotedIds.some(pid => (state.jobs[pid]?.level ?? 0) > 0)) return false;
-      // When gearsets are synced, also require an explicit gearset for the base class.
-      if (hasGearsets) {
-        const key = String(id) + ':' + (JOB_IDS[id]?.abbr ?? '');
-        if (!state.gearsetsByJob.has(key)) return false;
-      }
     }
     return true;
   });
@@ -1092,14 +1090,15 @@ function buildUpgradeTabs() {
     }
   }
 
-  // Category 2: Lodestone jobs with a level but no gearset (show "no gearset" message)
-  // Base-class jobs are excluded — they only appear in sidebar when a gearset exists.
+  // Category 2: jobs with a level but no Teamcraft gearset tab yet (e.g. Arcanist before a gearset exists).
+  // Include base classes only while no specialization is leveled (same rule as Gear Finder job list).
   for (const [idStr, info] of Object.entries(JOB_IDS)) {
     const jobId = Number(idStr);
     if (seenJobIds.has(jobId)) continue;
-    if (info.promotedJobIds) continue; // skip base classes
     const lv = state.jobs[jobId]?.level;
     if (!lv || !Number.isFinite(lv)) continue;
+    const promotedIds = info.promotedJobIds;
+    if (promotedIds?.length && promotedIds.some(pid => (state.jobs[pid]?.level ?? 0) > 0)) continue;
     const key = String(jobId) + ':' + info.abbr;
     tabs.push({ key, jobId, abbr: info.abbr, title: info.name, hasGearset: false });
   }
@@ -1131,6 +1130,7 @@ function syncUpgradeToolbar() {
 
 async function refreshCharacterJobsOnLoad() {
   if (!state.lodestoneId) return;
+  ui.beginViewLoading('Syncing character…');
   try {
     // Sometimes a just-loaded page has transient fetch failures (network warm-up, captive portals).
     // Retry once quickly; if it still fails we keep stored levels.
@@ -1210,6 +1210,8 @@ async function refreshCharacterJobsOnLoad() {
   } catch (err) {
     // Ignore network/privacy failures; stored levels remain.
     console.warn('[main] Could not refresh character levels on load:', err?.message ?? err);
+  } finally {
+    ui.endViewLoading();
   }
 }
 
@@ -1480,6 +1482,9 @@ function syncUpgradeSourceSelect() {
 }
 
 async function init() {
+  if (!isLoaded()) {
+    ui.beginViewLoading('Loading…');
+  }
   initMainTabs();
   initCharacterOverlay();
   initMasterCraftingOverlay();
@@ -1663,6 +1668,20 @@ async function init() {
     if (msg === 'Ready') {
       ui.showDataLoadingBar(false);
       ui.endViewLoading();
+      const importBtn = document.getElementById('btn-import-list');
+      if (importBtn && !importBtn.dataset.gfImportWired) {
+        importBtn.dataset.gfImportWired = '1';
+        importBtn.hidden = false;
+        importBtn.addEventListener('click', () => {
+          listImport.openImportModal({
+            getCraftPool: getCraftPoolItems,
+            createList: lists.createList,
+            addItemToList: lists.addItemToList,
+            exportTeamcraftUrl: lists.exportTeamcraftUrl,
+            onListCreated: refreshListPanel,
+          });
+        });
+      }
       void runSearch();
     } else if (msg.startsWith('error:')) {
       ui.showDataLoadingBar(false);
@@ -1700,6 +1719,9 @@ async function init() {
   });
 
   await loadData();
+  if (isLoaded()) {
+    ui.endViewLoading();
+  }
   await hydrateFromStorage();
   void refreshAllProfilesJobsOnLoad({ reason: 'load' });
   void refreshCharacterJobsOnLoad();

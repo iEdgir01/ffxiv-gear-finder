@@ -102,7 +102,7 @@ describe('promotedJobIds', () => {
   it('ARC (47) promotes to BRD (23)', () => assert.deepEqual(JOB_IDS[47].promotedJobIds, [23]));
   it('CNJ (48) promotes to WHM (24)', () => assert.deepEqual(JOB_IDS[48].promotedJobIds, [24]));
   it('THM (49) promotes to BLM (25)', () => assert.deepEqual(JOB_IDS[49].promotedJobIds, [25]));
-  it('ARCA (41) promotes to SMN (26) only — not SCH', () => assert.deepEqual(JOB_IDS[41].promotedJobIds, [26]));
+  it('ARCA (41) promotes to SMN (26) and SCH (27)', () => assert.deepEqual(JOB_IDS[41].promotedJobIds, [26, 27]));
   it('ROG (42) promotes to NIN (28)', () => assert.deepEqual(JOB_IDS[42].promotedJobIds, [28]));
   it('PLD (19) has no promotedJobIds', () => assert.equal(JOB_IDS[19].promotedJobIds, undefined));
 });

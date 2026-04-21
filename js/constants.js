@@ -32,7 +32,7 @@ export const JOB_IDS = {
   38: { abbr: 'SGE', name: 'Sage',          group: 'dom' },
   39: { abbr: 'VPR', name: 'Viper',         group: 'dow' },
   40: { abbr: 'PCT', name: 'Pictomancer',   group: 'dom' },
-  41: { abbr: 'ARCA', name: 'Arcanist',    group: 'dom', promotedJobIds: [26] },
+  41: { abbr: 'ARCA', name: 'Arcanist',    group: 'dom', promotedJobIds: [26, 27] },
   42: { abbr: 'ROG',  name: 'Rogue',       group: 'dow', promotedJobIds: [28] },
   43: { abbr: 'GLA',  name: 'Gladiator',   group: 'dow', promotedJobIds: [19] },
   44: { abbr: 'PGL',  name: 'Pugilist',    group: 'dow', promotedJobIds: [20] },

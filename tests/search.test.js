@@ -115,14 +115,14 @@ describe('jobCanEquipCategory', () => {
   it('handles space-separated abbreviation list — WAR excluded from DoH abbr list', () => {
     assert.equal(jobCanEquipCategory(21, 'CRP BSM ARM GSM LTW WVR ALC CUL'), false);
   });
-  it('Arcana: treats SMN/SCH-only categories as equippable', () => {
+  it('Arcana: treats SMN and SCH job categories as equippable', () => {
     assert.equal(jobCanEquipCategory(41, 'Summoner'), true);
-    assert.equal(jobCanEquipCategory(41, 'Scholar'), false);
+    assert.equal(jobCanEquipCategory(41, 'Scholar'), true);
   });
-  it('Arcana: treats SMN/SCH in abbreviation lists as equippable', () => {
+  it('Arcana: treats SMN and SCH in abbreviation lists as equippable', () => {
     assert.equal(jobCanEquipCategory(41, 'SMN SCH'), true);
     assert.equal(jobCanEquipCategory(41, 'SMN'), true);
-    assert.equal(jobCanEquipCategory(41, 'SCH'), false);
+    assert.equal(jobCanEquipCategory(41, 'SCH'), true);
   });
 
   // Parameterized base-class delegation tests

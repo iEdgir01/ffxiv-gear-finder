@@ -11,7 +11,7 @@ import {
 } from './constants.js';
 import { maxSingleGroupStatValue, canPlayerCraftRecipe } from './search.js';
 
-function el(tag, attrs = {}, ...children) {
+export function el(tag, attrs = {}, ...children) {
   const node = document.createElement(tag);
   for (const [k, v] of Object.entries(attrs)) {
     if (v === undefined || v === null) continue;
@@ -24,6 +24,49 @@ function el(tag, attrs = {}, ...children) {
     else if (child) node.appendChild(child);
   }
   return node;
+}
+
+const FOCUS_TRAP_FOCUSABLE =
+  'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+/**
+ * Keep Tab cycling within `root`. Call the returned disposer when the layer closes;
+ * pass `{ restoreFocus: true }` on the outermost close to move focus back to the previously focused node.
+ */
+export function mountFocusTrap(root) {
+  const previous = document.activeElement;
+  function visibleFocusables() {
+    return Array.from(root.querySelectorAll(FOCUS_TRAP_FOCUSABLE)).filter(el => {
+      if (el.getAttribute('aria-hidden') === 'true') return false;
+      return el.offsetParent !== null || el === document.activeElement;
+    });
+  }
+  function onKeydown(e) {
+    if (e.key !== 'Tab' || !root.isConnected) return;
+    if (!root.contains(document.activeElement)) return;
+    const nodes = visibleFocusables();
+    if (nodes.length === 0) return;
+    const first = nodes[0];
+    const last = nodes[nodes.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  }
+  root.addEventListener('keydown', onKeydown);
+  return function disposeFocusTrap({ restoreFocus = false } = {}) {
+    root.removeEventListener('keydown', onKeydown);
+    if (restoreFocus && previous && typeof previous.focus === 'function') {
+      try {
+        previous.focus();
+      } catch {
+        /* ignore */
+      }
+    }
+  };
 }
 
 /** `cssVar` from `main.js` tag defs → outlined pill class */
