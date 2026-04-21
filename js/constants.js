@@ -32,6 +32,15 @@ export const JOB_IDS = {
   38: { abbr: 'SGE', name: 'Sage',          group: 'dom' },
   39: { abbr: 'VPR', name: 'Viper',         group: 'dow' },
   40: { abbr: 'PCT', name: 'Pictomancer',   group: 'dom' },
+  41: { abbr: 'ARCA', name: 'Arcanist',    group: 'dom', promotedJobIds: [26] },
+  42: { abbr: 'ROG',  name: 'Rogue',       group: 'dow', promotedJobIds: [28] },
+  43: { abbr: 'GLA',  name: 'Gladiator',   group: 'dow', promotedJobIds: [19] },
+  44: { abbr: 'PGL',  name: 'Pugilist',    group: 'dow', promotedJobIds: [20] },
+  45: { abbr: 'MRD',  name: 'Marauder',    group: 'dow', promotedJobIds: [21] },
+  46: { abbr: 'LNC',  name: 'Lancer',      group: 'dow', promotedJobIds: [22] },
+  47: { abbr: 'ARC',  name: 'Archer',      group: 'dow', promotedJobIds: [23] },
+  48: { abbr: 'CNJ',  name: 'Conjurer',    group: 'dom', promotedJobIds: [24] },
+  49: { abbr: 'THM',  name: 'Thaumaturge', group: 'dom', promotedJobIds: [25] },
 };
 
 /** Upper bound for equip/recipe level filters and sidebar inputs (current game data). */
@@ -39,8 +48,8 @@ export const MAX_EQUIP_LEVEL = 100;
 
 export const DOH_JOB_IDS = [8, 9, 10, 11, 12, 13, 14, 15];
 export const DOL_JOB_IDS = [16, 17, 18];
-export const DOW_JOB_IDS = [19, 20, 21, 22, 23, 28, 29, 30, 32, 35, 36, 37, 39];
-export const DOM_JOB_IDS = [24, 25, 26, 27, 31, 33, 34, 38, 40];
+export const DOW_JOB_IDS = [19, 20, 21, 22, 23, 28, 29, 30, 32, 35, 36, 37, 39, 42, 43, 44, 45, 46, 47];
+export const DOM_JOB_IDS = [24, 25, 26, 27, 31, 33, 34, 38, 40, 41, 48, 49];
 // Deprecated: use DOW_JOB_IDS / DOM_JOB_IDS. Kept for backward compatibility with ui.js/main.js until Tasks 5-6.
 export const COMBAT_JOB_IDS = [...DOW_JOB_IDS, ...DOM_JOB_IDS];
 
@@ -76,14 +85,20 @@ export const CLASSJOB_NAME_TO_ID = {
   Astrologian: 31, Samurai: 32, Redmage: 33, Bluemage: 34,
   Gunbreaker: 35, Dancer: 36, Reaper: 37, Sage: 38,
   Viper: 39, Pictomancer: 40,
+  // Custom / experimental job support (not part of vanilla FFXIV job ids).
+  Arcana: 41,
+  Arcanist: 41,
+  Rogue: 42,
+  Gladiator: 43, Pugilist: 44, Marauder: 45,
+  Lancer: 46, Archer: 47, Conjurer: 48, Thaumaturge: 49,
 };
 
 export const CLASSJOB_CATEGORY_TO_JOBS = {
-  'All Classes':          ['CRP','BSM','ARM','GSM','LTW','WVR','ALC','CUL','MIN','BTN','FSH','PLD','MNK','WAR','DRG','BRD','WHM','BLM','SMN','SCH','NIN','MCH','DRK','AST','SAM','RDM','BLU','GNB','DNC','RPR','SGE','VPR','PCT'],
+  'All Classes':          ['CRP','BSM','ARM','GSM','LTW','WVR','ALC','CUL','MIN','BTN','FSH','PLD','MNK','WAR','DRG','BRD','WHM','BLM','SMN','SCH','NIN','MCH','DRK','AST','SAM','RDM','BLU','GNB','DNC','RPR','SGE','VPR','PCT','ARCA','ROG','GLA','PGL','MRD','LNC','ARC','CNJ','THM'],
   'Disciple of the Hand': ['CRP','BSM','ARM','GSM','LTW','WVR','ALC','CUL'],
   'Disciple of the Land': ['MIN','BTN','FSH'],
-  'Disciple of War':      ['PLD','MNK','WAR','DRG','BRD','NIN','MCH','DRK','SAM','GNB','DNC','RPR','VPR'],
-  'Disciple of Magic':    ['WHM','BLM','SMN','SCH','AST','RDM','BLU','SGE','PCT'],
+  'Disciple of War':      ['PLD','MNK','WAR','DRG','BRD','NIN','MCH','DRK','SAM','GNB','DNC','RPR','VPR','ROG','GLA','PGL','MRD','LNC','ARC'],
+  'Disciple of Magic':    ['WHM','BLM','SMN','SCH','AST','RDM','BLU','SGE','PCT','ARCA','CNJ','THM'],
   'Carpenter': ['CRP'], 'Blacksmith': ['BSM'], 'Armorer': ['ARM'], 'Goldsmith': ['GSM'],
   'Leatherworker': ['LTW'], 'Weaver': ['WVR'], 'Alchemist': ['ALC'], 'Culinarian': ['CUL'],
   'Miner': ['MIN'], 'Botanist': ['BTN'], 'Fisher': ['FSH'],
@@ -93,14 +108,17 @@ export const CLASSJOB_CATEGORY_TO_JOBS = {
   'Astrologian': ['AST'], 'Samurai': ['SAM'], 'Red Mage': ['RDM'], 'Blue Mage': ['BLU'],
   'Gunbreaker': ['GNB'], 'Dancer': ['DNC'], 'Reaper': ['RPR'], 'Sage': ['SGE'],
   'Viper': ['VPR'], 'Pictomancer': ['PCT'],
+  'Arcana': ['ARCA'],
+  'Gladiator':   ['GLA', 'PLD'],
+  'Pugilist':    ['PGL', 'MNK'],
+  'Marauder':    ['MRD', 'WAR'],
+  'Lancer':      ['LNC', 'DRG'],
+  'Archer':      ['ARC', 'BRD'],
+  'Conjurer':    ['CNJ', 'WHM'],
+  'Thaumaturge': ['THM', 'BLM'],
   // Legacy / alternate XIVAPI ClassJobCategory names (same jobs, different strings)
-  Gladiator: ['PLD'],
-  Pugilist: ['MNK'],
-  Marauder: ['WAR'],
-  Lancer: ['DRG'],
-  Rogue: ['NIN'],
-  Thaumaturge: ['BLM'],
-  Arcanist: ['SMN', 'SCH'],
+  Rogue: ['ROG', 'NIN'],
+  Arcanist: ['SMN', 'SCH', 'ARCA'],
 };
 
 export const PRIMARY_STAT_BY_JOB = {
@@ -115,11 +133,25 @@ export const PRIMARY_STAT_BY_JOB = {
   20: 'Strength', 22: 'Strength', 28: 'Strength', 32: 'Strength', 37: 'Strength', 39: 'Strength',
   // Physical Ranged (BRD/MCH/DNC)
   23: 'Dexterity', 29: 'Dexterity', 36: 'Dexterity',
+  // Rogue (base class; shares Dexterity gear path with Ninja)
+  42: 'Dexterity',
+  // Base classes
+  43: 'Vitality',    // GLA → PLD
+  44: 'Strength',    // PGL → MNK
+  45: 'Vitality',    // MRD → WAR
+  46: 'Strength',    // LNC → DRG
+  47: 'Dexterity',   // ARC → BRD
+  48: 'Mind',        // CNJ → WHM
+  49: 'Intelligence',// THM → BLM
   // Healers (WHM/SCH/AST/SGE)
   24: 'Mind', 27: 'Mind', 31: 'Mind', 38: 'Mind',
   // Casters (BLM/SMN/RDM/BLU/PCT)
-  25: 'Intelligence', 26: 'Intelligence', 33: 'Intelligence', 34: 'Intelligence', 40: 'Intelligence',
+  25: 'Intelligence', 26: 'Intelligence', 33: 'Intelligence', 34: 'Intelligence', 40: 'Intelligence', 41: 'Intelligence',
 };
+
+export function isBaseClass(jobId) {
+  return !!JOB_IDS[jobId]?.promotedJobIds;
+}
 
 export const SERVERS_BY_DC = {
   'Aether':    ['Adamantoise','Cactuar','Faerie','Gilgamesh','Jenova','Midgardsormr','Sargatanas','Siren'],

@@ -18,7 +18,7 @@ import {
   applyFinderSortMode,
   filterByJobGroupStats,
 } from './search.js';
-import { JOB_IDS, JOB_IDS_BY_GROUP, MAX_EQUIP_LEVEL } from './constants.js';
+import { JOB_IDS, JOB_IDS_BY_GROUP, MAX_EQUIP_LEVEL, isBaseClass } from './constants.js';
 import { GC_ITEMS } from './gcData.js';
 import { passesFinderSourceMode } from './finderSourceFilter.js';
 import { findBestUpgrades } from './upgrade.js';
@@ -39,9 +39,10 @@ const state = {
   /** True after the user picks a gear type pill (including All). */
   finderGearTypeChosen: false,
   statsCache: {},
+  /** Teamcraft gearsets: tabKey -> { jobId, slots, name } */
   gearsetsByJob: null,
   /** ClassJob id for Upgrades tab (Teamcraft gearset); independent of sidebar job. */
-  upgradeJobId: null,
+  upgradeJobKey: null,
   /** Garland acquisition cache: item id → parsed doc (session). */
   acqCache: {},
   /** Gear Finder Source: `all` | `gc` | `tomestone` | `scrip` | `master` | `craft` (toolbar; paired with sidebar toggles) */
@@ -84,6 +85,25 @@ let _refreshAllProfilesPromise = null;
 let _lastAllProfilesRefreshAt = 0;
 /** Draft object while master overlay is open (same reference passed to `fillMasterCraftingOverlay`). */
 let _masterDraft = null;
+
+/**
+ * Synthesize levels for all 9 base classes from their promoted job levels.
+ * Each base-class entry is set to max(existing base-class level, max of promotedJobIds levels).
+ * @param {Record<number|string, { level: number }>} jobs
+ */
+function withBaseClassJobLevels(jobs) {
+  const src = jobs && typeof jobs === 'object' ? jobs : {};
+  const out = { ...src };
+  for (const [idStr, info] of Object.entries(JOB_IDS)) {
+    if (!info.promotedJobIds) continue;
+    const id = Number(idStr);
+    const existing = Number(out[id]?.level ?? 0);
+    const promoted = Math.max(...info.promotedJobIds.map(pid => Number(out[pid]?.level ?? 0)));
+    const lv = Math.max(existing, promoted);
+    if (Number.isFinite(lv) && lv > 0) out[id] = { level: lv };
+  }
+  return out;
+}
 
 function normalizeMasterStars(raw) {
   const out = {};
@@ -300,7 +320,11 @@ function initJobGroupMasterEditButton() {
 }
 
 function equippedItemIdSetForActiveJob() {
-  const slots = state.gearsetsByJob?.get(state.activeJobId);
+  const jid = state.activeJobId;
+  if (jid == null) return new Set();
+  const key = String(jid) + ':' + (JOB_IDS[jid]?.abbr ?? '');
+  const entry = state.gearsetsByJob?.get(key) ?? null;
+  const slots = entry?.slots ?? null;
   const s = new Set();
   if (!slots) return s;
   for (const v of Object.values(slots)) {
@@ -525,9 +549,10 @@ async function runSearch() {
       equipLevelMax: state.equipLevelMax,
     });
 
-    const gearset = state.gearsetsByJob?.get(jobId);
-    const equipIds = gearset
-      ? [...new Set(Object.values(gearset).map(Number).filter(id => id > 0))]
+    const gearsetKey = String(jobId) + ':' + (JOB_IDS[jobId]?.abbr ?? '');
+    const gearset = state.gearsetsByJob?.get(gearsetKey);
+    const equipIds = gearset?.slots
+      ? [...new Set(Object.values(gearset.slots).map(Number).filter(id => id > 0))]
       : [];
     const poolIds = filtered.map(i => i.id);
     const uncachedIds = [...new Set([...poolIds, ...equipIds])].filter(id => !state.statsCache[id]);
@@ -659,12 +684,12 @@ async function handleImportById(e) {
   try {
     const { name, server, jobs, portrait } = await fetchCharacterJobs(id);
     state.lodestoneId = id;
-    state.jobs = jobs;
+    state.jobs = withBaseClassJobLevels(jobs);
     state.charName = name;
     state.charPortrait = portrait || avatarFromSearch || null;
     state.uid = null;
     state.gearsetsByJob = null;
-    state.upgradeJobId = null;
+    state.upgradeJobKey = null;
     state.activeGroup = null;
     state.activeJobId = null;
     state.activeGearType = null;
@@ -685,7 +710,7 @@ async function handleImportById(e) {
       name,
       server,
       portrait: state.charPortrait,
-      jobs,
+      jobs: state.jobs,
     });
     const pSaved = profiles.getActiveProfile();
     state.masterStars = normalizeMasterStars(pSaved?.masterStars);
@@ -796,7 +821,7 @@ function clearCharacterState() {
   state.charPortrait = null;
   state.uid = null;
   state.gearsetsByJob = null;
-  state.upgradeJobId = null;
+  state.upgradeJobKey = null;
   state.activeGroup = null;
   state.activeJobId = null;
   state.activeGearType = null;
@@ -840,7 +865,7 @@ async function applyStoredProfile(p) {
   applyIncludeTogglesFromProfile(p);
   state.uid = p.teamcraftUid || null;
   state.gearsetsByJob = null;
-  state.upgradeJobId = null;
+  state.upgradeJobKey = null;
   state.activeGroup = null;
   state.activeJobId = null;
   state.activeGearType = null;
@@ -983,6 +1008,17 @@ function onGearTypeSelect(type) {
   void runSearch();
 }
 
+function getVisibleJobIds(group) {
+  const allIds = JOB_IDS_BY_GROUP[group] ?? [];
+  const hasGearsets = state.gearsetsByJob?.size > 0;
+  if (!hasGearsets) return allIds;
+  return allIds.filter(id => {
+    if (!isBaseClass(id)) return true;
+    const key = String(id) + ':' + (JOB_IDS[id]?.abbr ?? '');
+    return state.gearsetsByJob.has(key);
+  });
+}
+
 function initSidebar() {
   document.getElementById('btn-search-char').addEventListener('click', handleCharacterSearch);
   document.addEventListener('import-character-id', e => void handleImportById(e));
@@ -998,7 +1034,7 @@ function initSidebar() {
     state.activeGearType = null;
     state.finderGearTypeChosen = false;
     ui.renderGearTypePills(undefined, onGearTypeSelect);
-    const groupIds = JOB_IDS_BY_GROUP[group];
+    const groupIds = getVisibleJobIds(group);
     ui.showJobSelect(true);
     ui.initJobSelect(
       groupIds,
@@ -1021,33 +1057,56 @@ function initSidebar() {
   refreshSavedProfilesUi();
 }
 
-function sortedGearsetJobIds() {
-  if (!state.gearsetsByJob?.size) return [];
-  return [...state.gearsetsByJob.keys()]
-    .map(id => Number(id))
-    .filter(id => Number.isFinite(id) && JOB_IDS[id])
-    .sort((a, b) => a - b);
+
+function buildUpgradeTabs() {
+  const tabs = [];
+  const seenJobIds = new Set();
+
+  // Category 1: jobs that have a gearset (always show upgrade results)
+  const m = state.gearsetsByJob;
+  if (m?.size) {
+    for (const [key, entry] of m.entries()) {
+      const jobId = Number(entry?.jobId);
+      if (!Number.isFinite(jobId) || !JOB_IDS[jobId]) continue;
+      const abbr = JOB_IDS[jobId].abbr;
+      tabs.push({ key, jobId, abbr, title: entry?.name ?? JOB_IDS[jobId].name, hasGearset: true });
+      seenJobIds.add(jobId);
+    }
+  }
+
+  // Category 2: Lodestone jobs with a level but no gearset (show "no gearset" message)
+  // Base-class jobs are excluded — they only appear in sidebar when a gearset exists.
+  for (const [idStr, info] of Object.entries(JOB_IDS)) {
+    const jobId = Number(idStr);
+    if (seenJobIds.has(jobId)) continue;
+    if (info.promotedJobIds) continue; // skip base classes
+    const lv = state.jobs[jobId]?.level;
+    if (!lv || !Number.isFinite(lv)) continue;
+    const key = String(jobId) + ':' + info.abbr;
+    tabs.push({ key, jobId, abbr: info.abbr, title: info.name, hasGearset: false });
+  }
+
+  tabs.sort((a, b) => a.jobId - b.jobId || a.abbr.localeCompare(b.abbr));
+  return tabs;
 }
 
-function ensureUpgradeJobId() {
-  const ids = sortedGearsetJobIds();
-  if (ids.length === 0) {
-    state.upgradeJobId = null;
+function ensureUpgradeJobKey() {
+  const tabs = buildUpgradeTabs();
+  if (tabs.length === 0) {
+    state.upgradeJobKey = null;
     return;
   }
-  const cur = state.upgradeJobId != null ? Number(state.upgradeJobId) : null;
-  if (cur == null || !Number.isFinite(cur) || !ids.includes(cur)) {
-    state.upgradeJobId = ids[0];
-  } else {
-    state.upgradeJobId = cur;
+  const cur = state.upgradeJobKey;
+  if (!cur || !tabs.some(t => t.key === cur)) {
+    state.upgradeJobKey = tabs[0].key;
   }
 }
 
 function syncUpgradeToolbar() {
-  ensureUpgradeJobId();
-  const ids = sortedGearsetJobIds();
-  ui.renderUpgradeJobTabs(ids, state.upgradeJobId, state.jobs, jid => {
-    state.upgradeJobId = jid;
+  ensureUpgradeJobKey();
+  const tabs = buildUpgradeTabs();
+  ui.renderUpgradeJobTabs(tabs, state.upgradeJobKey, state.jobs, key => {
+    state.upgradeJobKey = key;
     void refreshUpgradePage();
   });
 }
@@ -1066,7 +1125,7 @@ async function refreshCharacterJobsOnLoad() {
     }
     const { name, server, jobs, portrait } = payload ?? {};
     // If the user is mid-session and data is already loaded, update in-place without resetting UI state.
-    state.jobs = jobs || state.jobs;
+    state.jobs = withBaseClassJobLevels(jobs || state.jobs);
 
     // Supplement with Teamcraft job levels — TC reflects in-game progress faster than Lodestone.
     if (state.uid) {
@@ -1079,7 +1138,7 @@ async function refreshCharacterJobsOnLoad() {
             const tcLevel = tcJob?.level ?? 0;
             if (tcLevel > existing) merged[jobId] = { level: tcLevel };
           }
-          state.jobs = merged;
+          state.jobs = withBaseClassJobLevels(merged);
         }
       } catch {
         // Non-fatal; keep Lodestone-only levels.
@@ -1100,7 +1159,7 @@ async function refreshCharacterJobsOnLoad() {
       name: state.charName ?? name ?? 'Unknown',
       server: server ?? '',
       portrait: state.charPortrait ?? null,
-      jobs: state.jobs,
+      jobs: withBaseClassJobLevels(state.jobs),
     });
 
     refreshLevelDisplaySidebar();
@@ -1113,6 +1172,20 @@ async function refreshCharacterJobsOnLoad() {
       } catch {
         // Keep existing gearsets if refresh fails.
       }
+    }
+
+    if (state.activeGroup) {
+      ui.initJobSelect(
+        getVisibleJobIds(state.activeGroup),
+        state.jobs,
+        jid => {
+          state.activeJobId = jid;
+          clearSearch();
+          refreshLevelDisplaySidebar();
+          void runSearch();
+        },
+        { placeholderFirst: true }
+      );
     }
 
     await Promise.all([runSearch(), refreshUpgradePage()]);
@@ -1129,7 +1202,7 @@ function mergeJobsPreferHigher(a, b) {
     const incoming = jb?.level ?? 0;
     if (incoming > existing) out[jobId] = { level: incoming };
   }
-  return out;
+  return withBaseClassJobLevels(out);
 }
 
 async function refreshAllProfilesJobsOnLoad({ reason = 'load', minIntervalMs = 30_000 } = {}) {
@@ -1168,11 +1241,11 @@ async function refreshAllProfilesJobsOnLoad({ reason = 'load', minIntervalMs = 3
         }
       }
 
-      profiles.setJobsForProfile(lodestoneId, merged);
+      profiles.setJobsForProfile(lodestoneId, withBaseClassJobLevels(merged));
 
       // Keep in-memory state in sync for the active profile so the UI updates immediately.
       if (String(lodestoneId) === String(state.lodestoneId)) {
-        state.jobs = merged;
+        state.jobs = withBaseClassJobLevels(merged);
         refreshLevelDisplaySidebar();
       }
 
@@ -1214,6 +1287,19 @@ async function handleRefreshGearsets() {
       status.className = 'status-msg success';
       status.textContent = 'Gearsets refreshed.';
     }
+    if (state.activeGroup) {
+      ui.initJobSelect(
+        getVisibleJobIds(state.activeGroup),
+        state.jobs,
+        jid => {
+          state.activeJobId = jid;
+          clearSearch();
+          refreshLevelDisplaySidebar();
+          void runSearch();
+        },
+        { placeholderFirst: true }
+      );
+    }
     await refreshUpgradePage();
   } catch (err) {
     if (status) {
@@ -1234,24 +1320,34 @@ async function refreshUpgradePage() {
     return;
   }
 
-  const ids = sortedGearsetJobIds();
-  if (ids.length === 0) {
+  const tabs = buildUpgradeTabs();
+  if (tabs.length === 0) {
     if (seq === _upgradeRefreshSeq) {
       ui.renderUpgradePage([], '?', 'gearsets', handleAddToList, lists.getListedItemIdSet());
     }
     return;
   }
 
-  const jobId = state.upgradeJobId != null ? Number(state.upgradeJobId) : null;
-  const abbr = jobId != null && Number.isFinite(jobId) ? (JOB_IDS[jobId]?.abbr ?? '?') : '?';
-  if (jobId == null || !Number.isFinite(jobId)) {
+  const key = state.upgradeJobKey ? String(state.upgradeJobKey) : null;
+  const activeTab = key ? tabs.find(t => t.key === key) : null;
+  const jobId = activeTab?.jobId != null ? Number(activeTab.jobId) : null;
+  const abbr = activeTab?.abbr ?? (jobId != null && Number.isFinite(jobId) ? (JOB_IDS[jobId]?.abbr ?? '?') : '?');
+  if (!key || jobId == null || !Number.isFinite(jobId)) {
     if (seq === _upgradeRefreshSeq) {
       ui.renderUpgradePage([], abbr, 'gearset', handleAddToList, lists.getListedItemIdSet());
     }
     return;
   }
 
-  const gearset = state.gearsetsByJob.get(jobId);
+  const activeHasGearset = activeTab?.hasGearset ?? true;
+  if (!activeHasGearset) {
+    if (seq === _upgradeRefreshSeq) {
+      ui.renderUpgradePage([], abbr, 'no-gearset', handleAddToList, lists.getListedItemIdSet());
+    }
+    return;
+  }
+
+  const gearset = state.gearsetsByJob?.get(key)?.slots ?? null;
   if (!gearset || Object.keys(gearset).length === 0) {
     if (seq === _upgradeRefreshSeq) {
       ui.renderUpgradePage([], abbr, 'gearset', handleAddToList, lists.getListedItemIdSet());
