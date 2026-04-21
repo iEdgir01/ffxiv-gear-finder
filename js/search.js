@@ -16,7 +16,16 @@ function passesJobFilter(equipJobId, item) {
   const abbr = JOB_IDS[equipJobId]?.abbr;
   if (!abbr) return false;
   if (Array.isArray(item.classJobAbbrs) && item.classJobAbbrs.length > 0) {
-    return item.classJobAbbrs.includes(abbr);
+    if (item.classJobAbbrs.includes(abbr)) return true;
+    // Base class: check if any promoted job's abbr is in the list
+    const promoted = JOB_IDS[equipJobId]?.promotedJobIds;
+    if (promoted?.length) {
+      return promoted.some(pid => {
+        const pAbbr = JOB_IDS[pid]?.abbr;
+        return pAbbr != null && item.classJobAbbrs.includes(pAbbr);
+      });
+    }
+    return false;
   }
   return jobCanEquipCategory(equipJobId, item.classJobCategory);
 }
@@ -40,13 +49,20 @@ export const GEAR_SLOT_ORDER = {
 
 /**
  * True if the selected job can equip this item per XIVAPI ClassJobCategory (e.g. Weaver-only gear excludes CRP).
- * Datamining `Item.csv` often uses **job abbreviations** (e.g. `CRP`) for that job’s tools; XIVAPI may use full names (`Carpenter`). Both must work.
+ * Datamining `Item.csv` often uses **job abbreviations** (e.g. `CRP`) for that job's tools; XIVAPI may use full names (`Carpenter`). Both must work.
  */
 export function jobCanEquipCategory(jobId, categoryName) {
   const cat = (categoryName ?? '').trim();
   if (!cat) return false;
   const abbr = JOB_IDS[jobId]?.abbr;
   if (!abbr) return false;
+
+  // Base class: delegate to promoted job(s). Recursive — promoted jobs go through normal path.
+  const promoted = JOB_IDS[jobId]?.promotedJobIds;
+  if (promoted?.length) {
+    return promoted.some(pid => jobCanEquipCategory(pid, cat));
+  }
+
   const allowed = CLASSJOB_CATEGORY_TO_JOBS[cat];
   if (allowed !== undefined) {
     return allowed.includes(abbr);
@@ -345,8 +361,8 @@ export function getRecipeSearchRange(jobLevel) {
 }
 
 /**
- * True if the imported character’s level for the recipe’s crafter job meets this recipe’s level,
- * and (when the recipe has a star tier) the player’s saved **master crafting** stars for that job.
+ * True if the imported character's level for the recipe's crafter job meets this recipe's level,
+ * and (when the recipe has a star tier) the player's saved **master crafting** stars for that job.
  * @param {Record<number, { level: number }>} jobs — classJobId → { level }
  * @param {{ craftJobId?: number, recipeLevel?: number, recipeStars?: number }} recipeRow — pool row from `data.js`
  * @param {Record<string|number, number>|null|undefined} masterStarsByJob — classJobId → 0…4 (master tier)

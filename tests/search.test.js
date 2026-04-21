@@ -115,6 +115,47 @@ describe('jobCanEquipCategory', () => {
   it('handles space-separated abbreviation list — WAR excluded from DoH abbr list', () => {
     assert.equal(jobCanEquipCategory(21, 'CRP BSM ARM GSM LTW WVR ALC CUL'), false);
   });
+  it('Arcana: treats SMN/SCH-only categories as equippable', () => {
+    assert.equal(jobCanEquipCategory(41, 'Summoner'), true);
+    assert.equal(jobCanEquipCategory(41, 'Scholar'), false);
+  });
+  it('Arcana: treats SMN/SCH in abbreviation lists as equippable', () => {
+    assert.equal(jobCanEquipCategory(41, 'SMN SCH'), true);
+    assert.equal(jobCanEquipCategory(41, 'SMN'), true);
+    assert.equal(jobCanEquipCategory(41, 'SCH'), false);
+  });
+
+  // Parameterized base-class delegation tests
+  const BASE_CLASS_CASES = [
+    { id: 43, abbr: 'GLA', promotedAbbr: 'PLD', promotedId: 19, category: 'Paladin',   spaceList: 'GLA MRD PLD WAR DRK GNB' },
+    { id: 44, abbr: 'PGL', promotedAbbr: 'MNK', promotedId: 20, category: 'Monk',      spaceList: 'PGL MNK' },
+    { id: 45, abbr: 'MRD', promotedAbbr: 'WAR', promotedId: 21, category: 'Warrior',   spaceList: 'GLA MRD PLD WAR DRK GNB' },
+    { id: 46, abbr: 'LNC', promotedAbbr: 'DRG', promotedId: 22, category: 'Dragoon',   spaceList: 'LNC DRG' },
+    { id: 47, abbr: 'ARC', promotedAbbr: 'BRD', promotedId: 23, category: 'Bard',      spaceList: 'ARC BRD' },
+    { id: 48, abbr: 'CNJ', promotedAbbr: 'WHM', promotedId: 24, category: 'White Mage',spaceList: 'CNJ WHM' },
+    { id: 49, abbr: 'THM', promotedAbbr: 'BLM', promotedId: 25, category: 'Black Mage',spaceList: 'THM BLM' },
+    { id: 42, abbr: 'ROG', promotedAbbr: 'NIN', promotedId: 28, category: 'Ninja',     spaceList: 'ROG NIN' },
+  ];
+
+  for (const { id, abbr, category, spaceList } of BASE_CLASS_CASES) {
+    it(`${abbr}: can equip '${category}' category`, () => {
+      assert.equal(jobCanEquipCategory(id, category), true, `${abbr} should equip ${category}`);
+    });
+    it(`${abbr}: can equip space-separated list including promoted job`, () => {
+      assert.equal(jobCanEquipCategory(id, spaceList), true, `${abbr} should equip list: ${spaceList}`);
+    });
+    it(`${abbr}: can equip Disciple of War or Magic`, () => {
+      const group = [43,44,45,46,47,42].includes(id) ? 'Disciple of War' : 'Disciple of Magic';
+      assert.equal(jobCanEquipCategory(id, group), true, `${abbr} should equip ${group}`);
+    });
+  }
+
+  it('GLA: cannot equip Scholar-only gear (healer path)', () => {
+    assert.equal(jobCanEquipCategory(43, 'Scholar'), false);
+  });
+  it('CNJ: cannot equip Summoner-only gear (caster path)', () => {
+    assert.equal(jobCanEquipCategory(48, 'Summoner'), false);
+  });
 });
 
 describe('maxGroupStatScore', () => {
