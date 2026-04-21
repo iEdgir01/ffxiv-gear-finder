@@ -60,8 +60,7 @@ const BASE_CLASS_NAME_TO_ID = (() => {
     m[info.name.toLowerCase()] = id;
     m[info.abbr.toLowerCase()] = id;
   }
-  // Explicit variants not derivable from JOB_IDS name/abbr
-  m['arcanist'] = 41;
+  // Abbreviation variant not derivable from JOB_IDS abbr
   m['acn'] = 41;
   return m;
 })();
