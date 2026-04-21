@@ -1010,12 +1010,24 @@ function onGearTypeSelect(type) {
 
 function getVisibleJobIds(group) {
   const allIds = JOB_IDS_BY_GROUP[group] ?? [];
+  // No character data: show all jobs so anonymous users can pick any job and enter a level.
+  if (!state.jobs || Object.keys(state.jobs).length === 0) return allIds;
   const hasGearsets = state.gearsetsByJob?.size > 0;
-  if (!hasGearsets) return allIds;
   return allIds.filter(id => {
-    if (!isBaseClass(id)) return true;
-    const key = String(id) + ':' + (JOB_IDS[id]?.abbr ?? '');
-    return state.gearsetsByJob.has(key);
+    // Only show jobs the character has actually leveled.
+    const lv = state.jobs[id]?.level ?? 0;
+    if (lv <= 0) return false;
+    const promotedIds = JOB_IDS[id]?.promotedJobIds;
+    if (promotedIds) {
+      // Hide base class if any promoted job has a level — show the promoted job instead.
+      if (promotedIds.some(pid => (state.jobs[pid]?.level ?? 0) > 0)) return false;
+      // When gearsets are synced, also require an explicit gearset for the base class.
+      if (hasGearsets) {
+        const key = String(id) + ':' + (JOB_IDS[id]?.abbr ?? '');
+        if (!state.gearsetsByJob.has(key)) return false;
+      }
+    }
+    return true;
   });
 }
 
@@ -1062,12 +1074,18 @@ function buildUpgradeTabs() {
   const tabs = [];
   const seenJobIds = new Set();
 
-  // Category 1: jobs that have a gearset (always show upgrade results)
+  // Category 1: jobs that have a gearset and a level
   const m = state.gearsetsByJob;
   if (m?.size) {
     for (const [key, entry] of m.entries()) {
       const jobId = Number(entry?.jobId);
       if (!Number.isFinite(jobId) || !JOB_IDS[jobId]) continue;
+      // Skip gearsets for jobs the character hasn't leveled.
+      const lv = state.jobs[jobId]?.level ?? 0;
+      if (lv <= 0) continue;
+      // Skip base-class gearsets when any promoted job has a level — use the promoted job tab.
+      const promotedIds = JOB_IDS[jobId]?.promotedJobIds;
+      if (promotedIds?.length && promotedIds.some(pid => (state.jobs[pid]?.level ?? 0) > 0)) continue;
       const abbr = JOB_IDS[jobId].abbr;
       tabs.push({ key, jobId, abbr, title: entry?.name ?? JOB_IDS[jobId].name, hasGearset: true });
       seenJobIds.add(jobId);
