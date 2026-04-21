@@ -549,9 +549,10 @@ async function runSearch() {
       equipLevelMax: state.equipLevelMax,
     });
 
-    const gearset = state.gearsetsByJob?.get(jobId);
-    const equipIds = gearset
-      ? [...new Set(Object.values(gearset).map(Number).filter(id => id > 0))]
+    const gearsetKey = String(jobId) + ':' + (JOB_IDS[jobId]?.abbr ?? '');
+    const gearset = state.gearsetsByJob?.get(gearsetKey);
+    const equipIds = gearset?.slots
+      ? [...new Set(Object.values(gearset.slots).map(Number).filter(id => id > 0))]
       : [];
     const poolIds = filtered.map(i => i.id);
     const uncachedIds = [...new Set([...poolIds, ...equipIds])].filter(id => !state.statsCache[id]);
