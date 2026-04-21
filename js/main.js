@@ -87,8 +87,8 @@ let _lastAllProfilesRefreshAt = 0;
 let _masterDraft = null;
 
 /**
- * Ensure Arcana (ARCA, id 41) exists when SMN/SCH exist.
- * This lets the UI show ARCA as a base-class-style selector while keeping SMN + SCH available.
+ * Synthesize levels for all 9 base classes from their promoted job levels.
+ * Each base-class entry is set to max(existing base-class level, max of promotedJobIds levels).
  * @param {Record<number|string, { level: number }>} jobs
  */
 function withBaseClassJobLevels(jobs) {
@@ -1057,9 +1057,6 @@ function initSidebar() {
   refreshSavedProfilesUi();
 }
 
-function sortedGearsetJobIds() {
-  return [];
-}
 
 function buildUpgradeTabs() {
   const tabs = [];

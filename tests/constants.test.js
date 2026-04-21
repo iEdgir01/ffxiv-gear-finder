@@ -51,7 +51,7 @@ describe('STATS_BY_GROUP', () => {
 });
 
 describe('PRIMARY_STAT_BY_JOB', () => {
-  it('covers all 33 jobs', () => {
+  it('covers all jobs in DOH+DOL+DOW+DOM', () => {
     const allIds = [...DOH_JOB_IDS, ...DOL_JOB_IDS, ...DOW_JOB_IDS, ...DOM_JOB_IDS];
     for (const id of allIds) {
       assert.ok(PRIMARY_STAT_BY_JOB[id], `missing primary stat for job ${id}`);
