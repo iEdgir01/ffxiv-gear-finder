@@ -51,6 +51,37 @@ export function resolveGearsetJobId(raw) {
   return null;
 }
 
+// Built once at module load from JOB_IDS — maps lowercase name/abbr keywords to base-class job id.
+const BASE_CLASS_NAME_TO_ID = (() => {
+  const m = {};
+  for (const [idStr, info] of Object.entries(JOB_IDS)) {
+    if (!info.promotedJobIds) continue;
+    const id = Number(idStr);
+    m[info.name.toLowerCase()] = id;
+    m[info.abbr.toLowerCase()] = id;
+  }
+  // Explicit variants not derivable from JOB_IDS name/abbr
+  m['arcanist'] = 41;
+  m['acn'] = 41;
+  return m;
+})();
+
+/**
+ * Decide which job tab to display for a Teamcraft gearset.
+ * We prefer the *gearset name* because Teamcraft job ids can collide with XIVAPI ids (e.g. Rogue vs Machinist),
+ * and users can intentionally create base-class gearsets.
+ * Returns a job id from JOB_IDS (including synthetic ids like 41/42).
+ */
+function resolveDisplayJobId({ jobId, gearsetName }) {
+  const name = String(gearsetName ?? '').trim().toLowerCase();
+  if (name) {
+    for (const [key, id] of Object.entries(BASE_CLASS_NAME_TO_ID)) {
+      if (name.includes(key)) return id;
+    }
+  }
+  return jobId;
+}
+
 function pickJobField(fields) {
   return (
     fields.job ??
@@ -149,7 +180,8 @@ function slotCount(slots) {
 }
 
 /**
- * Fetch user's gearsets from Firestore (public read). Returns Map<jobId, slotsRecord>.
+ * Fetch user's gearsets from Firestore (public read).
+ * Returns Map<tabKey, { jobId, slots, name }>, where `tabKey` is `${jobId}:${abbr}`.
  */
 export async function fetchGearsetsForUser(uid) {
   if (!uid) return new Map();
@@ -183,7 +215,7 @@ export async function fetchGearsetsForUser(uid) {
   if (!res.ok) return new Map();
 
   const rows = await res.json();
-  const byJob = new Map();
+  const byTab = new Map();
 
   for (const row of rows) {
     const doc = row.document;
@@ -192,8 +224,13 @@ export async function fetchGearsetsForUser(uid) {
     for (const [k, v] of Object.entries(doc.fields)) fields[k] = fireVal(v);
 
     const rawJob = pickJobField(fields);
-    const jobNum = resolveGearsetJobId(rawJob);
-    if (jobNum == null) continue;
+    const parsedJobId = resolveGearsetJobId(rawJob);
+    if (parsedJobId == null) continue;
+    const gearsetName = fields.name ?? '';
+    const displayJobId = resolveDisplayJobId({ jobId: parsedJobId, gearsetName });
+    const info = JOB_IDS[displayJobId];
+    if (!info) continue;
+    const tabKey = String(displayJobId) + ':' + info.abbr;
 
     let slots = extractSlotsFromNestedItems(fields.items ?? fields.gear ?? fields.equipment);
     if (slotCount(slots) === 0) {
@@ -202,10 +239,10 @@ export async function fetchGearsetsForUser(uid) {
 
     if (slotCount(slots) === 0) continue;
 
-    const prev = byJob.get(jobNum);
-    if (prev && slotCount(prev) > slotCount(slots)) continue;
-    byJob.set(Number(jobNum), slots);
+    const prev = byTab.get(tabKey);
+    if (prev && slotCount(prev.slots) > slotCount(slots)) continue;
+    byTab.set(tabKey, { jobId: displayJobId, slots, name: gearsetName || info.name });
   }
 
-  return byJob;
+  return byTab;
 }

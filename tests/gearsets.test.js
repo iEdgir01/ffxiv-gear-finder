@@ -27,4 +27,26 @@ describe('resolveGearsetJobId', () => {
     assert.equal(resolveGearsetJobId(99999), null);
     assert.equal(resolveGearsetJobId('NotAJob'), null);
   });
+
+  // Promoted jobs (unchanged behavior)
+  it('resolves "Paladin" to 19', () => assert.equal(resolveGearsetJobId('Paladin'), 19));
+  it('resolves "summoner" to 26', () => assert.equal(resolveGearsetJobId('summoner'), 26));
+  it('resolves "scholar" to 27', () => assert.equal(resolveGearsetJobId('scholar'), 27));
+  it('resolves "ninja" to 28', () => assert.equal(resolveGearsetJobId('ninja'), 28));
+
+  // Base classes — must resolve to their synthetic ids
+  it('resolves "Arcanist" to 41', () => assert.equal(resolveGearsetJobId('Arcanist'), 41));
+  it('resolves "arcana" to 41', () => assert.equal(resolveGearsetJobId('arcana'), 41));
+  it('resolves "Rogue" to 42', () => assert.equal(resolveGearsetJobId('Rogue'), 42));
+  it('resolves "Gladiator" to 43', () => assert.equal(resolveGearsetJobId('Gladiator'), 43));
+  it('resolves "gladiator" to 43', () => assert.equal(resolveGearsetJobId('gladiator'), 43));
+  it('resolves "Pugilist" to 44', () => assert.equal(resolveGearsetJobId('Pugilist'), 44));
+  it('resolves "Marauder" to 45', () => assert.equal(resolveGearsetJobId('Marauder'), 45));
+  it('resolves "Lancer" to 46', () => assert.equal(resolveGearsetJobId('Lancer'), 46));
+  it('resolves "Archer" to 47', () => assert.equal(resolveGearsetJobId('Archer'), 47));
+  it('resolves "Conjurer" to 48', () => assert.equal(resolveGearsetJobId('Conjurer'), 48));
+  it('resolves "Thaumaturge" to 49', () => assert.equal(resolveGearsetJobId('Thaumaturge'), 49));
+
+  // Unknown input
+  it('returns null for unknown string', () => assert.equal(resolveGearsetJobId('Heretic'), null));
 });
