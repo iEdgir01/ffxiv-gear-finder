@@ -1097,18 +1097,21 @@ export function initImportTabs() {
 // ── Upgrade page ──────────────────────────────────────────────────────────────
 
 /**
- * @param {'profile'|'gearsets'|'gearset'|null} emptyMode — null means render the upgrades table
+ * @param {'profile'|'gearsets'|'gearset'|'no-gearset'|null} emptyMode — null means render the upgrades table
  */
-export function renderUpgradeJobTabs(jobIds, selectedJobId, jobsById, onSelect) {
+/**
+ * @param {Array<{ key: string, jobId: number, abbr: string, title?: string }>} tabs
+ * @param {string|null} selectedKey
+ */
+export function renderUpgradeJobTabs(tabs, selectedKey, jobsById, onSelect) {
   const wrap = document.getElementById('upgrade-job-tabs');
   if (!wrap) return;
   wrap.textContent = '';
-  const sel = selectedJobId != null ? Number(selectedJobId) : null;
-  for (const jid of jobIds) {
-    const jn = Number(jid);
-    const info = JOB_IDS[jn] ?? JOB_IDS[jid];
-    const abbr = info?.abbr ?? String(jid);
-    const active = sel != null && Number.isFinite(sel) && sel === jn;
+  for (const t of tabs) {
+    const jn = Number(t.jobId);
+    const info = JOB_IDS[jn];
+    const abbr = t.abbr ?? info?.abbr ?? String(jn);
+    const active = selectedKey != null && t.key === selectedKey;
     const lv = jobsById && typeof jobsById === 'object' ? jobsById[jn]?.level : null;
     const lvText = typeof lv === 'number' && Number.isFinite(lv) ? 'Lv ' + lv : null;
     const btn = el('button', {
@@ -1116,12 +1119,12 @@ export function renderUpgradeJobTabs(jobIds, selectedJobId, jobsById, onSelect) 
       class: 'upgrade-job-tab' + (active ? ' active' : ''),
       role: 'tab',
       'aria-selected': active ? 'true' : 'false',
-      title: info ? info.name : '',
+      title: t.title ?? (info ? info.name : ''),
     },
       el('span', { class: 'upgrade-job-tab-abbr' }, abbr),
       lvText ? el('span', { class: 'upgrade-job-tab-lv' }, lvText) : null
     );
-    btn.addEventListener('click', () => onSelect(jn));
+    btn.addEventListener('click', () => onSelect(t.key));
     wrap.appendChild(btn);
   }
 }
@@ -1148,6 +1151,14 @@ export function renderUpgradePage(upgrades, jobAbbr, emptyMode, onAddToList, lis
     container.appendChild(el('div', { class: 'empty-state' },
       el('span', { class: 'empty-title' }, 'No gearset for ' + jobAbbr),
       'This job has no saved gearset in Teamcraft, or slots could not be read.'
+    ));
+    return;
+  }
+
+  if (emptyMode === 'no-gearset') {
+    container.appendChild(el('div', { class: 'empty-state' },
+      el('span', { class: 'empty-title' }, 'No gearset for ' + jobAbbr + ' on Teamcraft'),
+      'Sync a ' + jobAbbr + ' gearset in the Teamcraft app, then click Refresh gearsets to see available upgrades.'
     ));
     return;
   }
