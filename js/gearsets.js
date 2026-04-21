@@ -37,17 +37,6 @@ export function resolveGearsetJobId(raw) {
   for (const [name, id] of Object.entries(CLASSJOB_NAME_TO_ID)) {
     if (normalizeNameKey(name) === norm) return id;
   }
-  const displayNames = {
-    paladin: 19, monk: 20, warrior: 21, dragoon: 22, bard: 23,
-    whitemage: 24, blackmage: 25, summoner: 26, scholar: 27,
-    ninja: 28, machinist: 29, darkknight: 30, astrologian: 31,
-    samurai: 32, redmage: 33, bluemage: 34, gunbreaker: 35,
-    dancer: 36, reaper: 37, sage: 38, viper: 39, pictomancer: 40,
-    carpenter: 8, blacksmith: 9, armorer: 10, goldsmith: 11,
-    leatherworker: 12, weaver: 13, alchemist: 14, culinarian: 15,
-    miner: 16, botanist: 17, fisher: 18,
-  };
-  if (displayNames[norm]) return displayNames[norm];
   return null;
 }
 

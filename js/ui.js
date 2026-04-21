@@ -623,7 +623,7 @@ export function syncAddButtonsListedState(listedIdSet, onAddToList) {
 }
 
 /** Length of the full "every job" list — footer is hidden when redundant with meta ("All jobs"). */
-const ALL_JOBS_ABBR_COUNT = CLASSJOB_CATEGORY_TO_JOBS['All Classes']?.length ?? 33;
+const ALL_JOBS_ABBR_COUNT = CLASSJOB_CATEGORY_TO_JOBS['All Classes']?.length ?? 42;
 
 /**
  * Show the job-abbr strip only for a **strict subset** of jobs (2 … all−1), e.g. DoH-only.
