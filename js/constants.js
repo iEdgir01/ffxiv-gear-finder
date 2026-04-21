@@ -109,15 +109,15 @@ export const CLASSJOB_CATEGORY_TO_JOBS = {
   'Gunbreaker': ['GNB'], 'Dancer': ['DNC'], 'Reaper': ['RPR'], 'Sage': ['SGE'],
   'Viper': ['VPR'], 'Pictomancer': ['PCT'],
   'Arcana': ['ARCA'],
-  'Gladiator':   ['GLA'],
-  'Pugilist':    ['PGL'],
-  'Marauder':    ['MRD'],
-  'Lancer':      ['LNC'],
-  'Archer':      ['ARC'],
-  'Conjurer':    ['CNJ'],
-  'Thaumaturge': ['THM'],
+  'Gladiator':   ['GLA', 'PLD'],
+  'Pugilist':    ['PGL', 'MNK'],
+  'Marauder':    ['MRD', 'WAR'],
+  'Lancer':      ['LNC', 'DRG'],
+  'Archer':      ['ARC', 'BRD'],
+  'Conjurer':    ['CNJ', 'WHM'],
+  'Thaumaturge': ['THM', 'BLM'],
   // Legacy / alternate XIVAPI ClassJobCategory names (same jobs, different strings)
-  Rogue: ['NIN'],
+  Rogue: ['ROG', 'NIN'],
   Arcanist: ['SMN', 'SCH', 'ARCA'],
 };
 
