@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { parseItemStats } from '../js/api.js';
+import { parseItemStats, parseLodestoneClassJobs } from '../js/api.js';
 
 describe('parseItemStats', () => {
   it('extracts basic fields and normalizes crafter tool categories', () => {
@@ -53,5 +53,38 @@ describe('parseItemStats', () => {
   it('handles missing ClassJobCategory gracefully', () => {
     const raw = { ID: 1, Name: 'X', LevelItem: 1, LevelEquip: 1, Stats: {}, IsUntradable: 0 };
     assert.equal(parseItemStats(raw).classJobCategory, '');
+  });
+});
+
+describe('parseLodestoneClassJobs', () => {
+  it('maps Arcanist unlock on Summoner row to Arcanist (41), not Summoner', () => {
+    const jobs = parseLodestoneClassJobs({
+      Summoner: { Level: 17, Unlockstate: 'Arcanist' },
+    });
+    assert.deepEqual(jobs[41], { level: 17 });
+    assert.equal(jobs[26], undefined);
+  });
+
+  it('maps misaligned Astrologian row with Rogue unlock to Rogue (42)', () => {
+    const jobs = parseLodestoneClassJobs({
+      Astrologian: { Level: 6, Unlockstate: 'Rogue' },
+    });
+    assert.deepEqual(jobs[42], { level: 6 });
+    assert.equal(jobs[31], undefined);
+  });
+
+  it('keeps Paladin level on Paladin when unlock is Gladiator', () => {
+    const jobs = parseLodestoneClassJobs({
+      Paladin: { Level: 80, Unlockstate: 'Gladiator' },
+    });
+    assert.deepEqual(jobs[19], { level: 80 });
+    assert.equal(jobs[43], undefined);
+  });
+
+  it('merges Warrior row from real Lodestone-style payload', () => {
+    const jobs = parseLodestoneClassJobs({
+      Warrior: { Level: 62, Unlockstate: 'Warrior' },
+    });
+    assert.deepEqual(jobs[21], { level: 62 });
   });
 });

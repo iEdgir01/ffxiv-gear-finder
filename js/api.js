@@ -1,6 +1,77 @@
 // js/api.js
-import { CLASSJOB_NAME_TO_ID } from './constants.js';
+import { CLASSJOB_NAME_TO_ID, JOB_IDS, isBaseClass } from './constants.js';
 import { normalizeGearType } from './search.js';
+
+/** Collapse Lodestone / UI spellings ("Dark Knight", "Whitemage") for lookup. */
+function normalizeClassJobLabel(label) {
+  return String(label ?? '')
+    .trim()
+    .replace(/[\s_-]+/g, '')
+    .toLowerCase();
+}
+
+const NORMALIZED_CLASSJOB_LABEL_TO_ID = new Map();
+for (const [label, id] of Object.entries(CLASSJOB_NAME_TO_ID)) {
+  NORMALIZED_CLASSJOB_LABEL_TO_ID.set(normalizeClassJobLabel(label), id);
+}
+
+function resolveClassJobLabelToId(label) {
+  if (label == null || label === '') return null;
+  return NORMALIZED_CLASSJOB_LABEL_TO_ID.get(normalizeClassJobLabel(label)) ?? null;
+}
+
+/**
+ * Lodestone `ClassJobs` rows from `lodestone.ffxivteamcraft.com` sometimes put `Level` on the wrong
+ * job key while `Unlockstate` names the class that actually owns the level (e.g. Astrologian row
+ * + Rogue unlock). Prefer Unlockstate in those cases; keep specialization rows when Unlockstate
+ * is the legitimate starter for that job (e.g. Paladin + Gladiator).
+ */
+function pickLodestoneLevelTargetId(keyId, unlockId) {
+  if (keyId == null && unlockId == null) return null;
+  if (unlockId == null || unlockId === keyId) return keyId;
+
+  // Arcanist XP often appears on Summoner/Scholar rows while Unlockstate is still Arcanist.
+  if (unlockId === 41 && (keyId === 26 || keyId === 27)) return 41;
+
+  // Row is the specialization; Unlockstate is its real starter class (level belongs on the row key).
+  if (isBaseClass(unlockId)) {
+    const promoted = JOB_IDS[unlockId]?.promotedJobIds;
+    if (promoted?.includes(keyId)) return keyId;
+  }
+
+  return unlockId;
+}
+
+/**
+ * Parse `Character?data=CJ` → `ClassJobs` into `{ [classJobId]: { level } }`.
+ * Exported for unit tests.
+ */
+export function parseLodestoneClassJobs(classJobs) {
+  const jobs = {};
+  if (!classJobs || typeof classJobs !== 'object') return jobs;
+  for (const [keyName, cj] of Object.entries(classJobs)) {
+    if (!cj || typeof cj !== 'object') continue;
+    if (keyName === 'Bozja' || keyName === 'Eureka') continue;
+    const levelRaw = cj?.Level;
+    if (levelRaw == null || levelRaw === '-') continue;
+    const level = Number(levelRaw);
+    if (!Number.isFinite(level) || level < 1) continue;
+
+    const keyId = resolveClassJobLabelToId(keyName);
+    const unlockRaw = cj?.Unlockstate;
+    const unlockId =
+      unlockRaw != null && unlockRaw !== '-' && String(unlockRaw).trim() !== ''
+        ? resolveClassJobLabelToId(String(unlockRaw))
+        : null;
+
+    const targetId = pickLodestoneLevelTargetId(keyId, unlockId);
+    if (targetId == null) continue;
+
+    const prev = jobs[targetId]?.level ?? 0;
+    if (level > prev) jobs[targetId] = { level };
+  }
+  return jobs;
+}
 
 const XIVAPI    = 'https://xivapi.com';
 const LODESTONE = 'https://lodestone.ffxivteamcraft.com';
@@ -102,15 +173,7 @@ export async function fetchCharacterJobs(characterId) {
   const res = await fetch(LODESTONE + '/Character/' + characterId + '?data=CJ');
   if (!res.ok) throw new Error('Character fetch failed (' + res.status + ')');
   const data = await res.json();
-  const classJobs = data.ClassJobs ?? {};
-  const jobs = {};
-  for (const [name, cj] of Object.entries(classJobs)) {
-    const id = CLASSJOB_NAME_TO_ID[name];
-    const level = cj?.Level;
-    if (id != null && level != null && level !== '-') {
-      jobs[id] = { level: Number(level) };
-    }
-  }
+  const jobs = parseLodestoneClassJobs(data.ClassJobs ?? {});
   if (Object.keys(jobs).length === 0) {
     throw new Error('No job data found. The character profile may be private.');
   }
