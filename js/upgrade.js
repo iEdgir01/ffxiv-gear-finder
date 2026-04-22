@@ -1,15 +1,8 @@
 import { JOB_IDS } from './constants.js';
-import { normalizeGearType, jobCanEquipCategory, maxGroupStatScore } from './search.js';
+import { normalizeGearType, passesJobFilter, maxGroupStatScore } from './search.js';
 
-function poolRowMatchesSelectedJob(jobId, row, statsById) {
-  const st = statsById[row.id];
-  const abbr = JOB_IDS[jobId]?.abbr;
-  if (!abbr) return false;
-  if (Array.isArray(st?.classJobAbbrs) && st.classJobAbbrs.length > 0) {
-    return st.classJobAbbrs.includes(abbr);
-  }
-  const cat = st?.classJobCategory ?? row.classJobCategory;
-  return jobCanEquipCategory(jobId, cat);
+function poolRowMatchesSelectedJob(jobId, row) {
+  return passesJobFilter(jobId, row);
 }
 
 const SLOT_DEFS = [
@@ -59,7 +52,7 @@ export function findBestUpgrades(jobId, jobLevel, gearsetSlots, statsById, poolI
     let bestMax = curBaseline;
 
     for (const row of poolItems) {
-      if (!poolRowMatchesSelectedJob(jobId, row, statsById)) continue;
+      if (!poolRowMatchesSelectedJob(jobId, row)) continue;
       const st = statsById[row.id];
       if (!st?.stats) continue;
       const equipCap = st.equipLevel ?? row.equipLevel;

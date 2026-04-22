@@ -90,6 +90,10 @@
               <button type="button" id="char-add-btn" class="btn-secondary btn-sm">+ Add character</button>
             </div>
             <div id="profile-cards-list" class="profile-cards-list"></div>
+            <footer class="char-manage-footer">
+              <button type="button" id="btn-clear-all-local-data" class="btn-secondary btn-sm char-clear-data-btn">Delete all saved data…</button>
+              <p class="char-manage-footer-hint">Clears saved characters, Teamcraft links, master crafting settings, lists, and cached item stats from this browser only.</p>
+            </footer>
           </div>
 
           <!-- Screen: Add / import a character -->
@@ -144,6 +148,7 @@
           <div id="master-overlay-body" class="character-overlay-section"></div>
           <div class="character-overlay-section" style="padding-top:0">
             <button type="button" class="btn-primary" id="master-overlay-save" style="width:100%">Save</button>
+            <p class="master-overlay-save-hint">Writes your master recipe tiers to this character’s saved profile in this browser. Close or press Escape to cancel without saving.</p>
           </div>
         </div>
       </div>

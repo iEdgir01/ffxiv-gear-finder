@@ -1403,6 +1403,37 @@ input[type="text"]:focus { border-color: var(--blue); }
   color: var(--blue);
 }
 
+.char-manage-footer {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.char-manage-footer-hint {
+  margin: 8px 0 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--text-muted);
+  max-width: 40em;
+}
+
+.char-clear-data-btn {
+  border-color: rgba(248, 113, 113, 0.45);
+  color: #f87171;
+}
+
+.char-clear-data-btn:hover:not(:disabled) {
+  border-color: #f87171;
+  color: #fca5a5;
+}
+
+.master-overlay-save-hint {
+  margin: 10px 0 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
 /* ── Profile cards ───────────────────────────────────── */
 .profile-cards-list {
   display: flex;
@@ -1854,6 +1885,25 @@ input[type="text"]:focus { border-color: var(--blue); }
   color: var(--text-muted, #888);
 }
 .import-row-btn:hover { color: var(--text, #e0e0e0); }
+
+.import-row-btn--edit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.625rem;
+  height: 1.625rem;
+  padding: 0;
+}
+
+.import-row-btn-edit-glyph {
+  display: inline-block;
+  transform: rotate(-90deg);
+  line-height: 1;
+}
+
+.import-row-btn--edit:hover .import-row-btn-edit-glyph {
+  transform: rotate(-90deg) scale(1.05);
+}
 
 .import-search-panel {
   max-width: 380px;

@@ -11,7 +11,7 @@ import {
  * XIVAPI `ClassJobCategory` (same mapping as the job tags on result cards). Recipe crafter
  * (`craftJobAbbr`) is display-only — e.g. a BSM-made tool still appears under jobs that can wear it.
  */
-function passesJobFilter(equipJobId, item) {
+export function passesJobFilter(equipJobId, item) {
   if (equipJobId == null) return true;
   const abbr = JOB_IDS[equipJobId]?.abbr;
   if (!abbr) return false;

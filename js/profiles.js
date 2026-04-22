@@ -48,6 +48,11 @@ function writeStore(store) {
   }
 }
 
+/** Reset stored characters and active selection (same as a fresh install for this key). */
+export function resetProfilesStore() {
+  writeStore(defaultStore());
+}
+
 /**
  * @param {string} lodestoneId
  * @param {{ name: string, server: string, portrait: string | null, jobs: Record<string, { level: number }> }} data

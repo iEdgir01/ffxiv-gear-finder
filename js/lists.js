@@ -16,6 +16,10 @@ function writeStore(store) {
   } catch {}
 }
 
+export function resetListsStore() {
+  writeStore({ lists: [], nextId: 1 });
+}
+
 export function getLists() {
   return readStore().lists;
 }

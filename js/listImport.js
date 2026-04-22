@@ -281,8 +281,13 @@ export function openImportModal({
 
         const editBtn = el(
           'button',
-          { type: 'button', class: 'import-row-btn', 'aria-label': 'Edit match', title: 'Edit match' },
-          '✏',
+          {
+            type: 'button',
+            class: 'import-row-btn import-row-btn--edit',
+            'aria-label': 'Edit match',
+            title: 'Edit match',
+          },
+          el('span', { class: 'import-row-btn-edit-glyph', 'aria-hidden': 'true' }, '\u270f'),
         );
         editBtn.addEventListener('click', () =>
           openSearchOverlay(i, state, getCraftPool, refreshTable, refreshCreateBtn),

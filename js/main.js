@@ -6,6 +6,7 @@ import {
   fetchByTeamcraftUID,
   fetchItemStats,
   extractTeamcraftUid,
+  clearItemStatsLocalStorageCache,
 } from './api.js';
 import { isGcExclusiveAcquisition } from './garland.js';
 import {
@@ -815,6 +816,7 @@ async function handleTcSaveForCard(lodestoneId, url) {
     await Promise.all([refreshUpgradePage(), runSearch()]);
   }
   refreshSavedProfilesUi();
+  closeCharacterOverlay();
 }
 
 function clearCharacterState() {
@@ -858,6 +860,33 @@ function clearCharacterState() {
   syncUpgradeSourceSelect();
   syncFinderSortSelect();
   void runSearch();
+}
+
+function deleteAllLocalAppData() {
+  const msg =
+    'Delete everything this app has saved in this browser?\n\n' +
+    '• All characters and Teamcraft links\n' +
+    '• Master crafting tiers\n' +
+    '• Gear lists\n' +
+    '• Cached item stats\n\n' +
+    'This cannot be undone.';
+  if (!confirm(msg)) return;
+  _masterDraft = null;
+  ui.hideMasterOverlay();
+  profiles.resetProfilesStore();
+  lists.resetListsStore();
+  clearItemStatsLocalStorageCache();
+  state.statsCache = {};
+  state.acqCache = {};
+  clearCharacterState();
+  void refreshUpgradePage();
+  refreshSavedProfilesUi();
+  refreshListPanel();
+  ui.syncAddButtonsListedState(lists.getListedItemIdSet(), handleAddToList);
+  ui.showCharacterScreen('add');
+  ui.resetAddForm();
+  const backBtn = document.getElementById('char-back-btn');
+  if (backBtn) backBtn.hidden = true;
 }
 
 async function applyStoredProfile(p) {
@@ -943,6 +972,13 @@ async function removeSavedProfile(lodestoneId) {
   refreshSavedProfilesUi();
 }
 
+function closeCharacterOverlay() {
+  const el = document.getElementById('character-overlay');
+  if (!el) return;
+  el.hidden = true;
+  el.setAttribute('aria-hidden', 'true');
+}
+
 function initCharacterOverlay() {
   const overlay = document.getElementById('character-overlay');
   const backdrop = document.getElementById('character-overlay-backdrop');
@@ -950,11 +986,10 @@ function initCharacterOverlay() {
   const openBtn = document.getElementById('character-open-btn');
   const addBtn = document.getElementById('char-add-btn');
   const backBtn = document.getElementById('char-back-btn');
+  const clearAllBtn = document.getElementById('btn-clear-all-local-data');
 
   function hide() {
-    if (!overlay) return;
-    overlay.hidden = true;
-    overlay.setAttribute('aria-hidden', 'true');
+    closeCharacterOverlay();
   }
   function show() {
     if (!overlay) return;
@@ -988,6 +1023,8 @@ function initCharacterOverlay() {
     ui.showCharacterScreen('manage');
     refreshSavedProfilesUi();
   });
+
+  clearAllBtn?.addEventListener('click', () => deleteAllLocalAppData());
 
   const importToggle = document.getElementById('character-import-toggle');
   const importExtra = document.getElementById('character-import-extra');

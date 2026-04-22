@@ -227,6 +227,20 @@ function cacheSet(id, data) {
   }
 }
 
+/** Remove all persisted XIVAPI item stat blobs for this app (keys `xivapi_item_2_*`). */
+export function clearItemStatsLocalStorageCache() {
+  try {
+    const toRemove = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.startsWith('xivapi_item_2_')) toRemove.push(k);
+    }
+    for (const k of toRemove) localStorage.removeItem(k);
+  } catch {
+    /* ignore */
+  }
+}
+
 // --- fetchItemStats (XIVAPI items only; character endpoints stay on Teamcraft Lodestone proxy above) ---
 
 const ITEM_COLUMNS = 'ID,Name,LevelItem,LevelEquip,Stats,ItemUICategory,IsUntradable,ClassJobCategory';
