@@ -1756,9 +1756,6 @@ async function init() {
   });
 
   await loadData();
-  if (isLoaded()) {
-    ui.endViewLoading();
-  }
   await hydrateFromStorage();
   void refreshAllProfilesJobsOnLoad({ reason: 'load' });
   void refreshCharacterJobsOnLoad();

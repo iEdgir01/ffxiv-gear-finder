@@ -227,7 +227,6 @@ function cacheSet(id, data) {
   }
 }
 
-/** Remove all persisted XIVAPI item stat blobs for this app (keys `xivapi_item_2_*`). */
 export function clearItemStatsLocalStorageCache() {
   try {
     const toRemove = [];

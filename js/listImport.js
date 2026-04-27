@@ -95,14 +95,6 @@ function statusIcon(status) {
   return { char: '⚠', cls: 'import-status-unmatched' };
 }
 
-/**
- * @param {object} opts
- * @param {() => Array<{ id: number, name: string }>} opts.getCraftPool
- * @param {(name: string) => object} opts.createList
- * @param {(listId: string, entry: { itemId: number, name: string, qty: number }) => object} opts.addItemToList
- * @param {(list: object) => string} opts.exportTeamcraftUrl
- * @param {() => void} [opts.onListCreated]
- */
 export function openImportModal({
   getCraftPool,
   createList,
@@ -372,7 +364,7 @@ export function openImportModal({
       } catch (err) {
         const msg = err && typeof err.message === 'string' ? err.message : 'Unknown error';
         createErr.textContent = `Could not create list or add items: ${msg}`;
-        createBtn.disabled = false;
+        refreshCreateBtn();
         return;
       }
       exportTarget.list = list;
