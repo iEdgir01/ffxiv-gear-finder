@@ -1432,6 +1432,14 @@ async function refreshUpgradePage() {
         /* ignore */
       }
     }
+    // Retry any equipped-item IDs that failed above — without this a transient XIVAPI
+    // error leaves the Equipped column blank until the user manually triggers a refresh.
+    const missedGear = gearIds.filter(id => !state.statsCache[id]);
+    if (missedGear.length > 0) {
+      try {
+        Object.assign(state.statsCache, await fetchItemStats(missedGear));
+      } catch { /* ignore */ }
+    }
     if (seq !== _upgradeRefreshSeq) return;
 
     pool = applyStatsCacheAndRefilter(pool, { jobId, jobLevel, gearType: null });
