@@ -1,8 +1,8 @@
 // AUTO-GENERATED. Do not hand edit.
-// Generated: 2026-04-20T06:43:05.644Z
+// Generated: 2026-04-27T06:51:09.217Z
 // Sources: https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/GCScripShopItem.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/GCScripShopCategory.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/de/SpecialShop.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/de/Item.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/ClassJobCategory.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/ItemUICategory.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/BaseParam.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/de/GrandCompanyRank.csv
 export const GC_DATA_META = {
-  "generatedAt": "2026-04-20T06:43:05.644Z",
+  "generatedAt": "2026-04-27T06:51:09.217Z",
   "source": {
     "gcScripShopItem": "https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/GCScripShopItem.csv",
     "gcScripShopCategory": "https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/GCScripShopCategory.csv",
