@@ -1169,6 +1169,9 @@ async function refreshCharacterJobsOnLoad() {
   if (!state.lodestoneId) return;
   ui.beginViewLoading('Syncing character…');
   try {
+    const jobsBefore = JSON.stringify(state.jobs);
+    const gearsetsBefore = JSON.stringify(state.gearsetsByJob ? [...state.gearsetsByJob.entries()].sort() : null);
+
     // Sometimes a just-loaded page has transient fetch failures (network warm-up, captive portals).
     // Retry once quickly; if it still fails we keep stored levels.
     let payload = null;
@@ -1243,7 +1246,11 @@ async function refreshCharacterJobsOnLoad() {
       );
     }
 
-    await Promise.all([runSearch(), refreshUpgradePage()]);
+    const jobsChanged = JSON.stringify(state.jobs) !== jobsBefore;
+    const gearsetsChanged = JSON.stringify(state.gearsetsByJob ? [...state.gearsetsByJob.entries()].sort() : null) !== gearsetsBefore;
+    if (jobsChanged || gearsetsChanged) {
+      await Promise.all([runSearch(), refreshUpgradePage()]);
+    }
   } catch (err) {
     // Ignore network/privacy failures; stored levels remain.
     console.warn('[main] Could not refresh character levels on load:', err?.message ?? err);
@@ -1272,6 +1279,7 @@ async function refreshAllProfilesJobsOnLoad({ reason = 'load', minIntervalMs = 3
     const store = profiles.readStore();
     const ids = Object.keys(store.profiles ?? {});
     if (ids.length === 0) return;
+    const activeJobsBefore = JSON.stringify(state.jobs);
 
     // Sequential fetch to avoid hammering external services.
     for (const lodestoneId of ids) {
@@ -1313,8 +1321,10 @@ async function refreshAllProfilesJobsOnLoad({ reason = 'load', minIntervalMs = 3
     // Re-render profile cards (levels not shown today, but keeps TC URL edits consistent).
     refreshSavedProfilesUi();
 
-    // Re-run views for active profile in case job level changed.
-    await Promise.all([runSearch(), refreshUpgradePage()]);
+    // Only re-render views if the active profile's job levels actually changed.
+    if (JSON.stringify(state.jobs) !== activeJobsBefore) {
+      await Promise.all([runSearch(), refreshUpgradePage()]);
+    }
 
     console.info('[main] Refreshed job levels for', ids.length, 'profiles (' + reason + ')');
   })();
