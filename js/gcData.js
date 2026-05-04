@@ -1,8 +1,8 @@
 // AUTO-GENERATED. Do not hand edit.
-// Generated: 2026-04-27T06:51:09.217Z
+// Generated: 2026-05-04T06:59:47.768Z
 // Sources: https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/GCScripShopItem.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/GCScripShopCategory.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/de/SpecialShop.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/de/Item.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/ClassJobCategory.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/ItemUICategory.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/BaseParam.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/de/GrandCompanyRank.csv
 export const GC_DATA_META = {
-  "generatedAt": "2026-04-27T06:51:09.217Z",
+  "generatedAt": "2026-05-04T06:59:47.768Z",
   "source": {
     "gcScripShopItem": "https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/GCScripShopItem.csv",
     "gcScripShopCategory": "https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/GCScripShopCategory.csv",
@@ -15,8 +15,8 @@ export const GC_DATA_META = {
   },
   "notes": "GC seal gear from GCScripShopItem + GCScripShopCategory; SpecialShop CostType 0 seal rows merged. No Garland.",
   "counts": {
-    "listings": 738,
-    "items": 738
+    "listings": 733,
+    "items": 733
   }
 };
 
@@ -12942,66 +12942,6 @@ export const GC_ITEMS = {
     "gearTypeRaw": "Wall-mounted",
     "stats": {}
   },
-  "37353": {
-    "itemId": 37353,
-    "companyId": 1,
-    "currencyId": 20,
-    "seals": 46179,
-    "receiveCount": 1,
-    "questId": null,
-    "requiredRankId": null,
-    "requiredRankOrder": null,
-    "levelEquip": 1,
-    "ilvl": 560,
-    "classJobCategory": "",
-    "gearTypeRaw": "Wall-mounted",
-    "stats": {}
-  },
-  "37355": {
-    "itemId": 37355,
-    "companyId": 1,
-    "currencyId": 20,
-    "seals": 46179,
-    "receiveCount": 1,
-    "questId": null,
-    "requiredRankId": null,
-    "requiredRankOrder": null,
-    "levelEquip": 0,
-    "ilvl": 52736,
-    "classJobCategory": "",
-    "gearTypeRaw": "Blacksmith's Primary Tool",
-    "stats": {}
-  },
-  "37356": {
-    "itemId": 37356,
-    "companyId": 1,
-    "currencyId": 20,
-    "seals": 46179,
-    "receiveCount": 1,
-    "questId": null,
-    "requiredRankId": null,
-    "requiredRankOrder": null,
-    "levelEquip": 0,
-    "ilvl": 0,
-    "classJobCategory": "",
-    "gearTypeRaw": "",
-    "stats": {}
-  },
-  "37357": {
-    "itemId": 37357,
-    "companyId": 1,
-    "currencyId": 20,
-    "seals": 46179,
-    "receiveCount": 1,
-    "questId": null,
-    "requiredRankId": null,
-    "requiredRankOrder": null,
-    "levelEquip": 0,
-    "ilvl": 52739,
-    "classJobCategory": "",
-    "gearTypeRaw": "Blacksmith's Primary Tool",
-    "stats": {}
-  },
   "37358": {
     "itemId": 37358,
     "companyId": 1,
@@ -13015,21 +12955,6 @@ export const GC_ITEMS = {
     "ilvl": 0,
     "classJobCategory": "",
     "gearTypeRaw": "",
-    "stats": {}
-  },
-  "37359": {
-    "itemId": 37359,
-    "companyId": 1,
-    "currencyId": 20,
-    "seals": 46179,
-    "receiveCount": 1,
-    "questId": null,
-    "requiredRankId": null,
-    "requiredRankOrder": null,
-    "levelEquip": 1,
-    "ilvl": 560,
-    "classJobCategory": "",
-    "gearTypeRaw": "Wall-mounted",
     "stats": {}
   },
   "37400": {

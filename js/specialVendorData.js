@@ -1,8 +1,8 @@
 // AUTO-GENERATED. Do not hand edit.
-// Generated: 2026-04-27T06:51:11.321Z
+// Generated: 2026-05-04T06:59:50.223Z
 // Tomestones + scrips: all job groups (combat, DoH, DoL). Sources: https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/de/SpecialShop.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/de/Item.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/ClassJobCategory.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/ItemUICategory.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/BaseParam.csv
 export const SPECIAL_VENDOR_META = {
-  "generatedAt": "2026-04-27T06:51:11.321Z",
+  "generatedAt": "2026-05-04T06:59:50.223Z",
   "source": {
     "specialShop": "https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/de/SpecialShop.csv",
     "item": "https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/de/Item.csv",
@@ -15,7 +15,7 @@ export const SPECIAL_VENDOR_META = {
     "scrip": "Item Name matches Crafters'/Gatherers' Scrip (excludes Token)"
   },
   "counts": {
-    "items": 1225
+    "items": 1221
   }
 };
 
@@ -1455,34 +1455,6 @@ export const SPECIAL_VENDOR_ITEMS = {
     "ilvl": 1,
     "classJobCategory": "",
     "gearTypeRaw": "Miscellany",
-    "stats": {}
-  },
-  "8559": {
-    "itemId": 8559,
-    "tomestone": {
-      "currencyId": 30,
-      "amount": 46179,
-      "currencyName": "Allagan tomestone of law"
-    },
-    "scrip": null,
-    "levelEquip": 1,
-    "ilvl": 1,
-    "classJobCategory": "All Classes",
-    "gearTypeRaw": "Body",
-    "stats": {}
-  },
-  "8560": {
-    "itemId": 8560,
-    "tomestone": {
-      "currencyId": 30,
-      "amount": 46179,
-      "currencyName": "Allagan tomestone of law"
-    },
-    "scrip": null,
-    "levelEquip": 1,
-    "ilvl": 1,
-    "classJobCategory": "All Classes",
-    "gearTypeRaw": "Legs",
     "stats": {}
   },
   "8876": {
@@ -6055,20 +6027,6 @@ export const SPECIAL_VENDOR_ITEMS = {
       "DirectHitRate": 96,
       "CriticalHit": 67
     }
-  },
-  "21191": {
-    "itemId": 21191,
-    "tomestone": {
-      "currencyId": 30,
-      "amount": 46179,
-      "currencyName": "Allagan tomestone of law"
-    },
-    "scrip": null,
-    "levelEquip": 1,
-    "ilvl": 1,
-    "classJobCategory": "",
-    "gearTypeRaw": "Other",
-    "stats": {}
   },
   "21399": {
     "itemId": 21399,
@@ -12666,20 +12624,6 @@ export const SPECIAL_VENDOR_ITEMS = {
     "ilvl": 480,
     "classJobCategory": "",
     "gearTypeRaw": "Reagent",
-    "stats": {}
-  },
-  "30269": {
-    "itemId": 30269,
-    "tomestone": {
-      "currencyId": 30,
-      "amount": 46179,
-      "currencyName": "Allagan tomestone of law"
-    },
-    "scrip": null,
-    "levelEquip": 1,
-    "ilvl": 1,
-    "classJobCategory": "",
-    "gearTypeRaw": "Miscellany",
     "stats": {}
   },
   "30273": {
