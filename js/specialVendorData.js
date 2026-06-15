@@ -1,8 +1,8 @@
 // AUTO-GENERATED. Do not hand edit.
-// Generated: 2026-06-08T07:38:15.751Z
+// Generated: 2026-06-15T07:54:31.213Z
 // Tomestones + scrips: all job groups (combat, DoH, DoL). Sources: https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/de/SpecialShop.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/de/Item.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/ClassJobCategory.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/ItemUICategory.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/BaseParam.csv
 export const SPECIAL_VENDOR_META = {
-  "generatedAt": "2026-06-08T07:38:15.751Z",
+  "generatedAt": "2026-06-15T07:54:31.213Z",
   "source": {
     "specialShop": "https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/de/SpecialShop.csv",
     "item": "https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/de/Item.csv",
