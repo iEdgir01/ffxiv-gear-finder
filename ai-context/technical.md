@@ -3,8 +3,9 @@
 ## Stack
 - Plain HTML/CSS/ES Modules — no bundler, no build step
 - Open index.html directly in browser (or `python -m http.server 3000`)
-- Tests: `npm test` → `node --test tests/*.test.js` — 147 tests across `tests/` covering search, api, lists, garland, upgrade, gearBaseline, gearsets, constants, gcSealCost, finderSourceFilter
-- **Deployed**: GitHub Pages at https://iedgir01.github.io/ffxiv-gear-finder/ (auto-deploys on push to main via `.github/workflows/deploy.yml`)
+- Tests: `npm test` → `node --test tests/*.test.js` — 228 tests across 54 suites in `tests/` covering search, api, lists, garland, upgrade, gearBaseline, gearsets, constants, gcSealCost, finderSourceFilter, listImport, specialVendorData, gcItems.pool
+- **Deployed**: Netlify at https://ffxiv-gear-finder.netlify.app (auto-deploys on push to main; `netlify.toml` runs `npm test` as build command, publishes repo root, no-cache headers on html/js/css)
+- `.github/workflows/deploy.yml` is CI-only now (runs tests) — no longer deploys to GitHub Pages
 - **Datamine CI**: `.github/workflows/weekly-datamine-refresh.yml` — Mondays 06:00 UTC, fetches xivapi/ffxiv-datamining CSVs, regenerates `js/gcData.js` + `js/specialVendorData.js`, runs tests, commits + pushes if changed (which triggers redeploy)
 
 ## Data Sources
@@ -129,6 +130,11 @@ URL: `https://ffxivteamcraft.com/import/{base64string}`
 - `gearBaseline.js` — baseline stat resolution, no DOM, no fetch
 - `gearsets.js` — Teamcraft gearset fetch, no DOM
 - `lists.js` — localStorage CRUD + Teamcraft URL builder, no DOM
+- `listImport.js` — parses pasted text into list items, no DOM, no fetch
+- `finderSourceFilter.js` — pure source-filter predicate logic, no DOM
+- `itemMeta.js` — generated item metadata constant, data only
+- `profiles.js` — localStorage profile CRUD (`gf_profiles_v1`), no DOM
 - `gcData.js` — generated constant, data only
+- `specialVendorData.js` — generated constant, data only
 - `ui.js` — DOM only, emits events, does not call search.js or api.js directly
 - `main.js` — orchestrates all others, owns all state

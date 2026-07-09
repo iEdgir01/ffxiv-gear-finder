@@ -6,9 +6,10 @@ Single-page browser app. Import FFXIV character job levels from Lodestone via XI
 ## Current Status
 
 ### Deployed
-- GitHub Pages: https://iedgir01.github.io/ffxiv-gear-finder/
-- CI on push to main (`deploy.yml`): runs tests → deploys to Pages
+- Netlify: https://ffxiv-gear-finder.netlify.app (auto-deploys on push to main; `netlify.toml` runs `npm test` as the build command)
+- GitHub Actions (`deploy.yml`): CI-only now (tests), no longer deploys to Pages
 - Weekly datamine refresh (`weekly-datamine-refresh.yml`): regenerates GC + special vendor data, auto-commits, re-triggers deploy
+- 228 tests passing across 54 suites (`npm test`)
 
 ### v1 Core — all complete
 - [x] Task 1: Scaffold — all project files, context docs, empty modules.
@@ -46,6 +47,14 @@ Single-page browser app. Import FFXIV character job levels from Lodestone via XI
 - [x] **Teamcraft URL per profile card** — TC linking moved from standalone `#teamcraft-section` to inline editable field on each card. `handleTcSaveForCard` saves URL, loads gearsets if card is the active profile.
 - [x] **On-reload level merge** — `refreshCharacterJobsOnLoad` now fetches both Lodestone and Teamcraft job levels, taking the higher value per job. Handles Lodestone lag (TC reflects in-game progress faster). 147 tests pass.
 
+### v4 Base Classes, Netlify, List Import — all complete
+- [x] **Netlify deploy switch** — moved from GitHub Pages to Netlify (`netlify.toml`, build command `npm test`); GitHub Actions `deploy.yml` is CI-only now. No-cache headers on html/js/css.
+- [x] **Level-sync on tab switch/focus** — job levels refresh on in-app tab switches and on window focus, not just page load.
+- [x] **Base class generalization** — all 9 FFXIV base classes (GLA, PGL, MRD, LNC, ARC, CNJ, THM + existing) added to `JOB_IDS` with `promotedJobIds`, so a base class resolves to its promoted job (e.g. Arcanist → SMN/SCH) throughout filtering, gearset lookup, and upgrade tabs. Data-driven `resolveDisplayJobId`, `withBaseClassJobLevels`, `buildUpgradeTabs` no-gearset empty state.
+- [x] **Text import list creator** — `js/listImport.js` + modal UI for creating gear lists from pasted text; job list visibility fixes.
+- [x] **API/upgrade fixes** — Lodestone `ClassJobs` level attribution corrected; Upgrades tab matches Gear Finder job-equip rules; equipped-item stats fetch retries on transient XIVAPI failure; background sync skips re-render when nothing changed (perf).
+- 228 tests pass on main.
+
 ## Key Decisions
 - **Plain HTML/CSS/JS, no build step** — open index.html directly; avoids toolchain complexity.
 - **Teamcraft GitHub CDN** for recipe data — loaded at startup, indexed in memory (~2-5MB).
@@ -58,14 +67,18 @@ Single-page browser app. Import FFXIV character job levels from Lodestone via XI
 - **Two-screen character overlay** — manage screen (profile cards) vs add screen (import form). Avoids the old embedded three-section design that was hard to navigate with multiple profiles.
 - **Job level merge on reload** — take `max(Lodestone, Teamcraft)` per job on page load. Teamcraft reflects in-game progress faster than Lodestone; Lodestone is the fallback when TC is not linked.
 - **`specialVendorData.js` uses space-separated abbreviation lists** — `classJobCategory` field uses format like `"GLA MRD PLD WAR DRK GNB"` (not a single keyword). `jobCanEquipCategory` must handle both single-keyword and space-separated formats.
+- **Base classes resolve via `promotedJobIds`** — generic delegation (not per-job special-casing) so a base class (e.g. Arcanist, Gladiator) inherits its promoted job's equip rules, gearsets, and upgrade tab. Applies to all 9 base classes uniformly.
+- **Netlify over GitHub Pages** — switched deploy target; GitHub Actions retained for CI (tests) only, not deploy.
 
 ## File Map
 - `ai-context/technical.md` — stack, APIs, data layer, module boundaries, scoring details
 - `ai-context/build-plan.md` — ordered tasks + completion status
 - `ai-context/ffxiv.md` — FFXIV domain context: job IDs, stat names, gear slots, GC behavior
-- `docs/superpowers/specs/2026-04-18-ffxiv-gear-finder-design.md` — original design spec
-- `docs/superpowers/plans/2026-04-18-ffxiv-gear-finder.md` — implementation plan
-- `tests/` — Jest unit tests for search.js, api.js, lists.js, garland.js, upgrade.js, gearBaseline.js, gearsets.js, constants.js
+- `ai-context/todo.md` — active/done task list
+- `ai-context/resume.md` — cold-start guide for agents
+- `docs/superpowers/specs/` — design specs (base-class generalization, text import list creator, v3 overlay)
+- `docs/superpowers/plans/` — implementation plans
+- `tests/` — `node --test` unit tests for search, api, lists, garland, upgrade, gearBaseline, gearsets, constants, gcSealCost, finderSourceFilter, listImport, specialVendorData, gcItems.pool (228 tests, 54 suites)
 
 ## Rules for all agents working on this project
 

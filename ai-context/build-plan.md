@@ -36,3 +36,11 @@ Do not start the next task until the current one passes all its checks.
 24. [x] Two-screen character overlay — manage screen (profile cards) + add screen (import form). Screen logic: profiles exist → manage, none → add, import success → manage, last removed → add. `resetAddForm()` fixes server dropdown bug. 147 tests pass.
 25. [x] Per-card Teamcraft URL — TC linking moved from standalone section to inline field on each profile card. `handleTcSaveForCard` saves + loads gearsets if card is active profile.
 26. [x] On-reload Lodestone + Teamcraft merge — `refreshCharacterJobsOnLoad` fetches both sources, takes max level per job. Handles Lodestone lag behind in-game progress. 147 tests pass.
+
+### v4 Base Classes, Netlify, List Import (all complete)
+27. [x] Netlify deploy switch — `netlify.toml` added, `deploy.yml` reduced to CI-only, no-cache headers on html/js/css.
+28. [x] Level-sync on tab switch/focus — job levels refresh on in-app tab switches and window focus.
+29. [x] Base class generalization — all 9 base classes (GLA, PGL, MRD, LNC, ARC, CNJ, THM, +2 existing) added to `JOB_IDS` with `promotedJobIds`; generic `promotedJobIds` delegation in `jobCanEquipCategory`/`passesJobFilter`; `resolveDisplayJobId`, `withBaseClassJobLevels`, `buildUpgradeTabs` no-gearset empty state.
+30. [x] Text import list creator — `js/listImport.js` + modal UI, job list visibility fixes.
+31. [x] API/upgrade fixes — Lodestone ClassJobs level attribution corrected; Upgrades tab matches Gear Finder job-equip rules; equipped-item stats fetch retry on transient XIVAPI failure; background sync skips re-render when unchanged.
+- 228 tests pass on main (54 suites).
