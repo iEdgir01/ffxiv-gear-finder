@@ -6,3 +6,12 @@ node_modules/
 # Claude Code
 .claude/settings.local.json
 .superpowers/
+
+# Governance: agent-local scaffolding + secrets (claude-global/CLAUDE.md)
+AGENTS.md
+ai-context/
+CLAUDE.md
+.claude/
+.env
+.env.*
+__pycache__/
