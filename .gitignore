@@ -2,3 +2,7 @@ node_modules/
 .DS_Store
 *.log
 .worktrees/
+
+# Claude Code
+.claude/settings.local.json
+.superpowers/
