@@ -1,8 +1,8 @@
 // AUTO-GENERATED. Do not hand edit.
-// Generated: 2026-07-27T09:35:09.793Z
+// Generated: 2026-08-03T09:28:48.243Z
 // Sources: https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/GCScripShopItem.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/GCScripShopCategory.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/de/SpecialShop.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/de/Item.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/ClassJobCategory.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/ItemUICategory.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/BaseParam.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/de/GrandCompanyRank.csv
 export const GC_DATA_META = {
-  "generatedAt": "2026-07-27T09:35:09.793Z",
+  "generatedAt": "2026-08-03T09:28:48.243Z",
   "source": {
     "gcScripShopItem": "https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/GCScripShopItem.csv",
     "gcScripShopCategory": "https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/GCScripShopCategory.csv",
@@ -2913,7 +2913,7 @@ export const GC_ITEMS = {
     "requiredRankOrder": 3,
     "levelEquip": 28,
     "ilvl": 29,
-    "classJobCategory": "GLA CNJ THM PLD WHM BLM",
+    "classJobCategory": "GLA CNJ THM PLD WHM BLM BST",
     "gearTypeRaw": "Shield",
     "stats": {
       "Intelligence": 2,
@@ -2971,7 +2971,7 @@ export const GC_ITEMS = {
     "requiredRankOrder": 6,
     "levelEquip": 37,
     "ilvl": 38,
-    "classJobCategory": "GLA CNJ THM PLD WHM BLM",
+    "classJobCategory": "GLA CNJ THM PLD WHM BLM BST",
     "gearTypeRaw": "Shield",
     "stats": {
       "Intelligence": 3,
@@ -3048,7 +3048,7 @@ export const GC_ITEMS = {
     "requiredRankOrder": 7,
     "levelEquip": 42,
     "ilvl": 43,
-    "classJobCategory": "GLA THM PLD BLM",
+    "classJobCategory": "GLA THM PLD BLM BST",
     "gearTypeRaw": "Shield",
     "stats": {
       "Intelligence": 3,
@@ -3124,7 +3124,7 @@ export const GC_ITEMS = {
     "requiredRankOrder": 8,
     "levelEquip": 44,
     "ilvl": 46,
-    "classJobCategory": "GLA CNJ THM PLD WHM BLM",
+    "classJobCategory": "GLA CNJ THM PLD WHM BLM BST",
     "gearTypeRaw": "Shield",
     "stats": {
       "Intelligence": 4,
@@ -3163,7 +3163,7 @@ export const GC_ITEMS = {
     "requiredRankOrder": 8,
     "levelEquip": 44,
     "ilvl": 46,
-    "classJobCategory": "GLA CNJ THM PLD WHM BLM",
+    "classJobCategory": "GLA CNJ THM PLD WHM BLM BST",
     "gearTypeRaw": "Shield",
     "stats": {
       "Intelligence": 4,
@@ -3202,7 +3202,7 @@ export const GC_ITEMS = {
     "requiredRankOrder": 8,
     "levelEquip": 44,
     "ilvl": 46,
-    "classJobCategory": "GLA CNJ THM PLD WHM BLM",
+    "classJobCategory": "GLA CNJ THM PLD WHM BLM BST",
     "gearTypeRaw": "Shield",
     "stats": {
       "Intelligence": 4,
@@ -11673,7 +11673,7 @@ export const GC_ITEMS = {
     "requiredRankOrder": null,
     "levelEquip": 70,
     "ilvl": 390,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Body",
     "stats": {
       "Strength": 125,
@@ -11693,7 +11693,7 @@ export const GC_ITEMS = {
     "requiredRankOrder": null,
     "levelEquip": 70,
     "ilvl": 390,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Legs",
     "stats": {
       "Strength": 125,
@@ -11953,7 +11953,7 @@ export const GC_ITEMS = {
     "requiredRankOrder": null,
     "levelEquip": 80,
     "ilvl": 490,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Earrings",
     "stats": {
       "Strength": 83,
@@ -12053,7 +12053,7 @@ export const GC_ITEMS = {
     "requiredRankOrder": null,
     "levelEquip": 80,
     "ilvl": 490,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Necklace",
     "stats": {
       "Strength": 83,
@@ -12153,7 +12153,7 @@ export const GC_ITEMS = {
     "requiredRankOrder": null,
     "levelEquip": 80,
     "ilvl": 490,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Bracelets",
     "stats": {
       "Strength": 83,
@@ -12253,7 +12253,7 @@ export const GC_ITEMS = {
     "requiredRankOrder": null,
     "levelEquip": 80,
     "ilvl": 490,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Ring",
     "stats": {
       "Strength": 83,
@@ -12513,7 +12513,7 @@ export const GC_ITEMS = {
     "requiredRankOrder": null,
     "levelEquip": 80,
     "ilvl": 520,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Earrings",
     "stats": {
       "Strength": 89,
@@ -12613,7 +12613,7 @@ export const GC_ITEMS = {
     "requiredRankOrder": null,
     "levelEquip": 80,
     "ilvl": 520,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Necklace",
     "stats": {
       "Strength": 89,
@@ -12713,7 +12713,7 @@ export const GC_ITEMS = {
     "requiredRankOrder": null,
     "levelEquip": 80,
     "ilvl": 520,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Bracelets",
     "stats": {
       "Strength": 89,
@@ -12813,7 +12813,7 @@ export const GC_ITEMS = {
     "requiredRankOrder": null,
     "levelEquip": 80,
     "ilvl": 520,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Ring",
     "stats": {
       "Strength": 89,

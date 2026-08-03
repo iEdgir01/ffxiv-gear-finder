@@ -1,8 +1,8 @@
 // AUTO-GENERATED. Do not hand edit.
-// Generated: 2026-07-27T09:35:12.734Z
+// Generated: 2026-08-03T09:28:49.281Z
 // Tomestones + scrips: all job groups (combat, DoH, DoL). Sources: https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/de/SpecialShop.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/de/Item.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/ClassJobCategory.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/ItemUICategory.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/BaseParam.csv
 export const SPECIAL_VENDOR_META = {
-  "generatedAt": "2026-07-27T09:35:12.734Z",
+  "generatedAt": "2026-08-03T09:28:49.281Z",
   "source": {
     "specialShop": "https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/de/SpecialShop.csv",
     "item": "https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/de/Item.csv",
@@ -15,7 +15,7 @@ export const SPECIAL_VENDOR_META = {
     "scrip": "Item Name matches Crafters'/Gatherers' Scrip (excludes Token)"
   },
   "counts": {
-    "items": 1221
+    "items": 1224
   }
 };
 
@@ -829,7 +829,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 50,
     "ilvl": 110,
-    "classJobCategory": "PGL ROG MNK NIN SAM VPR",
+    "classJobCategory": "PGL ROG MNK NIN SAM VPR BST",
     "gearTypeRaw": "Head",
     "stats": {
       "Strength": 26,
@@ -849,7 +849,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 50,
     "ilvl": 110,
-    "classJobCategory": "PGL ROG MNK NIN SAM VPR",
+    "classJobCategory": "PGL ROG MNK NIN SAM VPR BST",
     "gearTypeRaw": "Body",
     "stats": {
       "Strength": 41,
@@ -869,7 +869,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 50,
     "ilvl": 110,
-    "classJobCategory": "PGL ROG MNK NIN SAM VPR",
+    "classJobCategory": "PGL ROG MNK NIN SAM VPR BST",
     "gearTypeRaw": "Hands",
     "stats": {
       "Strength": 26,
@@ -889,7 +889,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 50,
     "ilvl": 110,
-    "classJobCategory": "PGL ROG MNK NIN SAM VPR",
+    "classJobCategory": "PGL ROG MNK NIN SAM VPR BST",
     "gearTypeRaw": "Legs",
     "stats": {
       "Strength": 41,
@@ -909,7 +909,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 50,
     "ilvl": 110,
-    "classJobCategory": "PGL ROG MNK NIN SAM VPR",
+    "classJobCategory": "PGL ROG MNK NIN SAM VPR BST",
     "gearTypeRaw": "Feet",
     "stats": {
       "Strength": 26,
@@ -1733,7 +1733,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 50,
     "ilvl": 130,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Head",
     "stats": {
       "Strength": 33,
@@ -1752,7 +1752,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 50,
     "ilvl": 130,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Body",
     "stats": {
       "Strength": 52,
@@ -1771,7 +1771,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 50,
     "ilvl": 130,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Hands",
     "stats": {
       "Strength": 33,
@@ -1790,7 +1790,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 50,
     "ilvl": 130,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Legs",
     "stats": {
       "Strength": 52,
@@ -1809,7 +1809,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 50,
     "ilvl": 130,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Feet",
     "stats": {
       "Strength": 33,
@@ -3279,7 +3279,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 60,
     "ilvl": 240,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Head",
     "stats": {
       "Strength": 53,
@@ -3412,7 +3412,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 60,
     "ilvl": 240,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Body",
     "stats": {
       "Strength": 85,
@@ -3545,7 +3545,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 60,
     "ilvl": 240,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Hands",
     "stats": {
       "Strength": 53,
@@ -3678,7 +3678,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 60,
     "ilvl": 240,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Legs",
     "stats": {
       "Strength": 85,
@@ -3811,7 +3811,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 60,
     "ilvl": 240,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Feet",
     "stats": {
       "Strength": 53,
@@ -4737,7 +4737,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 60,
     "ilvl": 270,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Head",
     "stats": {
       "Strength": 60,
@@ -4756,7 +4756,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 60,
     "ilvl": 270,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Body",
     "stats": {
       "Strength": 95,
@@ -4775,7 +4775,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 60,
     "ilvl": 270,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Hands",
     "stats": {
       "Strength": 60,
@@ -4794,7 +4794,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 60,
     "ilvl": 270,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Legs",
     "stats": {
       "Strength": 95,
@@ -4813,7 +4813,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 60,
     "ilvl": 270,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Feet",
     "stats": {
       "Strength": 60,
@@ -6513,7 +6513,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 70,
     "ilvl": 370,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Head",
     "stats": {
       "Strength": 83,
@@ -6532,7 +6532,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 70,
     "ilvl": 370,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Body",
     "stats": {
       "Strength": 132,
@@ -6551,7 +6551,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 70,
     "ilvl": 370,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Hands",
     "stats": {
       "Strength": 83,
@@ -6570,7 +6570,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 70,
     "ilvl": 370,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Legs",
     "stats": {
       "Strength": 132,
@@ -6589,7 +6589,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 70,
     "ilvl": 370,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Feet",
     "stats": {
       "Strength": 83,
@@ -7007,7 +7007,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 70,
     "ilvl": 370,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Earrings",
     "stats": {
       "Strength": 65,
@@ -7102,7 +7102,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 70,
     "ilvl": 370,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Necklace",
     "stats": {
       "Strength": 65,
@@ -7197,7 +7197,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 70,
     "ilvl": 370,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Bracelets",
     "stats": {
       "Strength": 65,
@@ -7292,7 +7292,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 70,
     "ilvl": 370,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Ring",
     "stats": {
       "Strength": 65,
@@ -7509,7 +7509,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 70,
     "ilvl": 360,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Legs",
     "stats": {
       "Strength": 116,
@@ -8155,7 +8155,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 70,
     "ilvl": 400,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Head",
     "stats": {
       "Strength": 90,
@@ -8174,7 +8174,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 70,
     "ilvl": 400,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Body",
     "stats": {
       "Strength": 142,
@@ -8193,7 +8193,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 70,
     "ilvl": 400,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Hands",
     "stats": {
       "Strength": 90,
@@ -8212,7 +8212,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 70,
     "ilvl": 400,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Legs",
     "stats": {
       "Strength": 142,
@@ -8231,7 +8231,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 70,
     "ilvl": 400,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Feet",
     "stats": {
       "Strength": 90,
@@ -8649,7 +8649,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 70,
     "ilvl": 400,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Earrings",
     "stats": {
       "Strength": 71,
@@ -8744,7 +8744,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 70,
     "ilvl": 400,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Necklace",
     "stats": {
       "Strength": 71,
@@ -8839,7 +8839,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 70,
     "ilvl": 400,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Bracelets",
     "stats": {
       "Strength": 71,
@@ -8934,7 +8934,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 70,
     "ilvl": 400,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Ring",
     "stats": {
       "Strength": 71,
@@ -9214,7 +9214,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 70,
     "ilvl": 380,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Head",
     "stats": {
       "Strength": 85,
@@ -9233,7 +9233,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 70,
     "ilvl": 380,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Body",
     "stats": {
       "Strength": 135,
@@ -9252,7 +9252,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 70,
     "ilvl": 380,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Hands",
     "stats": {
       "Strength": 85,
@@ -9271,7 +9271,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 70,
     "ilvl": 380,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Legs",
     "stats": {
       "Strength": 135,
@@ -9290,7 +9290,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 70,
     "ilvl": 380,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Feet",
     "stats": {
       "Strength": 85,
@@ -10709,7 +10709,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 80,
     "ilvl": 460,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Head",
     "stats": {
       "Strength": 97,
@@ -10728,7 +10728,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 80,
     "ilvl": 460,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Body",
     "stats": {
       "Strength": 155,
@@ -10747,7 +10747,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 80,
     "ilvl": 460,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Hands",
     "stats": {
       "Strength": 97,
@@ -10766,7 +10766,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 80,
     "ilvl": 460,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Legs",
     "stats": {
       "Strength": 155,
@@ -10785,7 +10785,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 80,
     "ilvl": 460,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Feet",
     "stats": {
       "Strength": 97,
@@ -11753,7 +11753,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 80,
     "ilvl": 500,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Head",
     "stats": {
       "Strength": 120,
@@ -11772,7 +11772,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 80,
     "ilvl": 500,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Body",
     "stats": {
       "Strength": 190,
@@ -11791,7 +11791,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 80,
     "ilvl": 500,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Hands",
     "stats": {
       "Strength": 120,
@@ -11810,7 +11810,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 80,
     "ilvl": 500,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Legs",
     "stats": {
       "Strength": 190,
@@ -11829,7 +11829,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 80,
     "ilvl": 500,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Feet",
     "stats": {
       "Strength": 120,
@@ -12247,7 +12247,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 80,
     "ilvl": 500,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Earrings",
     "stats": {
       "Strength": 94,
@@ -12342,7 +12342,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 80,
     "ilvl": 500,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Necklace",
     "stats": {
       "Strength": 94,
@@ -12437,7 +12437,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 80,
     "ilvl": 500,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Bracelets",
     "stats": {
       "Strength": 94,
@@ -12532,7 +12532,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 80,
     "ilvl": 500,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Ring",
     "stats": {
       "Strength": 94,
@@ -13144,7 +13144,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 80,
     "ilvl": 490,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Head",
     "stats": {
       "Strength": 104,
@@ -13163,7 +13163,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 80,
     "ilvl": 490,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Body",
     "stats": {
       "Strength": 166,
@@ -13182,7 +13182,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 80,
     "ilvl": 490,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Hands",
     "stats": {
       "Strength": 104,
@@ -13201,7 +13201,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 80,
     "ilvl": 490,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Legs",
     "stats": {
       "Strength": 166,
@@ -13220,7 +13220,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 80,
     "ilvl": 490,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Feet",
     "stats": {
       "Strength": 104,
@@ -13709,7 +13709,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 80,
     "ilvl": 495,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Body",
     "stats": {
       "Strength": 187,
@@ -13728,7 +13728,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 80,
     "ilvl": 495,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Legs",
     "stats": {
       "Strength": 187,
@@ -14552,7 +14552,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 80,
     "ilvl": 530,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Head",
     "stats": {
       "Strength": 129,
@@ -14571,7 +14571,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 80,
     "ilvl": 530,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Body",
     "stats": {
       "Strength": 205,
@@ -14590,7 +14590,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 80,
     "ilvl": 530,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Hands",
     "stats": {
       "Strength": 129,
@@ -14609,7 +14609,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 80,
     "ilvl": 530,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Legs",
     "stats": {
       "Strength": 205,
@@ -14628,7 +14628,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 80,
     "ilvl": 530,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Feet",
     "stats": {
       "Strength": 129,
@@ -15046,7 +15046,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 80,
     "ilvl": 530,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Earrings",
     "stats": {
       "Strength": 102,
@@ -15141,7 +15141,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 80,
     "ilvl": 530,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Necklace",
     "stats": {
       "Strength": 102,
@@ -15236,7 +15236,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 80,
     "ilvl": 530,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Bracelets",
     "stats": {
       "Strength": 102,
@@ -15331,7 +15331,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 80,
     "ilvl": 530,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Ring",
     "stats": {
       "Strength": 102,
@@ -15957,7 +15957,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 80,
     "ilvl": 520,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Head",
     "stats": {
       "Strength": 113,
@@ -15976,7 +15976,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 80,
     "ilvl": 520,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Body",
     "stats": {
       "Strength": 180,
@@ -15995,7 +15995,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 80,
     "ilvl": 520,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Hands",
     "stats": {
       "Strength": 113,
@@ -16014,7 +16014,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 80,
     "ilvl": 520,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Legs",
     "stats": {
       "Strength": 180,
@@ -16033,7 +16033,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 80,
     "ilvl": 520,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Feet",
     "stats": {
       "Strength": 113,
@@ -17002,7 +17002,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 90,
     "ilvl": 570,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Head",
     "stats": {
       "Strength": 152,
@@ -17021,7 +17021,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 90,
     "ilvl": 570,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Body",
     "stats": {
       "Strength": 242,
@@ -17040,7 +17040,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 90,
     "ilvl": 570,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Hands",
     "stats": {
       "Strength": 152,
@@ -17059,7 +17059,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 90,
     "ilvl": 570,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Legs",
     "stats": {
       "Strength": 242,
@@ -17078,7 +17078,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 90,
     "ilvl": 570,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Feet",
     "stats": {
       "Strength": 152,
@@ -17496,7 +17496,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 90,
     "ilvl": 570,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Earrings",
     "stats": {
       "Strength": 120,
@@ -17591,7 +17591,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 90,
     "ilvl": 570,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Necklace",
     "stats": {
       "Strength": 120,
@@ -17686,7 +17686,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 90,
     "ilvl": 570,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Bracelets",
     "stats": {
       "Strength": 120,
@@ -17781,7 +17781,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 90,
     "ilvl": 570,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Ring",
     "stats": {
       "Strength": 120,
@@ -18427,7 +18427,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 90,
     "ilvl": 590,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Head",
     "stats": {
       "Strength": 170,
@@ -18446,7 +18446,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 90,
     "ilvl": 590,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Body",
     "stats": {
       "Strength": 270,
@@ -18465,7 +18465,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 90,
     "ilvl": 590,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Hands",
     "stats": {
       "Strength": 170,
@@ -18484,7 +18484,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 90,
     "ilvl": 590,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Legs",
     "stats": {
       "Strength": 270,
@@ -18503,7 +18503,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 90,
     "ilvl": 590,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Feet",
     "stats": {
       "Strength": 170,
@@ -18921,7 +18921,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 90,
     "ilvl": 590,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Earrings",
     "stats": {
       "Strength": 134,
@@ -19016,7 +19016,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 90,
     "ilvl": 590,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Necklace",
     "stats": {
       "Strength": 134,
@@ -19111,7 +19111,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 90,
     "ilvl": 590,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Bracelets",
     "stats": {
       "Strength": 134,
@@ -19206,7 +19206,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 90,
     "ilvl": 590,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Ring",
     "stats": {
       "Strength": 134,
@@ -19975,7 +19975,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 90,
     "ilvl": 630,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Head",
     "stats": {
       "Strength": 211,
@@ -19994,7 +19994,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 90,
     "ilvl": 630,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Body",
     "stats": {
       "Strength": 336,
@@ -20013,7 +20013,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 90,
     "ilvl": 630,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Hands",
     "stats": {
       "Strength": 211,
@@ -20032,7 +20032,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 90,
     "ilvl": 630,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Legs",
     "stats": {
       "Strength": 336,
@@ -20051,7 +20051,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 90,
     "ilvl": 630,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Feet",
     "stats": {
       "Strength": 211,
@@ -20469,7 +20469,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 90,
     "ilvl": 630,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Earrings",
     "stats": {
       "Strength": 167,
@@ -20564,7 +20564,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 90,
     "ilvl": 630,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Necklace",
     "stats": {
       "Strength": 167,
@@ -20659,7 +20659,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 90,
     "ilvl": 630,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Bracelets",
     "stats": {
       "Strength": 167,
@@ -20754,7 +20754,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 90,
     "ilvl": 630,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Ring",
     "stats": {
       "Strength": 167,
@@ -21535,7 +21535,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 90,
     "ilvl": 660,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Head",
     "stats": {
       "Strength": 248,
@@ -21554,7 +21554,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 90,
     "ilvl": 660,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Body",
     "stats": {
       "Strength": 394,
@@ -21573,7 +21573,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 90,
     "ilvl": 660,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Hands",
     "stats": {
       "Strength": 248,
@@ -21592,7 +21592,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 90,
     "ilvl": 660,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Legs",
     "stats": {
       "Strength": 394,
@@ -21611,7 +21611,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 90,
     "ilvl": 660,
-    "classJobCategory": "PGL MNK SAM",
+    "classJobCategory": "PGL MNK SAM BST",
     "gearTypeRaw": "Feet",
     "stats": {
       "Strength": 248,
@@ -22029,7 +22029,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 90,
     "ilvl": 660,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Earrings",
     "stats": {
       "Strength": 196,
@@ -22124,7 +22124,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 90,
     "ilvl": 660,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Necklace",
     "stats": {
       "Strength": 196,
@@ -22219,7 +22219,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 90,
     "ilvl": 660,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Bracelets",
     "stats": {
       "Strength": 196,
@@ -22314,7 +22314,7 @@ export const SPECIAL_VENDOR_ITEMS = {
     "scrip": null,
     "levelEquip": 90,
     "ilvl": 660,
-    "classJobCategory": "PGL LNC MNK DRG SAM RPR",
+    "classJobCategory": "PGL LNC MNK DRG SAM RPR BST",
     "gearTypeRaw": "Ring",
     "stats": {
       "Strength": 196,
@@ -22752,6 +22752,48 @@ export const SPECIAL_VENDOR_ITEMS = {
       "currencyId": null,
       "amount": 500,
       "currencyName": "Tomestones"
+    },
+    "scrip": null,
+    "levelEquip": 1,
+    "ilvl": 1,
+    "classJobCategory": "",
+    "gearTypeRaw": "Miscellany",
+    "stats": {}
+  },
+  "50977": {
+    "itemId": 50977,
+    "tomestone": {
+      "currencyId": null,
+      "amount": 500,
+      "currencyName": "Tomestones"
+    },
+    "scrip": null,
+    "levelEquip": 1,
+    "ilvl": 1,
+    "classJobCategory": "",
+    "gearTypeRaw": "Miscellany",
+    "stats": {}
+  },
+  "52286": {
+    "itemId": 52286,
+    "tomestone": {
+      "currencyId": 40,
+      "amount": 51977,
+      "currencyName": "Allagan tomestone of allegory"
+    },
+    "scrip": null,
+    "levelEquip": 1,
+    "ilvl": 1,
+    "classJobCategory": "",
+    "gearTypeRaw": "Other",
+    "stats": {}
+  },
+  "52289": {
+    "itemId": 52289,
+    "tomestone": {
+      "currencyId": 40,
+      "amount": 51977,
+      "currencyName": "Allagan tomestone of allegory"
     },
     "scrip": null,
     "levelEquip": 1,
