@@ -1,8 +1,8 @@
 // AUTO-GENERATED. Do not hand edit.
-// Generated: 2026-09-07T11:11:12.962Z
+// Generated: 2026-09-14T11:21:30.723Z
 // Tomestones + scrips: all job groups (combat, DoH, DoL). Sources: https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/de/SpecialShop.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/de/Item.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/ClassJobCategory.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/ItemUICategory.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/BaseParam.csv
 export const SPECIAL_VENDOR_META = {
-  "generatedAt": "2026-09-07T11:11:12.962Z",
+  "generatedAt": "2026-09-14T11:21:30.723Z",
   "source": {
     "specialShop": "https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/de/SpecialShop.csv",
     "item": "https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/de/Item.csv",
@@ -15,11 +15,25 @@ export const SPECIAL_VENDOR_META = {
     "scrip": "Item Name matches Crafters'/Gatherers' Scrip (excludes Token)"
   },
   "counts": {
-    "items": 1224
+    "items": 1232
   }
 };
 
 export const SPECIAL_VENDOR_ITEMS = {
+  "2650": {
+    "itemId": 2650,
+    "tomestone": {
+      "currencyId": 30,
+      "amount": 51751,
+      "currencyName": "Allagan tomestone of law"
+    },
+    "scrip": null,
+    "levelEquip": 1,
+    "ilvl": 1,
+    "classJobCategory": "All Classes",
+    "gearTypeRaw": "Head",
+    "stats": {}
+  },
   "2920": {
     "itemId": 2920,
     "tomestone": {
@@ -2884,6 +2898,34 @@ export const SPECIAL_VENDOR_ITEMS = {
       "CriticalHit": 36,
       "DirectHitRate": 10
     }
+  },
+  "12077": {
+    "itemId": 12077,
+    "tomestone": {
+      "currencyId": 30,
+      "amount": 51750,
+      "currencyName": "Allagan tomestone of law"
+    },
+    "scrip": null,
+    "levelEquip": 1,
+    "ilvl": 1,
+    "classJobCategory": "",
+    "gearTypeRaw": "Other",
+    "stats": {}
+  },
+  "12986": {
+    "itemId": 12986,
+    "tomestone": {
+      "currencyId": 30,
+      "amount": 51751,
+      "currencyName": "Allagan tomestone of law"
+    },
+    "scrip": null,
+    "levelEquip": 1,
+    "ilvl": 1,
+    "classJobCategory": "All Classes",
+    "gearTypeRaw": "Earrings",
+    "stats": {}
   },
   "13254": {
     "itemId": 13254,
@@ -6027,6 +6069,20 @@ export const SPECIAL_VENDOR_ITEMS = {
       "DirectHitRate": 96,
       "CriticalHit": 67
     }
+  },
+  "20559": {
+    "itemId": 20559,
+    "tomestone": {
+      "currencyId": 30,
+      "amount": 51751,
+      "currencyName": "Allagan tomestone of law"
+    },
+    "scrip": null,
+    "levelEquip": 1,
+    "ilvl": 1,
+    "classJobCategory": "",
+    "gearTypeRaw": "Other",
+    "stats": {}
   },
   "21399": {
     "itemId": 21399,
@@ -10186,6 +10242,20 @@ export const SPECIAL_VENDOR_ITEMS = {
       "SkillSpeed": 94
     }
   },
+  "27936": {
+    "itemId": 27936,
+    "tomestone": {
+      "currencyId": 30,
+      "amount": 51750,
+      "currencyName": "Allagan tomestone of law"
+    },
+    "scrip": null,
+    "levelEquip": 1,
+    "ilvl": 1,
+    "classJobCategory": "All Classes",
+    "gearTypeRaw": "Head",
+    "stats": {}
+  },
   "28381": {
     "itemId": 28381,
     "tomestone": {
@@ -12624,6 +12694,20 @@ export const SPECIAL_VENDOR_ITEMS = {
     "ilvl": 480,
     "classJobCategory": "",
     "gearTypeRaw": "Reagent",
+    "stats": {}
+  },
+  "30052": {
+    "itemId": 30052,
+    "tomestone": {
+      "currencyId": 30,
+      "amount": 51750,
+      "currencyName": "Allagan tomestone of law"
+    },
+    "scrip": null,
+    "levelEquip": 1,
+    "ilvl": 1,
+    "classJobCategory": "All Classes",
+    "gearTypeRaw": "Body",
     "stats": {}
   },
   "30273": {
@@ -15396,6 +15480,20 @@ export const SPECIAL_VENDOR_ITEMS = {
       "CriticalHit": 99,
       "DirectHitRate": 69
     }
+  },
+  "32794": {
+    "itemId": 32794,
+    "tomestone": {
+      "currencyId": 30,
+      "amount": 51750,
+      "currencyName": "Allagan tomestone of law"
+    },
+    "scrip": null,
+    "levelEquip": 1,
+    "ilvl": 1,
+    "classJobCategory": "All Classes",
+    "gearTypeRaw": "Body",
+    "stats": {}
   },
   "32944": {
     "itemId": 32944,
@@ -22772,6 +22870,20 @@ export const SPECIAL_VENDOR_ITEMS = {
     "ilvl": 1,
     "classJobCategory": "",
     "gearTypeRaw": "Miscellany",
+    "stats": {}
+  },
+  "51752": {
+    "itemId": 51752,
+    "tomestone": {
+      "currencyId": 30,
+      "amount": 51751,
+      "currencyName": "Allagan tomestone of law"
+    },
+    "scrip": null,
+    "levelEquip": 1,
+    "ilvl": 1,
+    "classJobCategory": "",
+    "gearTypeRaw": "Other",
     "stats": {}
   },
   "52286": {

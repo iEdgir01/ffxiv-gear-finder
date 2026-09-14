@@ -1,8 +1,8 @@
 // AUTO-GENERATED. Do not hand edit.
-// Generated: 2026-09-07T11:11:10.758Z
+// Generated: 2026-09-14T11:21:28.301Z
 // Sources: https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/GCScripShopItem.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/GCScripShopCategory.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/de/SpecialShop.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/de/Item.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/ClassJobCategory.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/ItemUICategory.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/BaseParam.csv | https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/de/GrandCompanyRank.csv
 export const GC_DATA_META = {
-  "generatedAt": "2026-09-07T11:11:10.758Z",
+  "generatedAt": "2026-09-14T11:21:28.301Z",
   "source": {
     "gcScripShopItem": "https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/GCScripShopItem.csv",
     "gcScripShopCategory": "https://raw.githubusercontent.com/xivapi/ffxiv-datamining/master/csv/en/GCScripShopCategory.csv",
@@ -15,8 +15,8 @@ export const GC_DATA_META = {
   },
   "notes": "GC seal gear from GCScripShopItem + GCScripShopCategory; SpecialShop CostType 0 seal rows merged. No Garland.",
   "counts": {
-    "listings": 733,
-    "items": 733
+    "listings": 742,
+    "items": 742
   }
 };
 
@@ -13017,6 +13017,96 @@ export const GC_ITEMS = {
     "gearTypeRaw": "Blacksmith's Primary Tool",
     "stats": {}
   },
+  "38585": {
+    "itemId": 38585,
+    "companyId": 1,
+    "currencyId": 20,
+    "seals": 51750,
+    "receiveCount": 1,
+    "questId": null,
+    "requiredRankId": null,
+    "requiredRankOrder": null,
+    "levelEquip": 0,
+    "ilvl": 0,
+    "classJobCategory": "",
+    "gearTypeRaw": "",
+    "stats": {}
+  },
+  "38591": {
+    "itemId": 38591,
+    "companyId": 1,
+    "currencyId": 20,
+    "seals": 51751,
+    "receiveCount": 1,
+    "questId": null,
+    "requiredRankId": null,
+    "requiredRankOrder": null,
+    "levelEquip": 1,
+    "ilvl": 560,
+    "classJobCategory": "",
+    "gearTypeRaw": "Wall-mounted",
+    "stats": {}
+  },
+  "38592": {
+    "itemId": 38592,
+    "companyId": 1,
+    "currencyId": 20,
+    "seals": 51751,
+    "receiveCount": 1,
+    "questId": null,
+    "requiredRankId": null,
+    "requiredRankOrder": null,
+    "levelEquip": 1,
+    "ilvl": 560,
+    "classJobCategory": "",
+    "gearTypeRaw": "Wall-mounted",
+    "stats": {}
+  },
+  "38605": {
+    "itemId": 38605,
+    "companyId": 1,
+    "currencyId": 20,
+    "seals": 51750,
+    "receiveCount": 1,
+    "questId": null,
+    "requiredRankId": null,
+    "requiredRankOrder": null,
+    "levelEquip": 1,
+    "ilvl": 560,
+    "classJobCategory": "",
+    "gearTypeRaw": "Wall-mounted",
+    "stats": {}
+  },
+  "38617": {
+    "itemId": 38617,
+    "companyId": 1,
+    "currencyId": 20,
+    "seals": 51751,
+    "receiveCount": 1,
+    "questId": null,
+    "requiredRankId": null,
+    "requiredRankOrder": null,
+    "levelEquip": 0,
+    "ilvl": 53433,
+    "classJobCategory": "",
+    "gearTypeRaw": "Blacksmith's Primary Tool",
+    "stats": {}
+  },
+  "38622": {
+    "itemId": 38622,
+    "companyId": 1,
+    "currencyId": 20,
+    "seals": 51750,
+    "receiveCount": 1,
+    "questId": null,
+    "requiredRankId": null,
+    "requiredRankOrder": null,
+    "levelEquip": 1,
+    "ilvl": 560,
+    "classJobCategory": "",
+    "gearTypeRaw": "Outdoor Furnishing",
+    "stats": {}
+  },
   "38641": {
     "itemId": 38641,
     "companyId": 2,
@@ -13165,6 +13255,51 @@ export const GC_ITEMS = {
     "ilvl": 1,
     "classJobCategory": "",
     "gearTypeRaw": "Miscellany",
+    "stats": {}
+  },
+  "49807": {
+    "itemId": 49807,
+    "companyId": 1,
+    "currencyId": 20,
+    "seals": 51734,
+    "receiveCount": 1,
+    "questId": 71030,
+    "requiredRankId": null,
+    "requiredRankOrder": null,
+    "levelEquip": 0,
+    "ilvl": 0,
+    "classJobCategory": "",
+    "gearTypeRaw": "Pugilist's Arm",
+    "stats": {}
+  },
+  "49808": {
+    "itemId": 49808,
+    "companyId": 1,
+    "currencyId": 20,
+    "seals": 51734,
+    "receiveCount": 1,
+    "questId": 71030,
+    "requiredRankId": null,
+    "requiredRankOrder": null,
+    "levelEquip": 0,
+    "ilvl": 0,
+    "classJobCategory": "",
+    "gearTypeRaw": "Pugilist's Arm",
+    "stats": {}
+  },
+  "49811": {
+    "itemId": 49811,
+    "companyId": 1,
+    "currencyId": 20,
+    "seals": 51734,
+    "receiveCount": 1,
+    "questId": 71032,
+    "requiredRankId": null,
+    "requiredRankOrder": null,
+    "levelEquip": 0,
+    "ilvl": 0,
+    "classJobCategory": "",
+    "gearTypeRaw": "Pugilist's Arm",
     "stats": {}
   },
   "50285": {
