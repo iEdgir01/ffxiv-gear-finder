@@ -1,7 +1,7 @@
 # Build Plan
 
 ## Verification Gate Rule
-Do not start the next task until the current one passes all its checks.
+Do not start the next task until the current task passes all its checks.
 
 ## Tasks
 
